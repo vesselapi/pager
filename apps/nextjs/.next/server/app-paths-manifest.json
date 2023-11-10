@@ -1,5 +1,0 @@
-{
-  "/not-found": "app/not-found.js",
-  "/page": "app/page.js",
-  "/api/trpc/[trpc]/route": "app/api/trpc/[trpc]/route.js"
-}

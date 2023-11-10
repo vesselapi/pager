@@ -1,6 +1,7 @@
 .env
 .env.*
 .turbo
+.next
 node_modules
 build
 dist
