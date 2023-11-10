@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1699576510518,
+      "tag": "0000_foamy_psylocke",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1699577664049,
+      "tag": "0001_classy_wolverine",
+      "breakpoints": true
+    }
+  ]
+}
