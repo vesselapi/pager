@@ -1,0 +1,1 @@
+ALTER TABLE "t3turbo_post" RENAME TO "post";

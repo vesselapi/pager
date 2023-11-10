@@ -1,5 +1,5 @@
 {
-  "name": "@acme/nextjs",
+  "name": "@vessel/nextjs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,8 +13,8 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@acme/api": "workspace:^0.1.0",
-    "@acme/db": "workspace:^0.1.0",
+    "@vessel/api": "workspace:^0.1.0",
+    "@vessel/db": "workspace:^0.1.0",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@tanstack/react-query": "^5.8.1",
     "@tanstack/react-query-devtools": "^5.8.1",
@@ -30,10 +30,10 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:^0.2.0",
-    "@acme/prettier-config": "workspace:^0.1.0",
-    "@acme/tailwind-config": "workspace:^0.1.0",
-    "@acme/tsconfig": "workspace:^0.1.0",
+    "@vessel/eslint-config": "workspace:^0.2.0",
+    "@vessel/prettier-config": "workspace:^0.1.0",
+    "@vessel/tailwind-config": "workspace:^0.1.0",
+    "@vessel/tsconfig": "workspace:^0.1.0",
     "@types/node": "^18.18.9",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
@@ -46,10 +46,10 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@acme/eslint-config/base",
-      "@acme/eslint-config/nextjs",
-      "@acme/eslint-config/react"
+      "@vessel/eslint-config/base",
+      "@vessel/eslint-config/nextjs",
+      "@vessel/eslint-config/react"
     ]
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@vessel/prettier-config"
 }
