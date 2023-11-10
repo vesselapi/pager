@@ -1,5 +1,5 @@
 {
-  "name": "@acme/db",
+  "name": "@vessel/db",
   "version": "0.1.0",
   "private": true,
   "main": "./index.ts",
@@ -21,9 +21,9 @@
     "postgres": "^3.4.3"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:^0.2.0",
-    "@acme/prettier-config": "workspace:^0.1.0",
-    "@acme/tsconfig": "workspace:^0.1.0",
+    "@vessel/eslint-config": "workspace:^0.2.0",
+    "@vessel/prettier-config": "workspace:^0.1.0",
+    "@vessel/tsconfig": "workspace:^0.1.0",
     "dotenv-cli": "^7.3.0",
     "drizzle-kit": "^0.19.13",
     "eslint": "^8.53.0",
@@ -33,8 +33,8 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "@acme/eslint-config/base"
+      "@vessel/eslint-config/base"
     ]
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@vessel/prettier-config"
 }

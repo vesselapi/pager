@@ -1,5 +1,5 @@
 {
-  "name": "@acme/prettier-config",
+  "name": "@vessel/prettier-config",
   "private": true,
   "version": "0.1.0",
   "main": "index.mjs",
@@ -14,8 +14,8 @@
     "prettier-plugin-tailwindcss": "^0.5.6"
   },
   "devDependencies": {
-    "@acme/tsconfig": "workspace:^0.1.0",
+    "@vessel/tsconfig": "workspace:^0.1.0",
     "typescript": "^5.2.2"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@vessel/prettier-config"
 }
