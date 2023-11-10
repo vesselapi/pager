@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  setup:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,13 +15,5 @@ jobs:
           node-version: 18.x
           cache: "pnpm"
       - run: pnpm i
-  lint:
-    runs-on: ubuntu-latest
-    needs: [setup]
-    steps:
       - run: pnpm format:check
-  build:
-    runs-on: ubuntu-latest
-    needs: [setup]
-    steps:
       - run: turbo run build --filter="...[origin/main]"
