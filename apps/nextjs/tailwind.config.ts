@@ -1,7 +1,8 @@
-import baseConfig from "@vessel/tailwind-config";
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss';
+
+import baseConfig from '@vessel/tailwind-config';
 
 export default {
-  content: ["./src/**/*.{ts,tsx}"],
+  content: ['./src/**/*.{ts,tsx}'],
   presets: [baseConfig],
 } satisfies Config;
