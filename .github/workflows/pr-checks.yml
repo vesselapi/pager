@@ -16,4 +16,4 @@ jobs:
           cache: "pnpm"
       - run: pnpm i
       - run: pnpm format:check
-      - run: turbo run build --filter=...[origin/main]
+      - run: turbo run build --filter="...[origin/main]"
