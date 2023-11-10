@@ -12,9 +12,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@vessel/db": "workspace:^0.1.0",
     "@trpc/client": "next",
     "@trpc/server": "next",
+    "@vessel/db": "workspace:^0.1.0",
+    "radash": "^11.0.0",
     "superjson": "2.2.0",
     "zod": "^3.22.3"
   },

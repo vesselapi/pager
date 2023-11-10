@@ -10,8 +10,6 @@ import { initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 
-import { db } from '@vessel/db';
-
 /**
  * 1. CONTEXT
  *
@@ -21,9 +19,9 @@ import { db } from '@vessel/db';
  * processing a request
  *
  */
-interface CreateContextOptions {
-  headers: Headers;
-}
+export type CreateContextOptions = {
+  req: Request;
+};
 
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use
@@ -36,8 +34,7 @@ interface CreateContextOptions {
  */
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
-    headers: opts.headers,
-    db,
+    req: opts.req,
   };
 };
 
@@ -48,7 +45,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  */
 export const createTRPCContext = async (opts: { req: Request }) => {
   return createInnerTRPCContext({
-    headers: opts.req.headers,
+    req: opts.req,
   });
 };
 
@@ -93,6 +90,14 @@ export const createTRPCRouter = t.router;
  * can still access user session data if they are logged in
  */
 export const publicProcedure = t.procedure;
+export type ProcedureResolver = Parameters<typeof publicProcedure.mutation>[0];
+export type ProcedureInputResolver = Parameters<
+  ReturnType<typeof publicProcedure.input>['mutation']
+>[0];
+export type ProcedureMutationFnOpts = Parameters<ProcedureResolver>[0];
+export type ProcedureMutationReturnType = ReturnType<
+  typeof publicProcedure.mutation
+>;
 
 /**
  * Reusable middleware that enforces users are logged in before running the

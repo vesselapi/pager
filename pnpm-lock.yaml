@@ -232,6 +232,9 @@ importers:
       '@vessel/db':
         specifier: workspace:^0.1.0
         version: link:../db
+      radash:
+        specifier: ^11.0.0
+        version: 11.0.0
       superjson:
         specifier: 2.2.0
         version: 2.2.0
@@ -9411,6 +9414,11 @@ packages:
     resolution: {integrity: sha512-iHZWu+q3IdFZFX36ro/lKBkSvfkztY5Y7HMiPlOUjhupPcG2JMfst2KKEpu5XndviX/3UhFbRngUPNKtgvtZiA==}
     dependencies:
       inherits: 2.0.4
+    dev: false
+
+  /radash@11.0.0:
+    resolution: {integrity: sha512-CRWxTFTDff0IELGJ/zz58yY4BDgyI14qSM5OLNKbCItJrff7m7dXbVF0kWYVCXQtPb3SXIVhXvAImH6eT7VLSg==}
+    engines: {node: '>=14.18.0'}
     dev: false
 
   /range-parser@1.2.1:
