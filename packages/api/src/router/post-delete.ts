@@ -1,24 +1,24 @@
 import { compose } from 'radash';
 import { z } from 'zod';
 
-import { db, Db, desc, eq, schema } from '@vessel/db';
+import { db, Db, eq, schema } from '@vessel/db';
 
-import { useContextHook } from '../hooks/use-context-hook';
-import { useTrpcHook, useTrpcQueryHook } from '../hooks/use-trpc-hook';
-import { CreateContextOptions } from '../trpc';
+import { useContextHook } from '../middlewares/use-context-hook';
+import { useLogger } from '../middlewares/use-logger';
+import { CreateContextOptions, publicProcedure } from '../trpc';
 
-const input = z.object({
-  id: z.number(),
-});
-type Options = {
-  ctx: { db: Db } & CreateContextOptions;
-  input: z.infer<typeof input>;
-};
+const input = z.number();
 
-const del = ({ ctx, input }: Options) => {
-  return ctx.db.delete(schema.post).where(eq(schema.post.id, input.id));
-};
+type Context = { db: Db } & CreateContextOptions;
 
-export const postDelete = useTrpcQueryHook({ input })(
-  useContextHook({ db })(del),
-);
+export const postDelete = publicProcedure
+  .use(
+    useContextHook<Context>({
+      db: () => db,
+    }),
+  )
+  .use(useLogger())
+  .input(input)
+  .mutation(({ ctx, input }) => {
+    return ctx.db.delete(schema.post).where(eq(schema.post.id, input));
+  });

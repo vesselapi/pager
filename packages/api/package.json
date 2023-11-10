@@ -12,9 +12,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@exobase/core": "1.0.0-rc.25",
     "@trpc/client": "next",
     "@trpc/server": "next",
     "@vessel/db": "workspace:^0.1.0",
+    "next": "^14.0.1",
+    "pino": "^8.16.1",
     "radash": "^11.0.0",
     "superjson": "2.2.0",
     "zod": "^3.22.3"

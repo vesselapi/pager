@@ -1,15 +1,20 @@
 import { db, Db } from '@vessel/db';
 
-import { useContextHook } from '../hooks/use-context-hook';
-import { useTrpcQueryHook } from '../hooks/use-trpc-hook';
-import { CreateContextOptions } from '../trpc';
+import { useContextHook } from '../middlewares/use-context-hook';
+import { useLogger } from '../middlewares/use-logger';
+import { publicProcedure } from '../trpc';
 
-type Options = {
-  ctx: { db: Db } & CreateContextOptions;
+type Context = {
+  db: Db;
 };
 
-const list = ({ ctx }: Options) => {
-  return ctx.db.query.post.findMany();
-};
-
-export const postList = useTrpcQueryHook()(useContextHook({ db })(list));
+export const postList = publicProcedure
+  .use(
+    useContextHook<Context>({
+      db: () => db,
+    }),
+  )
+  .use(useLogger())
+  .query(({ ctx }) => {
+    return ctx.db.query.post.findMany();
+  });

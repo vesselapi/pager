@@ -6,6 +6,8 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
+import { NextApiRequest } from 'next';
+import { NextRequest } from 'next/server';
 import { initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
@@ -20,7 +22,7 @@ import { ZodError } from 'zod';
  *
  */
 export type CreateContextOptions = {
-  req: Request;
+  req: NextApiRequest;
 };
 
 /**
@@ -43,7 +45,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  * process every request that goes through your tRPC endpoint
  * @link https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: { req: Request }) => {
+export const createTRPCContext = async (opts: { req: NextApiRequest }) => {
   return createInnerTRPCContext({
     req: opts.req,
   });
@@ -90,14 +92,6 @@ export const createTRPCRouter = t.router;
  * can still access user session data if they are logged in
  */
 export const publicProcedure = t.procedure;
-export type ProcedureResolver = Parameters<typeof publicProcedure.mutation>[0];
-export type ProcedureInputResolver = Parameters<
-  ReturnType<typeof publicProcedure.input>['mutation']
->[0];
-export type ProcedureMutationFnOpts = Parameters<ProcedureResolver>[0];
-export type ProcedureMutationReturnType = ReturnType<
-  typeof publicProcedure.mutation
->;
 
 /**
  * Reusable middleware that enforces users are logged in before running the

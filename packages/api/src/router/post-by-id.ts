@@ -1,23 +1,26 @@
-import { compose } from 'radash';
 import { z } from 'zod';
 
 import { db, Db, eq, schema } from '@vessel/db';
 
-import { useContextHook } from '../hooks/use-context-hook';
-import { useTrpcHook, useTrpcQueryHook } from '../hooks/use-trpc-hook';
+import { useContextHook } from '../middlewares/use-context-hook';
+import { useLogger } from '../middlewares/use-logger';
+import { publicProcedure } from '../trpc';
 
+type Context = {
+  db: Db;
+};
 const input = z.object({ id: z.number() });
-type Options = {
-  ctx: { db: Db };
-  input: z.infer<typeof input>;
-};
 
-const byId = ({ ctx, input }: Options) => {
-  return ctx.db.query.post.findFirst({
-    where: eq(schema.post.id, input.id),
+export const postById = publicProcedure
+  .use(
+    useContextHook<Context>({
+      db: () => db,
+    }),
+  )
+  .use(useLogger())
+  .input(input)
+  .query(({ ctx, input }) => {
+    return ctx.db.query.post.findFirst({
+      where: eq(schema.post.id, input.id),
+    });
   });
-};
-
-export const postById = useTrpcQueryHook({ input })(
-  useContextHook({ db })(byId),
-);
