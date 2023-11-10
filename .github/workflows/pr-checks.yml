@@ -14,6 +14,6 @@ jobs:
         with:
           node-version: 18.x
           cache: "pnpm"
-      - run: pnpm i --prefer-offline
+      - run: pnpm i --lockfile-only
       - run: pnpm format:check
       - run: pnpm build:changes
