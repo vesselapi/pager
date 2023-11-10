@@ -1,0 +1,20 @@
+name: conventional-release-labels
+on:
+  pull_request_target:
+    types: [opened, edited, reopened]
+    branches:
+      - main
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      statuses: write
+    steps:
+      - uses: aslafy-z/conventional-pr-title-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: bcoe/conventional-release-labels@v1
+        with:
+          type_labels: '{"feat": "feature", "feature": "feature", "fix": "fix", "breaking": "breaking", "chore": "maintenance", "maintenance": "maintenance"}'
+          ignored_types: '[]'
