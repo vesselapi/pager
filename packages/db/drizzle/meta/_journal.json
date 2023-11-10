@@ -15,6 +15,13 @@
       "when": 1699577664049,
       "tag": "0001_classy_wolverine",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1699578897452,
+      "tag": "0002_handy_lorna_dane",
+      "breakpoints": true
     }
   ]
 }
