@@ -7,7 +7,8 @@ import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experime
 import { loggerLink, unstable_httpBatchStreamLink } from '@trpc/client';
 import superjson from 'superjson';
 
-import { env } from '~/env.mjs';
+import { env } from '@vessel/api/env.mjs';
+
 import { api } from '~/utils/api';
 
 const getBaseUrl = () => {
@@ -38,7 +39,7 @@ export function TRPCReactProvider(props: {
       links: [
         loggerLink({
           enabled: (opts) =>
-            process.env.NODE_ENV === 'development' ||
+            env.NODE_ENV === 'development' ||
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
         unstable_httpBatchStreamLink({
