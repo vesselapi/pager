@@ -12,6 +12,6 @@
     ],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "include": [".", ".next/types/**/*.ts"],
+  "include": [".", ".next/types/**/*.ts", "../../packages/api/env.mjs"],
   "exclude": ["node_modules"]
 }

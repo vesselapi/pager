@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
-import * as post from './schema/post';
+import * as post from './schema/user';
 
 export const schema = { ...post };
 
