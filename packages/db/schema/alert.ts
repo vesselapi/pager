@@ -5,10 +5,10 @@ import { user } from './user';
 export const alert = pgTable('alert', {
   id: text('id').primaryKey(), // v.alert.[hash]
   title: text('title'),
-  status: text('status', { enum: ['acked', 'open', 'closed'] })
-    .default('open')
+  status: text('status', { enum: ['ACKED', 'OPEN', 'CLOSED'] })
+    .default('OPEN')
     .notNull(),
-  assignedToId: text('assignedToId').references(() => user.id),
-  createdTime: timestamp('created_at').notNull(),
+  assignedToId: text('assigned_to_id').references(() => user.id),
+  createdAt: timestamp('created_at').notNull(),
   metadata: json('metadata'),
 });
