@@ -13,8 +13,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@vessel/api": "workspace:^0.1.0",
-    "@vessel/db": "workspace:^0.1.0",
+    "@clerk/nextjs": "^4.27.1",
     "@tanstack/react-query": "^5.8.1",
     "@tanstack/react-query-devtools": "^5.8.1",
     "@tanstack/react-query-next-experimental": "5.8.1",
@@ -22,6 +21,8 @@
     "@trpc/next": "next",
     "@trpc/react-query": "next",
     "@trpc/server": "next",
+    "@vessel/api": "workspace:^0.1.0",
+    "@vessel/db": "workspace:^0.1.0",
     "next": "^14.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -29,13 +30,13 @@
     "zod": "^3.22.3"
   },
   "devDependencies": {
+    "@types/node": "^18.18.9",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
     "@vessel/eslint-config": "workspace:^0.2.0",
     "@vessel/prettier-config": "workspace:^0.1.0",
     "@vessel/tailwind-config": "workspace:^0.1.0",
     "@vessel/tsconfig": "workspace:^0.1.0",
-    "@types/node": "^18.18.9",
-    "@types/react": "^18.2.37",
-    "@types/react-dom": "^18.2.15",
     "dotenv-cli": "^7.3.0",
     "eslint": "^8.53.0",
     "prettier": "^3.0.3",
