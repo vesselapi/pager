@@ -1,12 +1,8 @@
 import { createTRPCRouter } from '../trpc';
-import { postById } from './post-by-id';
-import { postCreate } from './post-create';
-import { postDelete } from './post-delete';
-import { postList } from './post-list';
+import { alertById } from './alert/alert-by-id';
+import { alertList } from './alert/alert-list';
 
-export const postRouter = createTRPCRouter({
-  all: postList,
-  byId: postById,
-  create: postCreate,
-  delete: postDelete,
+export const alertRouter = createTRPCRouter({
+  all: alertList,
+  byId: alertById,
 });
