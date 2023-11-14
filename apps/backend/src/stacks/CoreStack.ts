@@ -14,9 +14,9 @@ export function CoreStack({ stack }: StackContext) {
     },
   });
 
-  const alertOncallFn = new Function(stack, 'AlertOncallFn', {
+  const alertOncallFn = new Function(stack, 'AlertOncall', {
     runtime: 'nodejs18.x',
-    handler: 'src/routes/alert-oncall-.ts',
+    handler: 'src/functions/alert-oncall.main',
     deadLetterQueueEnabled: true,
   });
 
@@ -24,7 +24,7 @@ export function CoreStack({ stack }: StackContext) {
     consumer: alertOncallFn,
   });
 
-  new Topic(stack, 'alerts-topic', {
+  new Topic(stack, 'AlertsTopic', {
     subscribers: {
       subscriber1: alertOncallQueue,
     },

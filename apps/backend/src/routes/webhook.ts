@@ -1,8 +1,10 @@
 import { HttpEvent } from 'aws-lambda';
 
-export async function handler(event: HttpEvent) {
-  const records: any[] = event.Records;
-  console.log(`Message processed: "${records[0].body}"`);
+import { publish, Topic } from '@vessel/api/src/libs/aws';
 
-  return {};
+export async function main(event: HttpEvent) {
+  const records: any[] = event.Records;
+  console.log(`Message processed: "${records}"`);
+  await publish({ topic: Topic.ALERT, payload: { hi: 'test' } });
+  return { success: true };
 }

@@ -1,8 +1,8 @@
 import { SQSEvent } from 'aws-lambda';
 
-export async function handler(event: SQSEvent) {
+export async function main(event: SQSEvent) {
   const records: any[] = event.Records;
-  console.log(`Message processed: "${records[0].body}"`);
+  console.log(`Message processed: "${JSON.stringify(records)}"`);
 
   return {};
 }

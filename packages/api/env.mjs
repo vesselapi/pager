@@ -17,6 +17,7 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     CLERK_SECRET_KEY: z.string(),
+    AWS_SNS_TOPIC_ALERT_ARN: z.string(),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -37,6 +38,7 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    AWS_SNS_TOPIC_ALERT_ARN: process.env.AWS_SNS_TOPIC_ALERT,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:

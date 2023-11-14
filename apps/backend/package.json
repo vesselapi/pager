@@ -8,10 +8,12 @@
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "dev": "sst dev",
-    "deploy": "sst deploy --stage prod",
+    "deploy:development": "sst deploy --stage development",
+    "deploy:production": "sst deploy --stage production",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@vessel/api": "workspace:^0.1.0",
     "aws-cdk-lib": "2.101.1",
     "constructs": "10.2.69",
     "eslint": "^8.53.0",
