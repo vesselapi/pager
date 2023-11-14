@@ -1,0 +1,32 @@
+{
+  "name": "@vessel/backend",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint .",
+    "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
+    "dev": "sst dev",
+    "deploy": "sst deploy --stage prod",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "aws-cdk-lib": "2.101.1",
+    "constructs": "10.2.69",
+    "eslint": "^8.53.0",
+    "prettier": "^3.0.3",
+    "sst": "^2.36.1",
+    "typescript": "^5.2.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@vessel/eslint-config/base"
+    ]
+  },
+  "prettier": "@vessel/prettier-config",
+  "dependencies": {
+    "aws-lambda": "^1.0.7"
+  }
+}
