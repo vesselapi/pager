@@ -20,7 +20,8 @@ const publish = async ({
     TopicArn: topic,
     Message: JSON.stringify(payload),
   });
-  await client.send(params);
+  const test = await client.send(params);
+  console.log({ test });
 };
 
 export { publish };
