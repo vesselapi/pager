@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { TbBell, TbCalendarFilled } from 'react-icons/tb';
 
+import UserIcon from './UserIcon';
+
 const NavItem = ({
   title,
   route,
@@ -35,9 +37,7 @@ const SideNav = ({ children }) => {
       <div className="relative left-0 top-0 h-screen w-[220px] bg-gray-300 text-black">
         <div className="flex items-center justify-between p-3">
           <div>Vessel</div>
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white">
-            ZK
-          </div>
+          <UserIcon />
         </div>
         <NavItem route="alerts" title="Alerts" Icon={TbBell} />
         <NavItem route="schedule" title="Schedule" Icon={TbCalendarFilled} />
