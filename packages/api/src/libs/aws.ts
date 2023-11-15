@@ -6,8 +6,8 @@ const client = new SNSClient();
 
 export const Topic = {
   ALERT: env.AWS_SNS_TOPIC_ALERT_ARN,
-};
-type Topic = keyof typeof Topic;
+} as const;
+type Topic = (typeof Topic)[keyof typeof Topic];
 
 const publish = async ({
   topic,

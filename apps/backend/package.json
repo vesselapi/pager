@@ -7,18 +7,29 @@
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "dev": "sst dev",
+    "dev": "pnpm with-env sst dev",
     "deploy:development": "sst deploy --stage development",
     "deploy:production": "sst deploy --stage production",
-    "typecheck": "tsc --noEmit"
+    "secrets:development": "sst secrets load ../../.env --stage=development",
+    "typecheck": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --"
   },
   "devDependencies": {
+    "@types/node": "^18.18.9",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@types/aws-lambda": "^8.10.126",
     "@vessel/api": "workspace:^0.1.0",
+    "@vessel/eslint-config": "workspace:^0.2.0",
+    "@vessel/prettier-config": "workspace:^0.1.0",
+    "@vessel/tsconfig": "workspace:^0.1.0",
     "aws-cdk-lib": "2.101.1",
     "constructs": "10.2.69",
+    "dotenv-cli": "^7.3.0",
     "eslint": "^8.53.0",
     "prettier": "^3.0.3",
     "sst": "^2.36.1",
+    "tailwindcss": "3.3.5",
     "typescript": "^5.2.2"
   },
   "eslintConfig": {
@@ -29,6 +40,7 @@
   },
   "prettier": "@vessel/prettier-config",
   "dependencies": {
-    "aws-lambda": "^1.0.7"
+    "aws-lambda": "^1.0.7",
+    "radash": "^11.0.0"
   }
 }
