@@ -30,7 +30,7 @@ const UserIcon = async ({ size = 'small' }: { size?: 'small' | 'large' }) => {
         {
           'h-6 w-6': size === 'small',
         },
-        'flex items-center justify-center rounded-full bg-white',
+        'flex items-center justify-center rounded-full bg-white ring-2 ring-black',
       )}
     >
       {createInitials(user.firstName, user.lastName)}

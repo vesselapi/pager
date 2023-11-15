@@ -1,12 +1,27 @@
-import { MdFilterList } from 'react-icons/md';
+'use client';
+
+import { useState } from 'react';
+import { MdFilterList, MdOutlineClose } from 'react-icons/md';
 import { VscSettings } from 'react-icons/vsc';
 
+import Dropdown from '../_components/Dropdown';
 import AlertsListItem from './AlertListItem';
 
 const FilterPill = ({ title }: { title: string }) => {
   return (
-    <div className="w-fit rounded border border-gray-300 p-2 shadow">
-      <h2 className="text-xs text-gray-500">{title}</h2>
+    <div className="flex w-fit items-center">
+      <h3 className="h-[34px] rounded-l-md border border-gray-300 p-2 text-xs text-gray-500 shadow">
+        status
+      </h3>
+      <h3 className="h-[34px] border border-l-0 border-gray-300 p-2 text-xs text-gray-500 shadow">
+        is not
+      </h3>
+      <h3 className="h-[34px] border border-l-0 border-gray-300 p-2 text-xs text-gray-500 shadow">
+        {title}
+      </h3>
+      <div className="flex h-[34px] items-center justify-center rounded-r-md border border-l-0 border-gray-300 px-2 text-gray-500 shadow">
+        <MdOutlineClose />
+      </div>
     </div>
   );
 };
@@ -63,7 +78,7 @@ const AlertsList = () => {
   ];
 
   // Need to expand these
-  const filters = true;
+  const [filter, setFilter] = useState(false);
 
   return (
     <div className="flex flex-col">
@@ -75,19 +90,23 @@ const AlertsList = () => {
             placeholder="Search"
           />
           <div className="flex">
-            <div className="mr-1 flex items-center rounded bg-gray-200 px-2 py-1">
-              <MdFilterList className="mr-1" />
-              Filter
-            </div>
-            <div className="flex items-center rounded bg-gray-200 px-2 py-1">
-              <VscSettings className="mr-1" />
-              Display
-            </div>
+            <Dropdown items={['status']}>
+              <div className="mr-1 flex items-center rounded bg-gray-200 px-2 py-1">
+                <MdFilterList className="mr-1" />
+                Filter
+              </div>
+            </Dropdown>
+            <Dropdown items={['status']}>
+              <div className="flex items-center rounded bg-gray-200 px-2 py-1">
+                <VscSettings className="mr-1" />
+                Display
+              </div>
+            </Dropdown>
           </div>
         </div>
 
         {/* The Sub-title bar is used to show the views active state like what the display is and what filters are applied */}
-        {filters && (
+        {filter && (
           <div className="mt-2">
             <FilterPill title={'closed'} />
           </div>

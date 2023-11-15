@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.27.1",
+    "@headlessui/react": "^1.7.17",
     "@tanstack/react-query": "^5.8.1",
     "@tanstack/react-query-devtools": "^5.8.1",
     "@tanstack/react-query-next-experimental": "5.8.1",
