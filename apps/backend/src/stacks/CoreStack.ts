@@ -3,7 +3,7 @@ import { Api, Function, Queue, StackContext, Topic } from 'sst/constructs';
 
 import { env } from '@vessel/api/env.mjs';
 
-// TODO(@averyyip): It's not ideal that we configure out infra directly with our env vars because there could be secrets.
+// TODO(@averyyip): It's not ideal that we set our env vars directly on our infra because there could be secrets. Future work to use AWS SSM.
 const stackEnv = shake(
   mapValues(
     env as unknown as Record<string, string | number | undefined>,
