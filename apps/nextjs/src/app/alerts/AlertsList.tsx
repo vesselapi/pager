@@ -77,8 +77,15 @@ const AlertsList = () => {
     },
   ];
 
-  // Need to expand these
-  const [filter, setFilter] = useState(false);
+  const appliedFilters = [];
+
+  const filterOptions = [
+    {
+      name: 'status',
+      comparitors: ['eq', 'dne'],
+      options: ['acked', 'closed', 'open'],
+    },
+  ];
 
   return (
     <div className="flex flex-col">
@@ -90,7 +97,7 @@ const AlertsList = () => {
             placeholder="Search"
           />
           <div className="flex">
-            <Dropdown items={['status']}>
+            <Dropdown items={filterOptions.map((f) => f.name)}>
               <div className="mr-1 flex items-center rounded bg-gray-200 px-2 py-1">
                 <MdFilterList className="mr-1" />
                 Filter
@@ -106,7 +113,7 @@ const AlertsList = () => {
         </div>
 
         {/* The Sub-title bar is used to show the views active state like what the display is and what filters are applied */}
-        {filter && (
+        {appliedFilters.length && (
           <div className="mt-2">
             <FilterPill title={'closed'} />
           </div>

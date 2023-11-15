@@ -141,6 +141,9 @@ importers:
       '@clerk/nextjs':
         specifier: ^4.27.1
         version: 4.27.1(next@14.0.1)(react-dom@18.2.0)(react@18.2.0)
+      '@headlessui/react':
+        specifier: ^1.7.17
+        version: 1.7.17(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query':
         specifier: ^5.8.1
         version: 5.8.1(react-dom@18.2.0)(react-native@0.72.6)(react@18.2.0)
@@ -168,6 +171,9 @@ importers:
       '@vessel/db':
         specifier: workspace:^0.1.0
         version: link:../../packages/db
+      classnames:
+        specifier: ^2.3.2
+        version: 2.3.2
       next:
         specifier: ^14.0.1
         version: 14.0.1(react-dom@18.2.0)(react@18.2.0)
@@ -2808,6 +2814,18 @@ packages:
       '@hapi/hoek': 9.3.0
     dev: false
 
+  /@headlessui/react@1.7.17(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-4am+tzvkqDSSgiwrsEpGWqgGo9dz8qU5M3znCkC4PgkpY4HcCZzEDEvozltGGGHIKl9jbXbZPSH5TWn4sWJdow==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16 || ^17 || ^18
+      react-dom: ^16 || ^17 || ^18
+    dependencies:
+      client-only: 0.0.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /@humanwhocodes/config-array@0.11.13:
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
     engines: {node: '>=10.10.0'}
@@ -4956,6 +4974,10 @@ packages:
   /ci-info@3.8.0:
     resolution: {integrity: sha512-eXTggHWSooYhq49F2opQhuHWgzucfF2YgODK4e1566GQs5BIfP30B0oenwBJHfWxAs2fyPB1s7Mg949zLf61Yw==}
     engines: {node: '>=8'}
+    dev: false
+
+  /classnames@2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
     dev: false
 
   /clean-stack@2.2.0:
