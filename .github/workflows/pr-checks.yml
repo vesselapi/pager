@@ -34,4 +34,5 @@ jobs:
       - run: vercel env pull .env --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
       - run: pnpm -F api check-env-vars
       - run: node packages/api/env.mjs > test.txt
+      - run: ls -l text.txt
       - run: cat test.txt
