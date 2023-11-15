@@ -1,0 +1,16 @@
+name: setup
+description: Sets up environment
+runs:
+  using: 'composite'
+  steps:
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 8
+    - name: Setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'pnpm'
+        cache-dependency-path: 'pnpm-lock.yaml'
+    - run: pnpm i
+      shell: bash

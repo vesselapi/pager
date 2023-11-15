@@ -1,0 +1,20 @@
+name: Deploy Backend
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy-dev:
+    name: Deploy Backend to dev
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup environment
+        uses: ./.github/actions/setup-composite
+      - run: pnpm -F backend deploy:development

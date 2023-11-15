@@ -12,9 +12,11 @@
     "generate": "drizzle-kit generate:pg",
     "pull": "drizzle-kit introspect:pg",
     "push": "drizzle-kit push:pg",
+    "migrate": "pnpm with-env tsx migrate.ts",
     "check": "drizzle-kit check:pg",
     "studio": "drizzle-kit studio",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "drizzle-orm": "^0.28.6",
@@ -24,10 +26,12 @@
     "@vessel/eslint-config": "workspace:^0.2.0",
     "@vessel/prettier-config": "workspace:^0.1.0",
     "@vessel/tsconfig": "workspace:^0.1.0",
+    "dotenv": "^16.3.1",
     "dotenv-cli": "^7.3.0",
     "drizzle-kit": "^0.19.13",
     "eslint": "^8.53.0",
     "prettier": "^3.0.3",
+    "tsx": "^4.1.2",
     "typescript": "^5.2.2"
   },
   "eslintConfig": {

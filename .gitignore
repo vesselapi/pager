@@ -1,7 +1,10 @@
 .env
 .env.*
+.env.!(example)
 .turbo
 .next
+.sst
 node_modules
 build
 dist
+.vercel
