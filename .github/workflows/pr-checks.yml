@@ -33,3 +33,4 @@ jobs:
       - run: pnpm -F api check-env-vars
       - run: vercel env pull .env --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
       - run: pnpm -F api check-env-vars
+      - run: node packages/api/env.mjs
