@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1699990068748,
+      "tag": "0000_amusing_rhino",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1699990625277,
+      "tag": "0001_slimy_invaders",
+      "breakpoints": true
+    }
+  ]
+}
