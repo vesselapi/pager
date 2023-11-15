@@ -10,7 +10,7 @@ import { publicProcedure } from '../../trpc';
 interface Context {
   db: Db;
 }
-const input = z.object({ id: z.number() });
+const input = z.object({ id: z.string() });
 
 export const alertById = publicProcedure
   .use(

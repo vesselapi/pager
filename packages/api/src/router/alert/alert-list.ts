@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 import type { Db } from '@vessel/db';
 import { db } from '@vessel/db';
 
@@ -9,6 +11,27 @@ interface Context {
   db: Db;
 }
 
+const input = z.object({
+  filters: z
+    .object({
+      status: z.object({
+        value: z.enum(['ACKED', 'OPEN', 'CLOSED']),
+        condition: z.enum(['IS', 'IS_NOT']),
+      }),
+      title: z.object({
+        value: z.string(),
+        condition: z.enum(['CONTAINS']),
+      }),
+      assignedToId: z.object({
+        value: z.string(),
+        condition: z.enum(['IS', 'IS_NOT']),
+      }),
+      // TODO(@zkirby): Add filter support for createdAt times.
+    })
+    .partial()
+    .optional(),
+});
+
 export const alertList = publicProcedure
   .use(
     useContextHook<Context>({
@@ -16,6 +39,7 @@ export const alertList = publicProcedure
     }),
   )
   .use(useLogger())
-  .query(({ ctx }) => {
-    return ctx.db.query.alert.findMany();
+  .input(input)
+  .query(({ ctx, input }) => {
+    return ctx.db.query.alert.findMany({});
   });
