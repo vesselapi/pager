@@ -16,14 +16,6 @@ jobs:
           fetch-depth: 0
       - name: Setup environment
         uses: ./.github/actions/setup-composite
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      # - uses: actions/setup-node@v3
-      #   with:
-      #     node-version: 18.x
-      #     cache: 'pnpm'
-      # - run: pnpm i
       - run: pnpm format:check
       - run: pnpm build:changes
   verify-env-vars:
@@ -32,7 +24,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Setup environment
-        uses: ./.github/workflows/setup.yml
+        uses: ./.github/actions/setup-composite
       - name: Check env vars for development
         run: |
           vercel pull --yes --environment=development --token=${{ secrets.VERCEL_TOKEN }}
