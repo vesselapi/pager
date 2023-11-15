@@ -5,6 +5,7 @@ import '~/styles/globals.css';
 
 import { headers } from 'next/headers';
 
+import SideNav from './_components/SideNav';
 import { TRPCReactProvider } from './providers';
 
 const fontSans = Inter({
@@ -35,14 +36,17 @@ export const dynamic = 'force-dynamic';
 //     creator: '@jullerino',
 //   },
 // };
-
+/**
+ * TODO:
+ * - Should show "please use desktop" for mobile view.
+ */
 export default function Layout(props: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
       <html lang="en">
         <body className={['font-sans', fontSans.variable].join(' ')}>
           <TRPCReactProvider headers={headers()}>
-            {props.children}
+            <SideNav>{props.children}</SideNav>
           </TRPCReactProvider>
         </body>
       </html>

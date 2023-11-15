@@ -1,11 +1,23 @@
+import Link from 'next/link';
 import { TbBell, TbCalendarFilled } from 'react-icons/tb';
 
-const NavItem = ({ title, Icon }) => {
+const NavItem = ({
+  title,
+  route,
+  Icon,
+}: {
+  title: string;
+  route: string;
+  Icon: typeof TbBell;
+}) => {
   return (
-    <div className="ml-4 mt-2 flex cursor-pointer items-center">
+    <Link
+      href={route}
+      className="ml-2 mt-2 flex cursor-pointer items-center px-2 hover:bg-gray-200"
+    >
       <Icon className="mr-1" />
       {title}
-    </div>
+    </Link>
   );
 };
 
@@ -15,20 +27,20 @@ const NavItem = ({ title, Icon }) => {
  * TODO:
  *  - Make icon red if there are alerts
  *  - Add "my alerts", "all alerts" sub-nav
+ *  - Add keyboard shortcuts
  */
 const SideNav = ({ children }) => {
   return (
-    <div className="flex">
+    <div className="flex text-sm">
       <div className="relative left-0 top-0 h-screen w-[220px] bg-gray-300 text-black">
-        <div className="flex justify-between p-3">
+        <div className="flex items-center justify-between p-3">
           <div>Vessel</div>
-          <div>zk</div>
+          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white">
+            ZK
+          </div>
         </div>
-        <NavItem title="Alerts" Icon={TbBell} />
-        <div className="ml-4 mt-4 flex cursor-pointer items-center">
-          <TbCalendarFilled className="mr-1" />
-          Schedule
-        </div>
+        <NavItem route="alerts" title="Alerts" Icon={TbBell} />
+        <NavItem route="schedule" title="Schedule" Icon={TbCalendarFilled} />
       </div>
       <div className="h-screen w-screen">{children}</div>
     </div>
