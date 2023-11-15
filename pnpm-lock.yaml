@@ -321,6 +321,9 @@ importers:
       '@vessel/tsconfig':
         specifier: workspace:^0.1.0
         version: link:../../tooling/typescript
+      dotenv-cli:
+        specifier: ^7.3.0
+        version: 7.3.0
       eslint:
         specifier: ^8.53.0
         version: 8.53.0

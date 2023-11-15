@@ -32,8 +32,8 @@ jobs:
       - name: Check env vars for development
         run: |
           vercel env pull .env --yes --environment=development --token=${{ secrets.VERCEL_TOKEN }}
-          node packages/api/env.mjs
+          pnpm -F api check-env-vars
       - name: Check env vars for production
         run: |
           vercel env pull .env --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-          node packages/api/env.mjs
+          pnpm -F api check-env-vars
