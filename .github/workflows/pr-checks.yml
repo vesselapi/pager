@@ -15,7 +15,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup environment
-        uses: ./.github/actions/setup.yml
+        uses: ./.github/actions/setup-composite
       - uses: pnpm/action-setup@v2
         with:
           version: 8
