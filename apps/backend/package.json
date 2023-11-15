@@ -8,9 +8,8 @@
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "dev": "pnpm with-env sst dev",
-    "deploy:development": "sst deploy --stage development",
-    "deploy:production": "sst deploy --stage production",
-    "secrets:development": "sst secrets load ../../.env --stage=development",
+    "deploy:development": "pnpm with-env sst deploy --stage development",
+    "deploy:production": "pnpm with-env sst deploy --stage production",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
