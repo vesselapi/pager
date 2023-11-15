@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "83549790-5f2f-44d6-b129-7a303a795e02",
-  "prevId": "9ee37d32-97b8-493a-b755-3c880d14aa63",
+  "id": "79b00185-4ae9-4e12-a2fe-ccd6b7c5a786",
+  "prevId": "227fe2cc-84d6-47b0-a0e6-b7eb6dd21783",
   "tables": {
     "alert": {
       "name": "alert",
@@ -99,6 +99,35 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "organization": {
+      "name": "organization",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "user": {
       "name": "user",
       "schema": "",
@@ -111,6 +140,12 @@
         },
         "email": {
           "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "organization_id": {
+          "name": "organization_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -136,7 +171,17 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "user_organization_id_organization_id_fk": {
+          "name": "user_organization_id_organization_id_fk",
+          "tableFrom": "user",
+          "tableTo": "organization",
+          "columnsFrom": ["organization_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "user_email_unique": {
@@ -151,9 +196,7 @@
   "schemas": {},
   "_meta": {
     "schemas": {},
-    "tables": {
-      "\"alert-event\"": "\"alert_event\""
-    },
+    "tables": {},
     "columns": {}
   }
 }
