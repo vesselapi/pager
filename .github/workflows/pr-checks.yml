@@ -10,11 +10,15 @@ jobs:
     name: Lint and build check
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup environment
         uses: ./.github/actions/setup.yml
-      # - uses: pnpm/action-setup@v2
-      #   with:
-      #     version: 8
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
       # - uses: actions/setup-node@v3
       #   with:
       #     node-version: 18.x
