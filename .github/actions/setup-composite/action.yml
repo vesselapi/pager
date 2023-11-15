@@ -10,3 +10,4 @@ runs:
         cache: 'pnpm'
         cache-dependency-path: 'pnpm-lock.yaml'
     - run: pnpm i
+      shell: bash
