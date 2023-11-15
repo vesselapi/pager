@@ -19,7 +19,6 @@
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vessel/api": "workspace:^0.1.0",
-    "@vessel/db": "workspace:^0.1.0",
     "@vessel/eslint-config": "workspace:^0.2.0",
     "@vessel/prettier-config": "workspace:^0.1.0",
     "@vessel/tsconfig": "workspace:^0.1.0",

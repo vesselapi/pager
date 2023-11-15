@@ -60,9 +60,6 @@ importers:
       '@vessel/api':
         specifier: workspace:^0.1.0
         version: link:../../packages/api
-      '@vessel/db':
-        specifier: workspace:^0.1.0
-        version: link:../../packages/db
       '@vessel/eslint-config':
         specifier: workspace:^0.2.0
         version: link:../../tooling/eslint
@@ -360,9 +357,6 @@ importers:
       postgres:
         specifier: ^3.4.3
         version: 3.4.3
-      radash:
-        specifier: ^11.0.0
-        version: 11.0.0
     devDependencies:
       '@vessel/eslint-config':
         specifier: workspace:^0.2.0

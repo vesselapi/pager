@@ -1,8 +1,16 @@
 import { SQSEvent } from 'aws-lambda';
+import { z } from 'zod';
 
-export async function main(event: SQSEvent) {
-  const records: any[] = event.Records;
-  console.log(`Message processed: "${JSON.stringify(records)}"`);
+const schema = z.any();
+type Args = z.infer<typeof schema>;
 
-  return {};
+async function alertOncall(args: Args) {
+  console.log(`Message processed: "${JSON.stringify(args)}"`);
 }
+
+export const main = async (event: SQSEvent) => {
+  for (const record of event.Records) {
+    const args = schema.parse(record);
+    await alertOncall(args);
+  }
+};
