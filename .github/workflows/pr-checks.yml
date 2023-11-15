@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup environment
-        uses: ./.github/workflows/setup.yaml
+        uses: ./.github/workflows/setup.yml
       # - uses: pnpm/action-setup@v2
       #   with:
       #     version: 8
@@ -28,7 +28,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Setup environment
-        uses: ./.github/workflows/setup.yaml
+        uses: ./.github/workflows/setup.yml
       - name: Check env vars for development
         run: |
           vercel pull --yes --environment=development --token=${{ secrets.VERCEL_TOKEN }}
