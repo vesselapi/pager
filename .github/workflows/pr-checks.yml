@@ -2,20 +2,38 @@ name: pr-checks
 on:
   pull_request:
     branches: [main]
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 jobs:
-  check:
+  check-build:
+    name: Lint and build check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-          cache: 'pnpm'
-      - run: pnpm i
+      - name: Setup environment
+        uses: ./.github/workflows/setup.yaml
+      # - uses: pnpm/action-setup@v2
+      #   with:
+      #     version: 8
+      # - uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 18.x
+      #     cache: 'pnpm'
+      # - run: pnpm i
       - run: pnpm format:check
       - run: pnpm build:changes
+  verify-env-vars:
+    name: Verify environment variables are on dev and prod
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Setup environment
+        uses: ./.github/workflows/setup.yaml
+      - name: Check env vars for development
+        run: |
+          vercel pull --yes --environment=development --token=${{ secrets.VERCEL_TOKEN }}
+          node packages/api/env.mjs
+      - name: Check env vars for production
+        run: |
+          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          node packages/api/env.mjs
