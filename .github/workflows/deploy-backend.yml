@@ -1,11 +1,7 @@
 name: Deploy Backend
 on:
-  push:
-    branches:
-      - main
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  pull_request:
+    branches: [main]
 jobs:
   deploy-dev:
     name: Deploy Backend to dev
