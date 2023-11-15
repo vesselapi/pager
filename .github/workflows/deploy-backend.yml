@@ -1,7 +1,8 @@
 name: Deploy Backend
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches:
+      - main
 jobs:
   deploy-dev:
     name: Deploy Backend to dev
