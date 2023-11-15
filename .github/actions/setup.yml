@@ -1,0 +1,16 @@
+name: setup
+description: Sets up environment
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+        cache: 'pnpm'
+        cache-dependency-path: 'pnpm-lock.yaml'
+    - run: pnpm i
