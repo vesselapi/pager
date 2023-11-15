@@ -29,10 +29,11 @@ jobs:
           fetch-depth: 0
       - name: Setup environment
         uses: ./.github/actions/setup-composite
-      - run: vercel env pull .env --yes --environment=development --token=${{ secrets.VERCEL_TOKEN }}
-      - run: pnpm -F api check-env-vars
-      - run: vercel env pull .env --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      - run: pnpm -F api check-env-vars
-      - run: node packages/api/env.mjs > test.txt
-      - run: ls -l test.txt
-      - run: cat test.txt
+      - name: Check env vars for development
+        run: |
+          vercel env pull .env --yes --environment=development --token=${{ secrets.VERCEL_TOKEN }}
+          pnpm -F api check-env-vars
+      - name: Check env vars for production
+        run: |
+          vercel env pull .env --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          pnpm -F api check-env-vars
