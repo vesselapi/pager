@@ -31,9 +31,9 @@ jobs:
         uses: ./.github/actions/setup-composite
       - name: Check env vars for development
         run: |
-          vercel pull --yes --environment=development --token=${{ secrets.VERCEL_TOKEN }}
+          vercel env pull .env --yes --environment=development --token=${{ secrets.VERCEL_TOKEN }}
           node packages/api/env.mjs
       - name: Check env vars for production
         run: |
-          vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+          vercel env pull .env --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
           node packages/api/env.mjs
