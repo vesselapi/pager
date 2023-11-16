@@ -27,8 +27,6 @@ const alert = async ({
   services,
   framework,
 }: Props<Args, Services>): Promise<Result> => {
-  console.log({ args, framework });
-
   const {
     aws: { sqs },
     logger,

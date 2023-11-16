@@ -1,15 +1,31 @@
+import { Props } from '@exobase/core';
+import { useServices } from '@exobase/hooks';
 import { z } from 'zod';
 
-const schema = z.any();
+import { vessel } from '@vessel/api/src/exobase/hooks/common-hooks';
+import { useSqsArgs } from '@vessel/api/src/exobase/hooks/use-sqs-args';
+import {
+  Logger,
+  makeLogger,
+} from '@vessel/api/src/exobase/services/make-logger';
+
+const schema = z.object({ a: z.string() });
 type Args = z.infer<typeof schema>;
 
-async function alertOncall(args: Args) {
-  console.log(`Message processed: "${JSON.stringify(args)}"`);
-}
-
-export const main = async (event) => {
-  for (const record of event.Records) {
-    const args = schema.parse(record);
-    await alertOncall(args);
-  }
+type Services = {
+  logger: Logger;
 };
+
+const alertOncall = async ({ args, services }: Props<Args, Services>) => {
+  const { logger } = services;
+
+  logger.info(args, 'Alert oncall');
+};
+export const main = vessel()
+  .hook(
+    useServices({
+      logger: makeLogger,
+    }),
+  )
+  .hook(useSqsArgs<Args>(schema))
+  .endpoint(alertOncall);

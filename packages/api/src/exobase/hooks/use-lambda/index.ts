@@ -5,13 +5,13 @@ import { isString, lowerize, partial, tryit } from 'radash';
 
 import { responseFromError, responseFromResult } from './response';
 
-type SqsLambdaFramework = {
+export type SqsLambdaFramework = {
   context: Context;
   event: SQSEvent;
   lambdaType: 'sqs';
 };
 
-type ApiLambdaFramework = {
+export type ApiLambdaFramework = {
   context: Context;
   event: APIGatewayEvent;
   lambdaType: 'api';
@@ -30,7 +30,6 @@ async function lambdaHandler(
   context: Context,
 ) {
   const props: Props = initProps(makeRequest(event, context));
-
   const framework = props.request.method
     ? ({ event, context, lambdaType: 'api' } as ApiLambdaFramework)
     : ({
@@ -38,6 +37,7 @@ async function lambdaHandler(
         context,
         lambdaType: 'sqs',
       } as SqsLambdaFramework);
+
   const [error, result] = await tryit(func)({
     ...props,
     framework,
