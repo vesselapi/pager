@@ -17,6 +17,10 @@ export const env = createEnv({
     DATABASE_URL: z.string().url(),
     CLERK_SECRET_KEY: z.string(),
     AWS_SNS_TOPIC_ALERT_ARN: z.string(),
+    TWILIO_ACCOUNT_SID: z.string(),
+    TWILIO_AUTH_TOKEN: z.string(),
+    TWILIO_PHONE_NUMBER: z.string(),
+    RESEND_API_KEY: z.string(),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -37,6 +41,10 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     AWS_SNS_TOPIC_ALERT_ARN: process.env.AWS_SNS_TOPIC_ALERT_ARN,
+    TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
+    TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:

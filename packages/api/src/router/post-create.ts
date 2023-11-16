@@ -2,8 +2,8 @@ import { z } from 'zod';
 
 import { db, Db, schema } from '@vessel/db';
 
-import { useContextHook } from '../middlewares/use-context-hook';
 import { useLogger } from '../middlewares/use-logger';
+import { useServicesHook } from '../middlewares/use-services-hook';
 import { publicProcedure } from '../trpc';
 
 const input = z.object({
@@ -14,7 +14,7 @@ type Context = { db: Db };
 
 export const postCreate = publicProcedure
   .use(
-    useContextHook<Context>({
+    useServicesHook<Context>({
       db: () => db,
     }),
   )
