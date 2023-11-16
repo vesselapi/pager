@@ -13,6 +13,7 @@
     "postinstall": "pnpm lint:ws",
     "db:generate": "pnpm -F db generate",
     "db:migrate": "pnpm -F db migrate",
+    "db:pull": "pnpm -F db pull",
     "db:studio": "pnpm -F db studio",
     "dev": "turbo dev --parallel",
     "format:check": "turbo format --continue -- --cache --cache-location='node_modules/.cache/.prettiercache'",
