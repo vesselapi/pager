@@ -41,9 +41,6 @@ importers:
       radash:
         specifier: ^11.0.0
         version: 11.0.0
-      serialize-error:
-        specifier: ^11.0.3
-        version: 11.0.3
       zod:
         specifier: ^3.22.3
         version: 3.22.3

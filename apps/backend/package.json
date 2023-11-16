@@ -44,7 +44,6 @@
     "@exobase/use-lambda": "1.0.0-rc.24",
     "aws-lambda": "^1.0.7",
     "radash": "^11.0.0",
-    "serialize-error": "^11.0.3",
     "zod": "^3.22.3"
   }
 }
