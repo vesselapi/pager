@@ -12,7 +12,6 @@ import { serializeError } from 'serialize-error';
 export const useErrorMapping = () =>
   useCatch((props, response): Response => {
     const error = response.error;
-    console.log({ response });
     if (!error) return response;
 
     if (error instanceof ExobaseError) {

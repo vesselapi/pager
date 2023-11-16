@@ -2,16 +2,20 @@ import { Props } from '@exobase/core';
 import { useJsonBody, useServices } from '@exobase/hooks';
 import z from 'zod';
 
+import { vessel } from '@vessel/api/src/exobase/hooks/common-hooks';
+import {
+  Logger,
+  makeLogger,
+} from '@vessel/api/src/exobase/services/make-logger';
 import { Aws, makeAws } from '@vessel/api/src/services/aws';
 
-import { vessel } from '../hooks/common-hooks';
-
-const schema = z.object({});
+const schema = z.object({ test: z.string() });
 
 type Args = z.infer<typeof schema>;
 
 type Services = {
   aws: Aws;
+  logger: Logger;
 };
 
 type Result = {
@@ -40,6 +44,7 @@ export const main = vessel()
   .hook(
     useServices<Services>({
       aws: makeAws,
+      logger: makeLogger,
     }),
   )
   .hook(useJsonBody<Args>(schema))

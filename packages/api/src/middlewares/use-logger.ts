@@ -7,7 +7,7 @@ import { CreateContextOptions } from '../trpc';
 
 const MAX_LEVEL = 'info';
 
-const logger = pino(
+export const logger = pino(
   pino.transport({
     targets: [
       // getPinoTransport(MAX_LEVEL),
@@ -15,6 +15,8 @@ const logger = pino(
     ],
   }),
 );
+
+export type Logger = typeof logger;
 
 export const useLogger = () =>
   experimental_standaloneMiddleware<{ ctx: CreateContextOptions }>().create(

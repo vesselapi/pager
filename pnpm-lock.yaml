@@ -299,6 +299,15 @@ importers:
       '@aws-sdk/client-sns':
         specifier: ^3.450.0
         version: 3.450.0
+      '@exobase/core':
+        specifier: 1.0.0-rc.25
+        version: 1.0.0-rc.25
+      '@exobase/hooks':
+        specifier: 1.0.0-rc.53
+        version: 1.0.0-rc.53
+      '@exobase/use-lambda':
+        specifier: 1.0.0-rc.24
+        version: 1.0.0-rc.24
       '@t3-oss/env-nextjs':
         specifier: ^0.7.1
         version: 0.7.1(typescript@5.2.2)(zod@3.22.3)
@@ -320,6 +329,9 @@ importers:
       radash:
         specifier: ^11.0.0
         version: 11.0.0
+      serialize-error:
+        specifier: ^11.0.3
+        version: 11.0.3
       superjson:
         specifier: 2.2.0
         version: 2.2.0
@@ -327,6 +339,9 @@ importers:
         specifier: ^3.22.3
         version: 3.22.3
     devDependencies:
+      '@types/aws-lambda':
+        specifier: ^8.10.126
+        version: 8.10.126
       '@vessel/eslint-config':
         specifier: workspace:^0.2.0
         version: link:../../tooling/eslint
