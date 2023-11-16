@@ -1,7 +1,7 @@
 import { db, Db } from '@vessel/db';
 
-import { useContextHook } from '../middlewares/use-context-hook';
 import { useLogger } from '../middlewares/use-logger';
+import { useServicesHook } from '../middlewares/use-services-hook';
 import { publicProcedure } from '../trpc';
 
 type Context = {
@@ -10,7 +10,7 @@ type Context = {
 
 export const postList = publicProcedure
   .use(
-    useContextHook<Context>({
+    useServicesHook<Context>({
       db: () => db,
     }),
   )
