@@ -22,7 +22,9 @@
     "next": "^14.0.1",
     "pino": "^8.16.1",
     "radash": "^11.0.0",
+    "resend": "^2.0.0",
     "superjson": "2.2.0",
+    "twilio": "^4.19.0",
     "zod": "^3.22.3"
   },
   "devDependencies": {
