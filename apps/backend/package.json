@@ -14,7 +14,6 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.126",
     "@types/node": "^18.18.9",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
@@ -41,8 +40,6 @@
   "dependencies": {
     "@exobase/core": "1.0.0-rc.25",
     "@exobase/hooks": "1.0.0-rc.53",
-    "@exobase/use-lambda": "1.0.0-rc.24",
-    "aws-lambda": "^1.0.7",
     "radash": "^11.0.0",
     "zod": "^3.22.3"
   }

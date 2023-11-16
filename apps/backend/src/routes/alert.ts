@@ -9,7 +9,7 @@ import {
 } from '@vessel/api/src/exobase/services/make-logger';
 import { Aws, makeAws } from '@vessel/api/src/services/aws';
 
-const schema = z.object({ test: z.string() });
+const schema = z.object({});
 
 type Args = z.infer<typeof schema>;
 
@@ -31,12 +31,14 @@ const alert = async ({
 
   const {
     aws: { sqs },
+    logger,
   } = services;
 
   await sqs.publish({
     topic: sqs.TOPIC.ALERT,
     payload: { test: '1' },
   });
+  logger.info('Alert sent to topic');
   return { success: true };
 };
 

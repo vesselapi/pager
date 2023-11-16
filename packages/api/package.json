@@ -22,8 +22,8 @@
     "@trpc/client": "next",
     "@trpc/server": "next",
     "@vessel/db": "workspace:^0.1.0",
+    "bunyan": "^1.8.15",
     "next": "^14.0.1",
-    "pino": "^8.16.1",
     "radash": "^11.0.0",
     "serialize-error": "^11.0.3",
     "superjson": "2.2.0",
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.126",
+    "@types/bunyan": "^1.8.11",
     "@vessel/eslint-config": "workspace:^0.2.0",
     "@vessel/prettier-config": "workspace:^0.1.0",
     "@vessel/tsconfig": "workspace:^0.1.0",

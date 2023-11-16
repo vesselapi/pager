@@ -1,20 +1,11 @@
 import * as crypto from 'crypto';
 // import { getPinoTransport } from '@hyperdx/node-opentelemetry';
 import { experimental_standaloneMiddleware } from '@trpc/server';
-import pino from 'pino';
+import bunyan from 'bunyan';
 
 import { CreateContextOptions } from '../trpc';
 
-const MAX_LEVEL = 'info';
-
-export const logger = pino(
-  pino.transport({
-    targets: [
-      // getPinoTransport(MAX_LEVEL),
-      // other transports
-    ],
-  }),
-);
+export const logger = bunyan.createLogger({ name: 'logger' });
 
 export type Logger = typeof logger;
 
