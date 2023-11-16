@@ -34,3 +34,5 @@ export const makeAws = () => {
     sqs: makeSqs(),
   };
 };
+
+export type Aws = ReturnType<typeof makeAws>;
