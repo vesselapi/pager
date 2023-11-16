@@ -305,9 +305,6 @@ importers:
       '@trpc/server':
         specifier: next
         version: 11.0.0-alpha-next-2023-11-11-17-32-01.100
-      '@types/bunyan':
-        specifier: ^1.8.11
-        version: 1.8.11
       '@vessel/db':
         specifier: workspace:^0.1.0
         version: link:../db
@@ -333,6 +330,9 @@ importers:
       '@types/aws-lambda':
         specifier: ^8.10.126
         version: 8.10.126
+      '@types/bunyan':
+        specifier: ^1.8.11
+        version: 1.8.11
       '@vessel/eslint-config':
         specifier: workspace:^0.2.0
         version: link:../../tooling/eslint
@@ -6241,7 +6241,7 @@ packages:
     resolution: {integrity: sha512-758fRH7umIMk5qt5ELmRMff4mLDlN+xyYzC+dkPTdKwbSkJFvz6xwyScrytPU0QIBbRRwbiE8/BIg8bpajerNQ==}
     dependencies:
       '@types/node': 18.18.9
-    dev: false
+    dev: true
 
   /@types/cls-hooked@4.3.8:
     resolution: {integrity: sha512-tf/7H883gFA6MPlWI15EQtfNZ+oPL0gLKkOlx9UHFrun1fC/FkuyNBpTKq1B5E3T4fbvjId6WifHUdSGsMMuPg==}
