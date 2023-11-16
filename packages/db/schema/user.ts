@@ -1,4 +1,3 @@
-import { sql } from 'drizzle-orm';
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 import { organization } from './organization';
@@ -9,7 +8,5 @@ export const user = pgTable('user', {
   organizationId: text('organization_id').references(() => organization.id),
   firstName: text('first_name'),
   lastName: text('last_name'),
-  createdAt: timestamp('created_at')
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
 });
