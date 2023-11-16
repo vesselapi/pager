@@ -12,7 +12,7 @@ const Dropdown = ({
 }: {
   children: ReactElement;
   position?: 'left' | 'right';
-  items: string[];
+  items: { key: string; Component: () => any }[];
 }) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -38,7 +38,7 @@ const Dropdown = ({
           <div className="py-1">
             {items.map((item) => {
               return (
-                <Menu.Item key={item}>
+                <Menu.Item key={item.key}>
                   {({ active }) => (
                     <div
                       className={classNames(
@@ -46,7 +46,7 @@ const Dropdown = ({
                         'block px-4 py-2 text-sm',
                       )}
                     >
-                      {item}
+                      {item.Component()}
                     </div>
                   )}
                 </Menu.Item>

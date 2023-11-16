@@ -79,13 +79,13 @@ const AlertsList = () => {
 
   const appliedFilters = [];
 
-  const filterOptions = [
+  const [options, setOptions] = useState([
     {
       name: 'status',
       comparitors: ['eq', 'dne'],
-      options: ['acked', 'closed', 'open'],
+      options: [{ name: 'acked' }, { name: 'open' }],
     },
-  ];
+  ]);
 
   return (
     <div className="flex flex-col">
@@ -97,27 +97,45 @@ const AlertsList = () => {
             placeholder="Search"
           />
           <div className="flex">
-            <Dropdown items={filterOptions.map((f) => f.name)}>
+            <Dropdown
+              items={options.map((f) => {
+                return {
+                  key: f.name,
+                  Component: () => {
+                    return (
+                      <button
+                        onClick={() => {
+                          console.log('clicked!!');
+                          setOptions(f.options);
+                        }}
+                      >
+                        {f.name}
+                      </button>
+                    );
+                  },
+                };
+              })}
+            >
               <div className="mr-1 flex items-center rounded bg-gray-200 px-2 py-1">
                 <MdFilterList className="mr-1" />
                 Filter
               </div>
             </Dropdown>
-            <Dropdown items={['status']}>
-              <div className="flex items-center rounded bg-gray-200 px-2 py-1">
-                <VscSettings className="mr-1" />
-                Display
-              </div>
-            </Dropdown>
+            {/* <Dropdown items={['status']}> */}
+            <div className="flex items-center rounded bg-gray-200 px-2 py-1">
+              <VscSettings className="mr-1" />
+              Display
+            </div>
+            {/* </Dropdown> */}
           </div>
         </div>
 
         {/* The Sub-title bar is used to show the views active state like what the display is and what filters are applied */}
-        {appliedFilters.length && (
+        {appliedFilters.length ? (
           <div className="mt-2">
             <FilterPill title={'closed'} />
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* TODO: Change out for virtualized scroll */}

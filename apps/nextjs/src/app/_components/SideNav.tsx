@@ -39,9 +39,9 @@ const SideNav = ({ children }) => {
         <div>
           <div className="flex items-center justify-between p-3">
             <div>Vessel</div>
-            <Dropdown position="right" items={['logout']}>
-              <UserIcon />
-            </Dropdown>
+            {/* <Dropdown position="right" items={[]}> */}
+            <UserIcon />
+            {/* </Dropdown> */}
           </div>
           <NavItem route="alerts" title="Alerts" Icon={TbBell} />
           <NavItem route="schedule" title="Schedule" Icon={TbCalendarFilled} />
