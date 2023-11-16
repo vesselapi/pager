@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: false
@@ -366,6 +366,9 @@ importers:
       drizzle-orm:
         specifier: ^0.28.6
         version: 0.28.6(postgres@3.4.3)
+      drizzle-zod:
+        specifier: ^0.5.1
+        version: 0.5.1(drizzle-orm@0.28.6)
       postgres:
         specifier: ^3.4.3
         version: 3.4.3
@@ -400,6 +403,8 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
+
+  packages/types: {}
 
   tooling/eslint:
     dependencies:
@@ -8704,6 +8709,15 @@ packages:
         optional: true
     dependencies:
       postgres: 3.4.3
+    dev: false
+
+  /drizzle-zod@0.5.1(drizzle-orm@0.28.6):
+    resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
+    peerDependencies:
+      drizzle-orm: '>=0.23.13'
+      zod: '*'
+    dependencies:
+      drizzle-orm: 0.28.6(postgres@3.4.3)
     dev: false
 
   /dset@3.1.3:

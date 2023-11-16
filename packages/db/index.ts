@@ -12,14 +12,16 @@ export * from 'drizzle-orm';
 
 const queryClient = postgres(process.env.DATABASE_URL);
 
-export const db = drizzle(queryClient, { schema });
+const drizzleDbClient = drizzle(queryClient, { schema });
 
+const createDbClient = (db: typeof drizzleDbClient) => ({
+  alerts: {
+    find: () => ({}),
+    list: () => ({}),
+    upsert: () => ({}),
+  },
+  user: {},
+});
+
+export const db = createDbClient(drizzleDbClient);
 export type Db = typeof db;
-
-async function main() {
-  await db.insert(alert).values({
-    id: 'string',
-  });
-}
-
-main().catch(console.error);
