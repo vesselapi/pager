@@ -21,20 +21,22 @@ type Result = {
 const alert = async ({
   args,
   services,
+  framework,
 }: Props<Args, Services>): Promise<Result> => {
-  const partialAlert = args;
+  console.log({ args, framework });
+
   const {
     aws: { sqs },
   } = services;
 
   await sqs.publish({
     topic: sqs.TOPIC.ALERT,
-    payload: { test: 1 },
+    payload: { test: '1' },
   });
   return { success: true };
 };
 
-export default vessel()
+export const main = vessel()
   .hook(
     useServices<Services>({
       aws: makeAws,
