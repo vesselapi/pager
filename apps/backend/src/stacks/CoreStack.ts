@@ -14,7 +14,7 @@ const stackEnv = shake(
 export function CoreStack({ stack }: StackContext) {
   const api = new Api(stack, 'WebhookApi', {
     routes: {
-      'POST    /webhook': 'src/routes/webhook.main',
+      'POST    /webhook': 'src/routes/alert.main',
     },
     defaults: {
       function: {

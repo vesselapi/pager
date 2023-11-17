@@ -3,10 +3,6 @@
   "compilerOptions": {
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "include": [
-    ".",
-    "../../packages/api/env.mjs",
-    "../../packages/api/src/exobase"
-  ],
+  "include": ["*.ts", "src"],
   "exclude": ["node_modules"]
 }
