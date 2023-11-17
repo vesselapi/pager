@@ -1,8 +1,8 @@
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import type { OrgId } from '../../types';
-import { OrgIdRegex } from '../../types';
+import type { OrgId } from '@vessel/types';
+import { OrgIdRegex } from '@vessel/types';
 
 export const organization = pgTable('organization', {
   id: text('id').primaryKey(), // v_organization_[hash]

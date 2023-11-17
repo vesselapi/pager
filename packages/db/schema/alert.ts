@@ -1,8 +1,9 @@
 import { json, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import { AlertIdRegex, UserIdRegex } from '../../types';
-import type { AlertId, UserId } from '../../types';
+import type { AlertId, UserId } from '@vessel/types';
+import { AlertIdRegex, UserIdRegex } from '@vessel/types';
+
 import { user } from './user';
 
 export const alert = pgTable('alert', {

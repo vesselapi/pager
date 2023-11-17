@@ -2,7 +2,8 @@ import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
-import type { AlertEventId, AlertId, OrgId, UserId } from '../types';
+import type { AlertEventId, AlertId, OrgId, UserId } from '@vessel/types';
+
 import { alert as alertSchema, selectAlertSchema } from './schema/alert';
 import {
   alertEvent as alertEventSchema,
@@ -31,7 +32,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
   alerts: {
     find: async (id: AlertId) => {
       const alert = await db.query.alert.findFirst({
-        where: eq(alertSchema.id, id),
+        where: eq(alertSchema.id, id as string),
       });
       if (!alert) return null;
       return selectAlertSchema.parse(alert);
@@ -44,7 +45,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
   alertEvent: {
     find: async (id: AlertEventId) => {
       const alertEvent = await db.query.alertEvent.findFirst({
-        where: eq(alertEventSchema.id, id),
+        where: eq(alertEventSchema.id, id as string),
       });
       if (!alertEvent) return null;
       return selectAlertEventSchema.parse(alertEvent);
@@ -57,7 +58,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
   organizations: {
     find: async (id: OrgId) => {
       const organization = await db.query.organization.findFirst({
-        where: eq(organizationSchema.id, id),
+        where: eq(organizationSchema.id, id as string),
       });
       if (!organization) return null;
       return selectOrgSchema.parse(organization);
@@ -72,7 +73,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
   user: {
     find: async (id: UserId) => {
       const user = await db.query.user.findFirst({
-        where: eq(userSchema.id, id),
+        where: eq(userSchema.id, id as string),
       });
       if (!user) return null;
       return selectUserSchema.parse(user);
