@@ -9,6 +9,6 @@ export const alert = pgTable('alert', {
     .default('OPEN')
     .notNull(),
   assignedToId: text('assigned_to_id').references(() => user.id),
-  createdAt: timestamp('created_at').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
   metadata: json('metadata'),
 });
