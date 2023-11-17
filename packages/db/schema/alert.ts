@@ -1,4 +1,6 @@
 import { json, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
 
 import { user } from './user';
 
@@ -12,3 +14,6 @@ export const alert = pgTable('alert', {
   createdAt: timestamp('created_at').notNull(),
   metadata: json('metadata'),
 });
+
+const alertSelectSchema = createSelectSchema(alert);
+export type Alert = z.infer<typeof alertSelectSchema>;

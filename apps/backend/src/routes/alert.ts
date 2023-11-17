@@ -7,14 +7,14 @@ import {
   Logger,
   makeLogger,
 } from '@vessel/api/src/exobase/services/make-logger';
-import { Aws, makeAws } from '@vessel/api/src/services/aws';
+import { makePubSub, PubSub } from '@vessel/api/src/services/pubsub';
 
 const schema = z.object({});
 
 type Args = z.infer<typeof schema>;
 
 type Services = {
-  aws: Aws;
+  pubsub: PubSub;
   logger: Logger;
 };
 
@@ -27,14 +27,10 @@ const alert = async ({
   services,
   framework,
 }: Props<Args, Services>): Promise<Result> => {
-  const {
-    aws: { sqs },
-    logger,
-  } = services;
+  const { pubsub, logger } = services;
 
-  await sqs.publish({
-    topic: sqs.TOPIC.ALERT,
-    payload: { test: '1' },
+  await pubsub.alert.publish({
+    payload: {},
   });
   logger.info('Alert sent to topic');
   return { success: true };
@@ -43,7 +39,7 @@ const alert = async ({
 export const main = vessel()
   .hook(
     useServices<Services>({
-      aws: makeAws,
+      pubsub: makePubSub(),
       logger: makeLogger,
     }),
   )

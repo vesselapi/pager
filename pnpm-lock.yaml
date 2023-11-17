@@ -98,13 +98,13 @@ importers:
         version: 5.8.1(react-dom@18.2.0)(react-native@0.72.6)(react@18.2.0)
       '@trpc/client':
         specifier: next
-        version: 11.0.0-alpha-next-2023-11-11-17-32-01.100(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100)
+        version: 11.0.0-alpha-next-2023-11-17-15-28-40.101(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101)
       '@trpc/react-query':
         specifier: next
-        version: 11.0.0-alpha-next-2023-11-11-17-32-01.100(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-11-17-32-01.100)(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100)(react-dom@18.2.0)(react@18.2.0)
+        version: 11.0.0-alpha-next-2023-11-17-15-28-40.101(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-17-15-28-40.101)(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
         specifier: next
-        version: 11.0.0-alpha-next-2023-11-11-17-32-01.100
+        version: 11.0.0-alpha-next-2023-11-17-15-28-40.101
       expo:
         specifier: ^49.0.16
         version: 49.0.16(@babel/core@7.23.2)
@@ -213,16 +213,16 @@ importers:
         version: 5.8.1(@tanstack/react-query@5.8.1)(next@14.0.1)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/client':
         specifier: next
-        version: 11.0.0-alpha-next-2023-11-11-17-32-01.100(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100)
+        version: 11.0.0-alpha-next-2023-11-17-15-28-40.101(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101)
       '@trpc/next':
         specifier: next
-        version: 11.0.0-alpha-next-2023-11-11-17-32-01.100(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-11-17-32-01.100)(@trpc/react-query@11.0.0-alpha-next-2023-11-11-17-32-01.100)(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100)(next@14.0.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 11.0.0-alpha-next-2023-11-17-15-28-40.101(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-17-15-28-40.101)(@trpc/react-query@11.0.0-alpha-next-2023-11-17-15-28-40.101)(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101)(next@14.0.1)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/react-query':
         specifier: next
-        version: 11.0.0-alpha-next-2023-11-11-17-32-01.100(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-11-17-32-01.100)(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100)(react-dom@18.2.0)(react@18.2.0)
+        version: 11.0.0-alpha-next-2023-11-17-15-28-40.101(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-17-15-28-40.101)(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
         specifier: next
-        version: 11.0.0-alpha-next-2023-11-11-17-32-01.100
+        version: 11.0.0-alpha-next-2023-11-17-15-28-40.101
       '@vessel/api':
         specifier: workspace:^0.1.0
         version: link:../../packages/api
@@ -301,10 +301,10 @@ importers:
         version: 0.7.1(typescript@5.2.2)(zod@3.22.3)
       '@trpc/client':
         specifier: next
-        version: 11.0.0-alpha-next-2023-11-11-17-32-01.100(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100)
+        version: 11.0.0-alpha-next-2023-11-17-15-28-40.101(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101)
       '@trpc/server':
         specifier: next
-        version: 11.0.0-alpha-next-2023-11-11-17-32-01.100
+        version: 11.0.0-alpha-next-2023-11-17-15-28-40.101
       '@vessel/db':
         specifier: workspace:^0.1.0
         version: link:../db
@@ -366,9 +366,15 @@ importers:
       drizzle-orm:
         specifier: ^0.28.6
         version: 0.28.6(postgres@3.4.3)
+      drizzle-zod:
+        specifier: ^0.5.1
+        version: 0.5.1(drizzle-orm@0.28.6)(zod@3.22.3)
       postgres:
         specifier: ^3.4.3
         version: 3.4.3
+      zod:
+        specifier: ^3.22.3
+        version: 3.22.3
     devDependencies:
       '@vessel/eslint-config':
         specifier: workspace:^0.2.0
@@ -6109,53 +6115,53 @@ packages:
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
     dev: true
 
-  /@trpc/client@11.0.0-alpha-next-2023-11-11-17-32-01.100(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100):
-    resolution: {integrity: sha512-KucniMMgAi2jei2j1r8s76Jy+c4H84Cdnp3ytCi9isw5m6+cj12c/j7CScLJ0xukwNLHsQywTQZQuI6umFrWAQ==}
+  /@trpc/client@11.0.0-alpha-next-2023-11-17-15-28-40.101(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101):
+    resolution: {integrity: sha512-D9CAAndICihcY1PTBTH9xQpkhHU+X2dMioWnNFbnn6UYOAVSphsO3LcEfb4sUpHrYusiYxKHktVh64JplRKHJQ==}
     peerDependencies:
-      '@trpc/server': 11.0.0-alpha-next-2023-11-11-17-32-01.100+a69ae8503
+      '@trpc/server': 11.0.0-alpha-next-2023-11-17-15-28-40.101+575954d1e
     dependencies:
-      '@trpc/server': 11.0.0-alpha-next-2023-11-11-17-32-01.100
+      '@trpc/server': 11.0.0-alpha-next-2023-11-17-15-28-40.101
     dev: false
 
-  /@trpc/next@11.0.0-alpha-next-2023-11-11-17-32-01.100(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-11-17-32-01.100)(@trpc/react-query@11.0.0-alpha-next-2023-11-11-17-32-01.100)(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100)(next@14.0.1)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-gu/ucxLKfkBrXnA28Z9u8DSqG0ytEmF8T9IGL+cgUeEbZHtfB/0pT43TJjpEpJwewjQ5HkzEpy0qJln5mnhsCA==}
+  /@trpc/next@11.0.0-alpha-next-2023-11-17-15-28-40.101(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-17-15-28-40.101)(@trpc/react-query@11.0.0-alpha-next-2023-11-17-15-28-40.101)(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101)(next@14.0.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-CpORpC6+EkGNYuKTJoMBob0LZVPAJlHE39/Z/Ded8e+NXlwC4AGS1h7zEGVSsWyuafIhtkS8hz/gAWbnf8Atdg==}
     peerDependencies:
       '@tanstack/react-query': ^5.0.0
-      '@trpc/client': 11.0.0-alpha-next-2023-11-11-17-32-01.100+a69ae8503
-      '@trpc/react-query': 11.0.0-alpha-next-2023-11-11-17-32-01.100+a69ae8503
-      '@trpc/server': 11.0.0-alpha-next-2023-11-11-17-32-01.100+a69ae8503
+      '@trpc/client': 11.0.0-alpha-next-2023-11-17-15-28-40.101+575954d1e
+      '@trpc/react-query': 11.0.0-alpha-next-2023-11-17-15-28-40.101+575954d1e
+      '@trpc/server': 11.0.0-alpha-next-2023-11-17-15-28-40.101+575954d1e
       next: '*'
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
       '@tanstack/react-query': 5.8.1(react-dom@18.2.0)(react-native@0.72.6)(react@18.2.0)
-      '@trpc/client': 11.0.0-alpha-next-2023-11-11-17-32-01.100(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100)
-      '@trpc/react-query': 11.0.0-alpha-next-2023-11-11-17-32-01.100(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-11-17-32-01.100)(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100)(react-dom@18.2.0)(react@18.2.0)
-      '@trpc/server': 11.0.0-alpha-next-2023-11-11-17-32-01.100
+      '@trpc/client': 11.0.0-alpha-next-2023-11-17-15-28-40.101(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101)
+      '@trpc/react-query': 11.0.0-alpha-next-2023-11-17-15-28-40.101(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-17-15-28-40.101)(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101)(react-dom@18.2.0)(react@18.2.0)
+      '@trpc/server': 11.0.0-alpha-next-2023-11-17-15-28-40.101
       next: 14.0.1(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-ssr-prepass: 1.5.0(react@18.2.0)
     dev: false
 
-  /@trpc/react-query@11.0.0-alpha-next-2023-11-11-17-32-01.100(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-11-17-32-01.100)(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-Tod9DfYfOejmoopabQSGIhfXzecSAugBGauNhHZRKWsP6aj9ZR7pzowovP81i9s+SD/w7KZEmuIDIxY44y/Mxg==}
+  /@trpc/react-query@11.0.0-alpha-next-2023-11-17-15-28-40.101(@tanstack/react-query@5.8.1)(@trpc/client@11.0.0-alpha-next-2023-11-17-15-28-40.101)(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-jY1wHjecmbsC9r7o5Tgajud0yPxTHOoAoIFuiRjnbNyV0jMbfzpblZZuB10rBfe3/vxaNrau8gqjjZMdorchVA==}
     peerDependencies:
       '@tanstack/react-query': ^5.0.0
-      '@trpc/client': 11.0.0-alpha-next-2023-11-11-17-32-01.100+a69ae8503
-      '@trpc/server': 11.0.0-alpha-next-2023-11-11-17-32-01.100+a69ae8503
+      '@trpc/client': 11.0.0-alpha-next-2023-11-17-15-28-40.101+575954d1e
+      '@trpc/server': 11.0.0-alpha-next-2023-11-17-15-28-40.101+575954d1e
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
       '@tanstack/react-query': 5.8.1(react-dom@18.2.0)(react-native@0.72.6)(react@18.2.0)
-      '@trpc/client': 11.0.0-alpha-next-2023-11-11-17-32-01.100(@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100)
-      '@trpc/server': 11.0.0-alpha-next-2023-11-11-17-32-01.100
+      '@trpc/client': 11.0.0-alpha-next-2023-11-17-15-28-40.101(@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101)
+      '@trpc/server': 11.0.0-alpha-next-2023-11-17-15-28-40.101
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@trpc/server@11.0.0-alpha-next-2023-11-11-17-32-01.100:
-    resolution: {integrity: sha512-cKN5EongO/s0cc0bSJwHhy+sKsvVknOhclVh8BrkvJdDzRtuzuiHbDe9pLBYo+9jdNk7AVyivZAuyntWbx1lSw==}
+  /@trpc/server@11.0.0-alpha-next-2023-11-17-15-28-40.101:
+    resolution: {integrity: sha512-Y6bOF+HybP+abRyRmi4vopfm4aG/uiXQ2mpPM5oSrUMw2hORWbX69Uk09k2efMAeNMkAXZlNtyAJxzvVcVmvnA==}
     engines: {node: '>=18.0.0'}
     dev: false
 
@@ -8704,6 +8710,16 @@ packages:
         optional: true
     dependencies:
       postgres: 3.4.3
+    dev: false
+
+  /drizzle-zod@0.5.1(drizzle-orm@0.28.6)(zod@3.22.3):
+    resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
+    peerDependencies:
+      drizzle-orm: '>=0.23.13'
+      zod: '*'
+    dependencies:
+      drizzle-orm: 0.28.6(postgres@3.4.3)
+      zod: 3.22.3
     dev: false
 
   /dset@3.1.3:
