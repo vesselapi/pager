@@ -19,7 +19,9 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@vessel/types": "workspace:^",
     "drizzle-orm": "^0.28.6",
+    "drizzle-zod": "^0.5.1",
     "postgres": "^3.4.3"
   },
   "devDependencies": {
