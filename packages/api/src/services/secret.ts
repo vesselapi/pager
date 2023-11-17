@@ -63,8 +63,6 @@ export const makeSecret = () => {
     }
     return decrypt(encrypted);
   };
-
-  return { put, get };
 };
 
 export type Secret = ReturnType<typeof makeSecret>;
