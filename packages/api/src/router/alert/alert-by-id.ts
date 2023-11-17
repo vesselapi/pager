@@ -1,27 +1,31 @@
 import { z } from 'zod';
 
 import type { Db } from '@vessel/db';
-import { db, eq, schema } from '@vessel/db';
+import { db } from '@vessel/db';
+import { AlertId, AlertIdRegex } from '@vessel/types';
 
-import { useContextHook } from '../../middlewares/use-context-hook';
 import { useLogger } from '../../middlewares/use-logger';
+import { useServicesHook } from '../../middlewares/use-services-hook';
 import { publicProcedure } from '../../trpc';
 
 interface Context {
   db: Db;
 }
-const input = z.object({ id: z.string() });
+const input = z.object({
+  id: z
+    .string()
+    .regex(AlertIdRegex, `Invalid id, expected format ${AlertIdRegex}`)
+    .transform((x) => x as AlertId),
+});
 
 export const alertById = publicProcedure
   .use(
-    useContextHook<Context>({
+    useServicesHook<Context>({
       db: () => db,
     }),
   )
   .use(useLogger())
   .input(input)
   .query(({ ctx, input }) => {
-    return ctx.db.query.alert.findFirst({
-      where: eq(schema.alert.id, input.id),
-    });
+    return ctx.db.alerts.find(input.id);
   });

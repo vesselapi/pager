@@ -3,8 +3,8 @@ import { z } from 'zod';
 import type { Db, SQL } from '@vessel/db';
 import { and, asc, db, desc, eq, ilike, not, or, schema } from '@vessel/db';
 
-import { useContextHook } from '../../middlewares/use-context-hook';
 import { useLogger } from '../../middlewares/use-logger';
+import { useServicesHook } from '../../middlewares/use-services-hook';
 import { publicProcedure } from '../../trpc';
 
 interface Context {
@@ -115,7 +115,7 @@ const input = z.object({
 
 export const alertList = publicProcedure
   .use(
-    useContextHook<Context>({
+    useServicesHook<Context>({
       db: () => db,
     }),
   )
@@ -125,7 +125,7 @@ export const alertList = publicProcedure
     const sortClause = buildSortClause(input.sorts);
     const filterClause = buildFilterClause(input.filters);
 
-    return ctx.db.query.alert.findMany({
+    return ctx.db.alerts.list({
       limit: input.limit,
       offset: input.offset,
       orderBy: sortClause,
@@ -136,5 +136,4 @@ export const alertList = publicProcedure
 /**
  * TODO:
  * - implement unit tests
- * - add id validations with drizzle-zod
  */
