@@ -92,7 +92,7 @@ const buildFilterClause = (inputFilters: z.infer<typeof filters>) => {
 
       return and(statusCondition, curr);
     } else if ('title' in filter) {
-      // WARNING(@zkirby): Absolutely not the most efficient way to implement this
+      // WARNING(@zkirby): Not the most efficient way to implement this
       // filter but should be fine for now until we need to do something more efficient.
       const titleIsLike = ilike(schema.alert.title, `%${filter.title.value}%`);
       return and(titleIsLike, curr);
