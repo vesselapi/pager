@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import type { Db, SQL } from '@vessel/db';
 import { and, asc, db, desc, eq, ilike, not, or, schema } from '@vessel/db';
+import { UserIdRegex } from '@vessel/types';
 
 import { useLogger } from '../../middlewares/use-logger';
 import { useServicesHook } from '../../middlewares/use-services-hook';
@@ -58,7 +59,9 @@ const filters = z
       .or(
         z.object({
           assignedToId: z.object({
-            value: z.string(),
+            value: z
+              .string()
+              .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`),
             // Only support "is assigned to" for now.
             condition: z.enum([Conditions.Is]),
           }),
@@ -132,8 +135,3 @@ export const alertList = publicProcedure
       where: filterClause,
     });
   });
-
-/**
- * TODO:
- * - implement unit tests
- */
