@@ -23,9 +23,9 @@ const sorts = z
   .optional();
 
 const Conditions = {
-  Is: 'IS',
-  IsNot: 'IS_NOT',
-  Contains: 'CONTAINS',
+  Is: 'IS' as const,
+  IsNot: 'IS_NOT' as const,
+  Contains: 'CONTAINS' as const,
 };
 
 // NOTE(@zkirby): All conditions are AND-ed, ORs can be done by supplying
@@ -41,30 +41,27 @@ const filters = z
   .array(
     z
       .object({
-        status: z.object({
-          value: z.array(z.enum(['ACKED', 'OPEN', 'CLOSED'])),
-          condition: z.enum([Conditions.Is, Conditions.IsNot]),
-        }),
+        property: z.literal('status'),
+        value: z.array(z.enum(['ACKED', 'OPEN', 'CLOSED'])),
+        condition: z.enum([Conditions.Is, Conditions.IsNot]),
       })
       .or(
         z.object({
-          title: z.object({
-            value: z.string(),
-            // Supports the search functionality on the FE
-            // for now until we implement more efficient search.
-            condition: z.enum([Conditions.Contains]),
-          }),
+          property: z.literal('title'),
+          value: z.string(),
+          // Supports the search functionality on the FE
+          // for now until we implement more efficient search.
+          condition: z.enum([Conditions.Contains]),
         }),
       )
       .or(
         z.object({
-          assignedToId: z.object({
-            value: z
-              .string()
-              .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`),
-            // Only support "is assigned to" for now.
-            condition: z.enum([Conditions.Is]),
-          }),
+          property: z.literal('assignedToId'),
+          value: z
+            .string()
+            .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`),
+          // Only support "is assigned to" for now.
+          condition: z.enum([Conditions.Is]),
         }),
       ),
     // TODO(@zkirby): Add filter support for createdAt times.
@@ -83,27 +80,24 @@ const buildFilterClause = (inputFilters: z.infer<typeof filters>) => {
   if (!inputFilters?.length) return undefined;
 
   return inputFilters.reduce<SQL<unknown> | undefined>((curr, filter) => {
-    if ('status' in filter) {
-      const statusEquals = filter.status.value.map((v) =>
-        eq(schema.alert.status, v),
-      );
+    const { property, value, condition } = filter;
+
+    if ('status' === property) {
+      const statusEquals = value.map((v) => eq(schema.alert.status, v));
 
       // expands to something like: not(or(eq(col, 'ACKED'), eq(col, 'CLOSED')))
       const conditions = or(...statusEquals)!;
-      const shouldBeInverted = filter.status.condition === Conditions.IsNot;
+      const shouldBeInverted = condition === Conditions.IsNot;
       const statusCondition = shouldBeInverted ? not(conditions) : conditions;
 
       return and(statusCondition, curr);
-    } else if ('title' in filter) {
+    } else if ('title' === property) {
       // WARNING(@zkirby): Not the most efficient way to implement this
       // filter but should be fine for now until we need to do something more efficient.
-      const titleIsLike = ilike(schema.alert.title, `%${filter.title.value}%`);
+      const titleIsLike = ilike(schema.alert.title, `%${value}%`);
       return and(titleIsLike, curr);
-    } else if ('assignedToId' in filter) {
-      const assignedToIdIs = eq(
-        schema.alert.assignedToId,
-        filter.assignedToId.value,
-      );
+    } else if ('assignedToId' === property) {
+      const assignedToIdIs = eq(schema.alert.assignedToId, value);
       return and(assignedToIdIs, curr);
     }
   }, undefined);
