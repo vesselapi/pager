@@ -32,10 +32,9 @@ const Conditions = {
 // multiple values in the same filter (e.g., `value: ['ACKED', 'CLOSED']`).
 // conditions should always take the shape:
 // {
-//    [property name]: {
-//        value: z.any(),
-//        conditions: z.enum(Conditions)
-//    }
+//    property: z.literal(),
+//    value: z.any(),
+//    conditions: z.enum(Conditions)
 // }
 const filters = z
   .array(
