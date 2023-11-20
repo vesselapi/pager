@@ -24,7 +24,7 @@ export const schema = {
 
 export * from 'drizzle-orm';
 
-const queryClient = postgres(process.env.DATABASE_URL);
+const queryClient = postgres(process.env.DATABASE_URL!);
 
 const drizzleDbClient = drizzle(queryClient, { schema });
 
