@@ -3,7 +3,13 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { z } from 'zod';
 
-import type { AlertEventId, AlertId, OrgId, UserId } from '@vessel/types';
+import type {
+  AlertEventId,
+  AlertId,
+  OrgId,
+  SecretId,
+  UserId,
+} from '@vessel/types';
 
 import { IdGenerator } from './id-generator';
 import {
@@ -54,10 +60,14 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return alerts.map((a) => selectAlertSchema.parse(a));
     },
     create: async (alert: Omit<CreateAlert, 'id'>) => {
-      return await db.insert(alertSchema).values({
-        id: IdGenerator.alert(),
-        ...alert,
-      });
+      const dbAlert = await db
+        .insert(alertSchema)
+        .values({
+          id: IdGenerator.alert(),
+          ...alert,
+        })
+        .returning();
+      return selectAlertSchema.parse(dbAlert);
     },
   },
   alertEvent: {
@@ -102,7 +112,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     },
   },
   secret: {
-    find: async (id: UserId) => {
+    find: async (id: SecretId) => {
       const secret = await db.query.secret.findFirst({
         where: eq(secretSchema.id, id as string),
       });

@@ -2,11 +2,15 @@ import crypto from 'crypto';
 
 import { AlertId } from '@vessel/types';
 
-const randomString = () => {
+export const hash = (text: string) => {
   const hash = crypto.createHash('SHA256');
-  const uuid = crypto.randomUUID();
-  hash.update(uuid);
+  hash.update(text);
   return hash.digest('hex');
+};
+
+export const randomString = () => {
+  const uuid = crypto.randomUUID();
+  return hash(uuid);
 };
 
 export const IdGenerator = {

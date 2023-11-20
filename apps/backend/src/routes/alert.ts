@@ -4,11 +4,13 @@ import z from 'zod';
 
 import { vessel } from '@vessel/api/src/exobase/hooks/common-hooks';
 import {
-  Logger,
-  makeLogger,
-} from '@vessel/api/src/exobase/services/make-logger';
+  ApiTokenAuth,
+  useApiTokenAuth,
+} from '@vessel/api/src/exobase/hooks/use-api-token-auth';
 import { makePubSub, PubSub } from '@vessel/api/src/services/pubsub';
+import { makeSecret, Secret } from '@vessel/api/src/services/secret';
 
+import { db } from '../../../../packages/db';
 import { insertAlertSchema } from '../../../../packages/db/schema/alert';
 
 const schema = z.object({
@@ -23,7 +25,7 @@ type Args = z.infer<typeof schema>;
 
 type Services = {
   pubsub: PubSub;
-  logger: Logger;
+  secret: Secret;
 };
 
 type Result = {
@@ -33,16 +35,16 @@ type Result = {
 const alert = async ({
   args,
   services,
-  framework,
-}: Props<Args, Services>): Promise<Result> => {
+  auth,
+}: Props<Args, Services, ApiTokenAuth>): Promise<Result> => {
   const { alert } = args;
-  const { pubsub, logger } = services;
+  const { pubsub } = services;
 
-  const dbAlert = await pubsub.alert.publish({
-    organizationId: '',
+  const dbAlert = await db.alerts.create({
+    organizationId: auth.orgId,
     ...alert,
   });
-  logger.info('Alert sent to topic');
+  await pubsub.alert.publish(dbAlert);
   return { success: true };
 };
 
@@ -50,8 +52,9 @@ export const main = vessel()
   .hook(
     useServices<Services>({
       pubsub: makePubSub(),
-      logger: makeLogger,
+      secret: makeSecret(),
     }),
   )
+  .hook(useApiTokenAuth())
   .hook(useJsonBody<Args>(schema))
   .endpoint(alert);

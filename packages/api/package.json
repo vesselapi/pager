@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-sns": "^3.450.0",
+    "@aws-sdk/client-sqs": "^3.454.0",
     "@exobase/core": "1.0.0-rc.25",
     "@exobase/hooks": "1.0.0-rc.53",
     "@exobase/use-lambda": "1.0.0-rc.24",
@@ -38,6 +39,7 @@
     "@vessel/eslint-config": "workspace:^0.2.0",
     "@vessel/prettier-config": "workspace:^0.1.0",
     "@vessel/tsconfig": "workspace:^0.1.0",
+    "@vessel/types": "workspace:^0.1.0",
     "dotenv-cli": "^7.3.0",
     "eslint": "^8.53.0",
     "prettier": "^3.0.3",

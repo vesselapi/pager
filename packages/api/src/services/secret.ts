@@ -1,7 +1,8 @@
 import crypto from 'crypto';
 
-import { db, eq } from '@vessel/db';
-import { secret } from '@vessel/db/schema/secret';
+import { db } from '@vessel/db';
+import { hash, randomString } from '@vessel/db/id-generator';
+import { ApiToken, ApiTokenId, OrgId, SecretId } from '@vessel/types';
 
 import { env } from '../../env.mjs';
 
@@ -46,23 +47,58 @@ export const makeSecret = () => {
     return JSON.parse(decrypted.toString());
   };
 
-  const put = async ({ key, value }: { key: string; value: Json }) => {
+  const put = async ({
+    key,
+    value,
+    orgId,
+  }: {
+    key: string;
+    value: Json;
+    orgId: OrgId | null;
+  }) => {
     const encrypted = encrypt(value);
-    await db.insert(secret).values({
+    await db.secret.create({
       id: key,
+      organizationId: orgId,
       ...encrypted,
     });
   };
 
-  const get = async <T>(key: string): Promise<T> => {
-    const encrypted = await db.query.secret.findFirst({
-      where: eq(secret.id, key),
-    });
+  const get = async <T>(
+    key: SecretId,
+  ): Promise<{ orgId: OrgId | null; value: T } | null> => {
+    const encrypted = await db.secret.find(key);
     if (!encrypted) {
-      throw new Error('Secret not found');
+      return null;
     }
-    return decrypt(encrypted);
+    const value = decrypt(encrypted);
+    return { orgId: encrypted.organizationId, value };
   };
+
+  const makeApiToken = () => {
+    const toApiTokenId = (apiToken: ApiToken): ApiTokenId =>
+      `v_secret_apiToken_${hash(apiToken)}`;
+    const create = async (
+      orgId: OrgId,
+    ): Promise<{ apiTokenId: ApiTokenId; apiToken: ApiToken }> => {
+      const apiToken: ApiToken = `v_apiToken_${randomString()}`;
+      const apiTokenId = toApiTokenId(apiToken);
+      await put({ key: apiTokenId, value: apiToken, orgId });
+      return { apiTokenId, apiToken };
+    };
+
+    const find = async (apiToken: ApiToken) => {
+      const apiTokenId = toApiTokenId(apiToken);
+      const dbApiToken = await get<ApiToken>(apiTokenId);
+      if (!dbApiToken) {
+        return null;
+      }
+      return { orgId: dbApiToken.orgId, apiToken: dbApiToken.value };
+    };
+    return { create, find };
+  };
+
+  return { apiToken: makeApiToken() };
 };
 
 export type Secret = ReturnType<typeof makeSecret>;

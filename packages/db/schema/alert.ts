@@ -38,4 +38,5 @@ export const insertAlertSchema = createInsertSchema(alert, {
       .transform((x) => x as UserId),
 });
 
+export type Alert = z.infer<typeof selectAlertSchema>;
 export type CreateAlert = Omit<z.infer<typeof insertAlertSchema>, 'id'>;
