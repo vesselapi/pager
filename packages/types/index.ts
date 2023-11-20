@@ -12,3 +12,9 @@ export const UserIdRegex = /^v_user_[a-z0-9]+$/;
 
 export type SecretId = `v_secret_${string}_${string}`; // v_secret_{entity}_{suffix}
 export const SecretIdRegex = /^v_secret_[a-z0-9]+_[a-z0-9]+$/;
+
+export type ApiTokenId = `v_secret_apiToken_${string}`; // v_secret_apiToken_{orgId}
+export const ApiTokenIdRegex = /^v_secret_apiToken_[a-z0-9]+$/;
+
+export type ApiToken = `v_apiToken_${string}`; // v_apiToken_{hash}
+export const ApiTokenRegex = /^v_apiToken_[a-z0-9]+$/;

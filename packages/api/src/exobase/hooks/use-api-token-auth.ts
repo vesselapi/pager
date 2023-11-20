@@ -1,0 +1,68 @@
+import { hook, Props } from '@exobase/core';
+import { isArray } from 'radash';
+
+import { ApiToken, OrgId } from '@vessel/types';
+
+import { Secret } from '../../services/secret';
+import * as errors from '../errors';
+
+const API_TOKEN_HEADER_KEY = 'x-vessel-api-token';
+
+export type ApiTokenAuth = {
+  apiToken: ApiToken;
+  orgId: OrgId;
+};
+
+type Services = {
+  secret: Secret;
+};
+
+export const useApiTokenAuth = () =>
+  hook<Props<{}, Services>, Props<{}, {}, ApiTokenAuth>>(
+    function useApiTokenAuth(func) {
+      return async (props) => {
+        const { secret } = props.services;
+
+        const apiToken = props.request.headers[
+          API_TOKEN_HEADER_KEY
+        ] as ApiToken;
+        if (isArray(apiToken)) {
+          throw new errors.NotAuthenticatedError({
+            message: `Invalid API token value, found multiple headers for "${API_TOKEN_HEADER_KEY}"`,
+          });
+        }
+
+        if (!apiToken) {
+          throw new errors.NotAuthenticatedError({
+            message: `Missing API token in header key "${API_TOKEN_HEADER_KEY}"`,
+          });
+        }
+
+        const apiTokenSecret = await secret.apiToken.find(apiToken);
+        if (!apiTokenSecret) {
+          throw new errors.NotAuthenticatedError({
+            message: 'Invalid API token',
+          });
+        }
+
+        if (apiTokenSecret.apiToken !== apiToken) {
+          throw new errors.NotAuthenticatedError({
+            message: 'Invalid API token',
+          });
+        }
+
+        const auth: ApiTokenAuth = {
+          apiToken: apiToken as ApiToken,
+          orgId: apiTokenSecret.orgId as OrgId,
+        };
+
+        return await func({
+          ...props,
+          auth: {
+            ...props.auth,
+            ...auth,
+          },
+        });
+      };
+    },
+  );
