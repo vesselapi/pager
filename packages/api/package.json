@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-sns": "^3.450.0",
-    "@aws-sdk/client-sqs": "^3.454.0",
     "@exobase/core": "1.0.0-rc.25",
     "@exobase/hooks": "1.0.0-rc.53",
     "@exobase/use-lambda": "1.0.0-rc.24",
