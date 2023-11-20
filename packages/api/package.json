@@ -22,11 +22,12 @@
     "@trpc/client": "next",
     "@trpc/server": "next",
     "@vessel/db": "workspace:^0.1.0",
+    "@vessel/types": "workspace:^",
     "bunyan": "^1.8.15",
     "next": "^14.0.1",
     "radash": "^11.0.0",
-    "serialize-error": "^11.0.3",
     "resend": "^2.0.0",
+    "serialize-error": "^11.0.3",
     "superjson": "2.2.0",
     "twilio": "^4.19.0",
     "zod": "^3.22.3"
