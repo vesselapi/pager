@@ -9,7 +9,15 @@ import {
 } from '@vessel/api/src/exobase/services/make-logger';
 import { makePubSub, PubSub } from '@vessel/api/src/services/pubsub';
 
-const schema = z.object({});
+import { insertAlertSchema } from '../../../../packages/db/schema/alert';
+
+const schema = z.object({
+  alert: insertAlertSchema.pick({
+    title: true,
+    status: true,
+    metadata: true,
+  }),
+});
 
 type Args = z.infer<typeof schema>;
 
@@ -27,10 +35,12 @@ const alert = async ({
   services,
   framework,
 }: Props<Args, Services>): Promise<Result> => {
+  const { alert } = args;
   const { pubsub, logger } = services;
 
-  await pubsub.alert.publish({
-    payload: {},
+  const dbAlert = await pubsub.alert.publish({
+    organizationId: '',
+    ...alert,
   });
   logger.info('Alert sent to topic');
   return { success: true };
