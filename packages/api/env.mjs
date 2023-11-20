@@ -15,6 +15,7 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URL: z.string().url(),
+    DATABASE_SECRET_STORE_KEY: z.string(),
     CLERK_SECRET_KEY: z.string(),
     AWS_SNS_TOPIC_ALERT_ARN: z.string(),
     TWILIO_ACCOUNT_SID: z.string(),
@@ -37,6 +38,7 @@ export const env = createEnv({
     VERCEL_URL: process.env.VERCEL_URL,
     PORT: process.env.PORT,
     DATABASE_URL: process.env.DATABASE_URL,
+    DATABASE_SECRET_STORE_KEY: process.env.DATABASE_SECRET_STORE_KEY,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,

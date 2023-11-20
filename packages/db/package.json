@@ -22,7 +22,8 @@
     "@vessel/types": "workspace:^",
     "drizzle-orm": "^0.28.6",
     "drizzle-zod": "^0.5.1",
-    "postgres": "^3.4.3"
+    "postgres": "^3.4.3",
+    "zod": "^3.22.3"
   },
   "devDependencies": {
     "@vessel/eslint-config": "workspace:^0.2.0",
