@@ -37,6 +37,7 @@
     "@types/bunyan": "^1.8.11",
     "@vessel/eslint-config": "workspace:^0.2.0",
     "@vessel/prettier-config": "workspace:^0.1.0",
+    "@vessel/types": "workspace:^0.1.0",
     "@vessel/tsconfig": "workspace:^0.1.0",
     "dotenv-cli": "^7.3.0",
     "eslint": "^8.53.0",
