@@ -7,7 +7,6 @@
  * The pieces you will need to use are documented accordingly near the end
  */
 import { NextApiRequest } from 'next';
-import { NextRequest } from 'next/server';
 import { initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 import { ZodError } from 'zod';

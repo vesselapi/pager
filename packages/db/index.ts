@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
+import { z } from 'zod';
 
 import type { AlertEventId, AlertId, OrgId, UserId } from '@vessel/types';
 
@@ -13,6 +14,11 @@ import {
   organization as organizationSchema,
   selectOrgSchema,
 } from './schema/organization';
+import {
+  insertSecretSchema,
+  secret as secretSchema,
+  selectSecretSchema,
+} from './schema/secret';
 import { selectUserSchema, user as userSchema } from './schema/user';
 
 export const schema = {
@@ -20,11 +26,12 @@ export const schema = {
   alertEvent: alertEventSchema,
   organization: organizationSchema,
   user: userSchema,
+  secret: secretSchema,
 };
 
 export * from 'drizzle-orm';
 
-const queryClient = postgres(process.env.DATABASE_URL);
+const queryClient = postgres(process.env.DATABASE_URL!);
 
 const drizzleDbClient = drizzle(queryClient, { schema });
 
@@ -81,6 +88,18 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     list: async (...args: Parameters<typeof db.query.user.findMany>) => {
       const users = await db.query.user.findMany(...args);
       return users.map((a) => selectUserSchema.parse(a));
+    },
+  },
+  secret: {
+    find: async (id: UserId) => {
+      const secret = await db.query.secret.findFirst({
+        where: eq(secretSchema.id, id as string),
+      });
+      if (!secret) return null;
+      return selectSecretSchema.parse(secret);
+    },
+    create: async (secret: z.infer<typeof insertSecretSchema>) => {
+      await db.insert(secretSchema).values(secret);
     },
   },
 });
