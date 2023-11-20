@@ -1,0 +1,12 @@
+{
+  "extends": "@vessel/tsconfig/base.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+  },
+  "include": [
+    ".",
+    "../../packages/api/env.mjs",
+    "../../packages/api/src/exobase"
+  ],
+  "exclude": ["node_modules"]
+}

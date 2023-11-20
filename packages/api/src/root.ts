@@ -1,8 +1,8 @@
-import { postRouter } from './router/post';
+import { alertRouter } from './router/alert';
 import { createTRPCRouter } from './trpc';
 
 export const appRouter = createTRPCRouter({
-  post: postRouter,
+  alert: alertRouter,
 });
 
 // export type definition of API

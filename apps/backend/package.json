@@ -1,40 +1,33 @@
 {
-  "name": "@vessel/db",
+  "name": "@vessel/backend",
   "version": "0.1.0",
   "private": true,
-  "main": "./index.ts",
-  "types": "./index.ts",
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
-    "generate": "drizzle-kit generate:pg",
-    "pull": "drizzle-kit introspect:pg",
-    "push": "drizzle-kit push:pg",
-    "migrate": "pnpm with-env tsx migrate.ts",
-    "check": "drizzle-kit check:pg",
-    "studio": "drizzle-kit studio",
+    "dev": "pnpm with-env sst dev",
+    "deploy:development": "pnpm with-env sst deploy --stage development",
+    "deploy:production": "pnpm with-env sst deploy --stage production",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
-  "dependencies": {
-    "@vessel/types": "workspace:^",
-    "drizzle-orm": "^0.28.6",
-    "drizzle-zod": "^0.5.1",
-    "postgres": "^3.4.3",
-    "zod": "^3.22.3"
-  },
   "devDependencies": {
+    "@types/node": "^18.18.9",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vessel/api": "workspace:^0.1.0",
     "@vessel/eslint-config": "workspace:^0.2.0",
     "@vessel/prettier-config": "workspace:^0.1.0",
     "@vessel/tsconfig": "workspace:^0.1.0",
-    "dotenv": "^16.3.1",
+    "aws-cdk-lib": "2.101.1",
+    "constructs": "10.2.69",
     "dotenv-cli": "^7.3.0",
-    "drizzle-kit": "^0.19.13",
     "eslint": "^8.53.0",
     "prettier": "^3.0.3",
-    "tsx": "^4.1.2",
+    "sst": "^2.36.1",
+    "tailwindcss": "3.3.5",
     "typescript": "^5.2.2"
   },
   "eslintConfig": {
@@ -43,5 +36,11 @@
       "@vessel/eslint-config/base"
     ]
   },
-  "prettier": "@vessel/prettier-config"
+  "prettier": "@vessel/prettier-config",
+  "dependencies": {
+    "@exobase/core": "1.0.0-rc.25",
+    "@exobase/hooks": "1.0.0-rc.53",
+    "radash": "^11.0.0",
+    "zod": "^3.22.3"
+  }
 }

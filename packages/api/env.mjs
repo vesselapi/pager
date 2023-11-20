@@ -8,7 +8,6 @@ export const env = createEnv({
       .optional()
       .transform((v) => (v ? `https://${v}` : undefined)),
     PORT: z.coerce.number().default(3000),
-    NODE_ENV: z.enum(['development', 'production']),
   },
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
@@ -16,7 +15,13 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URL: z.string().url(),
+    DATABASE_SECRET_STORE_KEY: z.string(),
     CLERK_SECRET_KEY: z.string(),
+    AWS_SNS_TOPIC_ALERT_ARN: z.string(),
+    TWILIO_ACCOUNT_SID: z.string(),
+    TWILIO_AUTH_TOKEN: z.string(),
+    TWILIO_PHONE_NUMBER: z.string(),
+    RESEND_API_KEY: z.string(),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -33,10 +38,15 @@ export const env = createEnv({
     VERCEL_URL: process.env.VERCEL_URL,
     PORT: process.env.PORT,
     DATABASE_URL: process.env.DATABASE_URL,
-    NODE_ENV: process.env.NODE_ENV,
+    DATABASE_SECRET_STORE_KEY: process.env.DATABASE_SECRET_STORE_KEY,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    AWS_SNS_TOPIC_ALERT_ARN: process.env.AWS_SNS_TOPIC_ALERT_ARN,
+    TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
+    TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:
