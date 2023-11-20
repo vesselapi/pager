@@ -15,6 +15,7 @@ import { IdGenerator } from './id-generator';
 import {
   alert as alertSchema,
   CreateAlert,
+  insertAlertSchema,
   selectAlertSchema,
 } from './schema/alert';
 import {
@@ -60,13 +61,11 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return alerts.map((a) => selectAlertSchema.parse(a));
     },
     create: async (alert: Omit<CreateAlert, 'id'>) => {
-      const dbAlert = await db
-        .insert(alertSchema)
-        .values({
-          id: IdGenerator.alert(),
-          ...alert,
-        })
-        .returning();
+      const newAlert = insertAlertSchema.parse({
+        id: IdGenerator.alert(),
+        ...alert,
+      });
+      const dbAlert = await db.insert(alertSchema).values(newAlert).returning();
       return selectAlertSchema.parse(dbAlert);
     },
   },
