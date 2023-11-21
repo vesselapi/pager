@@ -16,7 +16,7 @@ const SortItem = ({
   onSort: TOnSort;
 }) => {
   return (
-    <button onClick={(_) => onSort(value)} className="cursor-pointer">
+    <button onClick={(_) => onSort(value)} className="cursor-pointer w-full text-left">
       {label}
     </button>
   );

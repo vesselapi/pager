@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { api } from '~/utils/api';
 import type { RouterInputs } from '~/utils/api';
@@ -12,27 +12,40 @@ import AlertListSortDropdown, {
   AlertListSortPill,
 } from './_components/AlertListSortDropdown';
 import AlertsListItem from './AlertListItem';
+import { useDebounce } from '../../hooks/useDebounce'
 
 interface DisplaySettings {
   // How the alerts should be styled
   style: 'condensed' | 'regular';
 }
-type SortSettings = RouterInputs['alert']['all']['sorts'];
-type FilterSettings = RouterInputs['alert']['all']['filters'];
+
+type ExtractInnerType<T> = T extends (infer U)[] ? U : never;
+type SortSettings = ExtractInnerType<RouterInputs['alert']['all']['sorts']> & { id: string }
+type FilterSettings = ExtractInnerType<RouterInputs['alert']['all']['filters']> & {
+  id: string;
+  conditionOptions?: string[];
+  valueOptions?: string[]
+};
 
 const AlertsList = () => {
   const [display, setDisplay] = useState<DisplaySettings>({
     style: 'regular',
   });
-  const [sorts, setSorts] = useState<SortSettings>([]);
-  const [filters, setFilters] = useState<FilterSettings>([]);
-  const [search, setSearch] = useState<string | null>(null);
-  const debouncedSearch = useDebounce<string>(search, 500)
+  const [sorts, setSorts] = useState<SortSettings[]>([]);
+  const [filters, setFilters] = useState<FilterSettings[]>([]);
+  const [search, setSearch] = useState<string>();
+  const debouncedSearch = useDebounce<string | undefined>(search, 200)
 
+
+  const allFilters = useMemo(() => {
+    const searchFilter = [{ property: 'title', value: debouncedSearch, condition: "CONTAINS" }]
+    const otherFilters = filters?.map(f => ({ property: f.property, value: f.value, condition: f.condition }))
+    return [...(otherFilters ?? []), ...(debouncedSearch ? searchFilter : [])]
+  }, [filters, debouncedSearch])
 
   const alerts = api.alert.all.useQuery({
     sorts,
-    filters: [...filters, ...(search ? [{ property: 'title', value: debouncedSearch, condition: "CONTAINS" }] : [])],
+    filters: allFilters,
   });
   const users = api.user.all.useQuery();
 
@@ -42,40 +55,40 @@ const AlertsList = () => {
         <div className="flex items-center justify-between">
           <input
             value={search}
-            onChange={(e) => setSearch(e.target.value) }
+            onChange={(e) => setSearch(e.target.value)}
             className="w-[300px] rounded border border-gray-300 px-2 py-1"
             type="text"
             placeholder="Search"
           />
           <div>
             <AlertListFilterDropdown
-              filters={[
+              filterOptions={[
                 {
-                  property: 'Status',
+                  property: 'status',
+                  label: 'Status',
                   options: [
                     { label: 'Acked', value: 'ACKED' },
                     { label: 'Open', value: 'OPEN' },
                     { label: 'Closed', value: 'CLOSED' },
                   ],
-                  condition: 'IS',
+                  conditions: ['IS', 'IS_NOT'],
                 },
                 {
-                  property: 'AssignedTo',
+                  property: 'assignedToId',
+                  label: 'Assigned To',
                   options:
                     users.data?.map((u) => ({
                       label: u.email ?? u.id,
                       value: u.id,
                     })) ?? [],
-                  condition: 'IS',
+                  conditions: ['IS', 'IS_NOT'],
                 },
               ]}
               onFilter={(f: {
                 property: string;
                 value: string[];
                 condition: string;
-              }) => {
-                setFilters((pf) => [...pf!, f] as FilterSettings);
-              }}
+              }) => setFilters((pf) => [...pf, f] as FilterSettings)}
             />
             <AlertListSortDropdown
               sorts={[
@@ -85,7 +98,7 @@ const AlertsList = () => {
                 { label: 'Created Time', value: 'createdAt' },
               ]}
               onSort={(sort: string) =>
-                setSorts((s) => [...s!, { property: sort }] as SortSettings)
+                setSorts((s) => [...s, { property: sort }] as SortSettings)
               }
             />
             <AlertListDisplayDropdown
@@ -110,7 +123,7 @@ const AlertsList = () => {
                 })
               }
                 onRemove={() => setSorts(srts => {
-                  return [...srts].filter(sort => sort === s)
+                  return [...srts].filter(sort => sort !== s)
                 })}
                 title={s.property} order={s.order} />
             </div>
@@ -121,6 +134,11 @@ const AlertsList = () => {
                 property={f.property}
                 condition={f.condition}
                 value={f.value}
+                conditionOptions={f.conditionOptions}
+                valueOptions={f.valueOptions}
+                onRemove={() => setFilters(flts => [...flts].filter(rf => rf !== f))}
+                onChangeValue={(value) => setFilters((fts) => [...fts].map((filter) => filter === f ? { ...filter, value } : filter))}
+                onChangeCondition={(condition) => setFilters((fts) => [...fts].map((filter) => (filter === f ? { ...filter, condition } : filter)))}
               />
             </div>
           ))}

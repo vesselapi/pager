@@ -3,23 +3,44 @@ import { MdFilterList, MdOutlineClose } from 'react-icons/md';
 
 import Dropdown from '../../_components/Dropdown';
 import Pill from '../../_components/Pill';
+import RadioSelect from '../../_components/RadioSelect';
+import CheckboxSelect from '../../_components/CheckboxSelect';
 
 const AlertListFilterPill = ({
   property,
   condition,
+  conditionOptions,
   value,
+  valueOptions,
+  onRemove,
+  onChangeCondition,
+  onChangeValue,
 }: {
   property: string;
   condition: string;
+  conditionOptions: { label: string; value: string }[];
   value: string | string[];
-}) => { 
+  valueOptions: { label: string; value: string }[];
+  onRemove: () => void;
+  onChangeCondition: (condition: string) => void;
+  onChangeValue: (value: string | string[]) => void;
+}) => {
+  const arrayValue = Array.isArray(value) ? value : [value]
+
   return (
-    <Pill>   
+    <Pill>
       <div>{property}</div>
-      <Dropdown>{condition}</Dropdown>
-      <Dropdown>{value}</Dropdown>
+      <Dropdown OpenButton={<div>{condition}</div>}>
+        <RadioSelect value={condition} options={conditionOptions} onChange={(e: string) => {
+          onChangeCondition(e)
+        }}
+        />
+      </Dropdown>
+      <Dropdown OpenButton={<div>{arrayValue.join(', ')}</div>}>
+        <CheckboxSelect value={arrayValue} options={valueOptions} onChange={values => onChangeValue(values)} preventDefault />
+      </Dropdown>
       <button onClick={onRemove}>
-        <MdOutlineClose />  
+        <MdOutlineClose />
       </button>
     </Pill>
   );
@@ -27,8 +48,9 @@ const AlertListFilterPill = ({
 
 interface FilterOption {
   property: string;
+  label: string;
   options: { label: string; value: string }[];
-  condition: string;
+  conditions: string[];
 }
 interface SelectedFilter {
   property: string;
@@ -37,10 +59,10 @@ interface SelectedFilter {
 }
 
 const AlertListFilterDropdown = ({
-  filters,
+  filterOptions,
   onFilter,
 }: {
-  filters: FilterOption[];
+  filterOptions: FilterOption[];
   onFilter: (filter: SelectedFilter) => void;
 }) => {
   const [selectedFilter, setSelected] = useState<FilterOption | null>(null);
@@ -48,8 +70,8 @@ const AlertListFilterDropdown = ({
   const options = useMemo(() => {
     return selectedFilter
       ? selectedFilter.options
-      : filters.map((f) => ({ label: f.property, value: f.property }));
-  }, [selectedFilter, filters]);
+      : filterOptions.map((f) => ({ label: f.label, value: f.property }));
+  }, [selectedFilter, filterOptions]);
 
   return (
     <Dropdown
@@ -63,15 +85,20 @@ const AlertListFilterDropdown = ({
       {options.map((o) => (
         <button
           key={o.value}
+          className='w-full text-left'
           onClick={(e) => {
             if (selectedFilter) {
               onFilter({
                 property: selectedFilter.property,
                 value: [o.value],
-                condition: selectedFilter.condition,
+                // We'll always apply the first condition for now.
+                condition: selectedFilter.conditions[0]!,
+                conditionOptions: selectedFilter.conditions.map(a => ({ label: a, value: a })),
+                valueOptions: selectedFilter.options,
               });
+              setSelected(null);
             } else {
-              const filter = filters.find((f) => f.property === o.value)!;
+              const filter = filterOptions.find((f) => f.property === o.value)!;
               setSelected(filter);
               e.preventDefault();
             }
