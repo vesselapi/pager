@@ -1,4 +1,6 @@
+import type { ReactNode } from 'react';
 import Link from 'next/link';
+import { SignOutButton } from '@clerk/nextjs';
 import { TbBell, TbCalendarFilled } from 'react-icons/tb';
 
 import Dropdown from './Dropdown';
@@ -32,16 +34,16 @@ const NavItem = ({
  *  - Add "my alerts", "all alerts" sub-nav
  *  - Add keyboard shortcuts
  */
-const SideNav = ({ children }) => {
+const SideNav = ({ children }: { children: ReactNode }) => {
   return (
     <div className="flex text-sm">
       <div className="relative left-0 top-0 flex h-screen w-[220px] flex-col justify-between bg-gray-300 text-black">
         <div>
           <div className="flex items-center justify-between p-3">
             <div>Vessel</div>
-            {/* <Dropdown position="right" items={[]}> */}
-            <UserIcon />
-            {/* </Dropdown> */}
+            <Dropdown position="right" OpenButton={<UserIcon />}>
+              <SignOutButton />
+            </Dropdown>
           </div>
           <NavItem route="alerts" title="Alerts" Icon={TbBell} />
           <NavItem route="schedule" title="Schedule" Icon={TbCalendarFilled} />

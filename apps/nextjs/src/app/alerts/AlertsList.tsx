@@ -1,91 +1,37 @@
 'use client';
 
 import { useState } from 'react';
-import { MdFilterList, MdOutlineClose } from 'react-icons/md';
-import { VscSettings } from 'react-icons/vsc';
 
-import Dropdown from '../_components/Dropdown';
+import { api } from '~/utils/api';
+import type { RouterInputs } from '~/utils/api';
+import AlertListDisplayDropdown from './_components/AlertListDisplayDropdown';
+import AlertListFilterDropdown, {
+  AlertListFilterPill,
+} from './_components/AlertListFilterDropdown';
+import AlertListSortDropdown, {
+  AlertListSortPill,
+} from './_components/AlertListSortDropdown';
 import AlertsListItem from './AlertListItem';
 
-const FilterPill = ({ title }: { title: string }) => {
-  return (
-    <div className="flex w-fit items-center">
-      <h3 className="h-[34px] rounded-l-md border border-gray-300 p-2 text-xs text-gray-500 shadow">
-        status
-      </h3>
-      <h3 className="h-[34px] border border-l-0 border-gray-300 p-2 text-xs text-gray-500 shadow">
-        is not
-      </h3>
-      <h3 className="h-[34px] border border-l-0 border-gray-300 p-2 text-xs text-gray-500 shadow">
-        {title}
-      </h3>
-      <div className="flex h-[34px] items-center justify-center rounded-r-md border border-l-0 border-gray-300 px-2 text-gray-500 shadow">
-        <MdOutlineClose />
-      </div>
-    </div>
-  );
-};
+interface DisplaySettings {
+  // How the alerts should be styled
+  style: 'condensed' | 'regular';
+}
+type SortSettings = RouterInputs['alert']['all']['sorts'];
+type FilterSettings = RouterInputs['alert']['all']['filters'];
 
 const AlertsList = () => {
-  // TODO: retrieve alerts and users
-  const alerts = [
-    {
-      id: 1,
-      title: 'alert 1',
-      assignedToId: 3,
-      status: 'open',
-      createdAt: 'alert 2',
-    },
-    {
-      id: 2,
-      title: 'alert 2',
-      assignedToId: 2,
-      status: 'closed',
-      createdAt: 'alert 3',
-    },
-    {
-      id: 3,
-      title: 'alert 3',
-      assignedToId: 3,
-      status: 'open',
-      createdAt: 'alert 4',
-    },
-    {
-      id: 4,
-      title: 'alert 4',
-      assignedToId: 2,
-      status: 'acked',
-      createdAt: 'alert 5',
-    },
-    {
-      id: 5,
-      title: 'alert 5',
-      assignedToId: 3,
-      status: 'closed',
-      createdAt: 'alert 6',
-    },
-  ];
+  const [display, setDisplay] = useState<DisplaySettings>({
+    style: 'regular',
+  });
+  const [sorts, setSorts] = useState<SortSettings>([]);
+  const [filters, setFilters] = useState<FilterSettings>([]);
 
-  const users = [
-    {
-      id: 3,
-      initials: 'zk',
-    },
-    {
-      id: 2,
-      initials: 'ay',
-    },
-  ];
-
-  const appliedFilters = [];
-
-  const [options, setOptions] = useState([
-    {
-      name: 'status',
-      comparitors: ['eq', 'dne'],
-      options: [{ name: 'acked' }, { name: 'open' }],
-    },
-  ]);
+  const alerts = api.alert.all.useQuery({
+    sorts,
+    filters,
+  });
+  const users = api.user.all.useQuery();
 
   return (
     <div className="flex flex-col">
@@ -96,55 +42,80 @@ const AlertsList = () => {
             type="text"
             placeholder="Search"
           />
-          <div className="flex">
-            <Dropdown
-              items={options.map((f) => {
-                return {
-                  key: f.name,
-                  Component: () => {
-                    return (
-                      <button
-                        onClick={() => {
-                          console.log('clicked!!');
-                          setOptions(f.options);
-                        }}
-                      >
-                        {f.name}
-                      </button>
-                    );
-                  },
-                };
-              })}
-            >
-              <div className="mr-1 flex items-center rounded bg-gray-200 px-2 py-1">
-                <MdFilterList className="mr-1" />
-                Filter
-              </div>
-            </Dropdown>
-            {/* <Dropdown items={['status']}> */}
-            <div className="flex items-center rounded bg-gray-200 px-2 py-1">
-              <VscSettings className="mr-1" />
-              Display
-            </div>
-            {/* </Dropdown> */}
+          <div>
+            <AlertListFilterDropdown
+              filters={[
+                {
+                  property: 'Status',
+                  options: [
+                    { label: 'ACKED', value: 'ACKED' },
+                    { label: 'OPEN', value: 'OPEN' },
+                    { label: 'CLOSED', value: 'CLOSED' },
+                  ],
+                  condition: 'IS',
+                },
+                {
+                  property: 'AssignedTo',
+                  options:
+                    users.data?.map((u) => ({
+                      label: u.email ?? u.id,
+                      value: u.id,
+                    })) ?? [],
+                  condition: 'IS',
+                },
+              ]}
+              onFilter={(f: {
+                property: string;
+                value: string[];
+                condition: string;
+              }) => {
+                setFilters((pf) => [...pf!, f] as FilterSettings);
+              }}
+            />
+            <AlertListSortDropdown
+              sorts={[
+                { label: 'Title', value: 'title' },
+                { label: 'Assigned To', value: 'assignedToId' },
+                { label: 'Status', value: 'status' },
+                { label: 'Created Time', value: 'createdAt' },
+              ]}
+              onSort={(sort: string) =>
+                setSorts((s) => [...s!, { property: sort }] as SortSettings)
+              }
+            />
+            <AlertListDisplayDropdown
+              display={display}
+              setDisplay={setDisplay}
+            />
           </div>
         </div>
 
         {/* The Sub-title bar is used to show the views active state like what the display is and what filters are applied */}
-        {appliedFilters.length ? (
-          <div className="mt-2">
-            <FilterPill title={'closed'} />
-          </div>
-        ) : null}
+        <div className="mt-2 flex">
+          {sorts?.map((s) => (
+            <div className="mr-2" key={s.property}>
+              <AlertListSortPill title={s.property} order={s.order} />
+            </div>
+          ))}
+          {filters?.map((f) => (
+            <div className="mr-2" key={f.property}>
+              <AlertListFilterPill
+                property={f.property}
+                condition={f.condition}
+                value={f.value}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* TODO: Change out for virtualized scroll */}
       <div className="h-screen overflow-y-auto">
         <div className="px-10 pt-4">
-          {alerts.map((a) => {
+          {alerts.data?.map((a) => {
             return (
               <div className="mt-5" key={a.id}>
-                <AlertsListItem alert={a} />
+                <AlertsListItem style={display.style} alert={a} />
               </div>
             );
           })}
