@@ -1,4 +1,4 @@
-import { SSTConfig } from 'sst';
+import type { SSTConfig } from 'sst';
 
 import { CoreStack } from './src/stacks/CoreStack';
 

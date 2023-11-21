@@ -1,14 +1,16 @@
-import { BadRequestError, Handler, Props } from '@exobase/core';
+import type { Handler, Props } from '@exobase/core';
+import { BadRequestError } from '@exobase/core';
 import { isArray, isFunction, tryit } from 'radash';
-import zod, { AnyZodObject, ZodArray, ZodError } from 'zod';
+import type { AnyZodObject, ZodArray, ZodError } from 'zod';
+import zod from 'zod';
 
-import { SqsLambdaFramework } from './use-lambda';
+import type { SqsLambdaFramework } from './use-lambda';
 
 type Zod = typeof zod;
 type KeyOfType<T, Value> = { [P in keyof T]: Value };
 
 const isZodError = (e: any): e is ZodError =>
-  e && e.issues && isArray(e.issues);
+  e?.issues && isArray(e.issues);
 
 export const withSqsArgs = async (
   func: Handler,

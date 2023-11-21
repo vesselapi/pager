@@ -1,5 +1,6 @@
 import { isString, mapValues, shake } from 'radash';
-import { Api, Function, Queue, StackContext, Topic } from 'sst/constructs';
+import type { StackContext} from 'sst/constructs';
+import { Api, Function, Queue, Topic } from 'sst/constructs';
 
 import { env } from '@vessel/api/env.mjs';
 

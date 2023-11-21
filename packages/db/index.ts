@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import type { AlertEventId, AlertId, OrgId, UserId } from '@vessel/types';
 
@@ -14,8 +14,9 @@ import {
   organization as organizationSchema,
   selectOrgSchema,
 } from './schema/organization';
+import type {
+  insertSecretSchema} from './schema/secret';
 import {
-  insertSecretSchema,
   secret as secretSchema,
   selectSecretSchema,
 } from './schema/secret';
