@@ -18,3 +18,9 @@ export const IntegrationIdRegex = /^v_integration_[a-z0-9]+$/;
 
 export const APP_ID = ['sentry'] as const;
 export type AppId = (typeof APP_ID)[number];
+
+export type ApiTokenId = `v_secret_apiToken_${string}`; // v_secret_apiToken_{hash}
+export const ApiTokenIdRegex = /^v_secret_apiToken_[a-z0-9]+$/;
+
+export type ApiToken = `v_apiToken_${string}`; // v_apiToken_{sha256(apiToken)}
+export const ApiTokenRegex = /^v_apiToken_[a-z0-9]+$/;
