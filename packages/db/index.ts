@@ -22,7 +22,10 @@ import {
   alertEvent as alertEventSchema,
   selectAlertEventSchema,
 } from './schema/alertEvent';
-import { selectIntegrationSchema } from './schema/integration';
+import {
+  integration as integrationSchema,
+  selectIntegrationSchema,
+} from './schema/integration';
 import {
   organization as organizationSchema,
   selectOrgSchema,
@@ -37,6 +40,7 @@ import { selectUserSchema, user as userSchema } from './schema/user';
 export const schema = {
   alert: alertSchema,
   alertEvent: alertEventSchema,
+  integration: integrationSchema,
   organization: organizationSchema,
   user: userSchema,
   secret: secretSchema,
@@ -85,7 +89,9 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
   },
   integrations: {
     listByOrgId: async (orgId: OrgId) => {
-      const integrations = await db.query.integrations.listByOrgId(orgId);
+      const integrations = await db.query.integration.findMany({
+        where: eq(integrationSchema.organizationId, orgId),
+      });
       return integrations.map((x) => selectIntegrationSchema.parse(x));
     },
   },
