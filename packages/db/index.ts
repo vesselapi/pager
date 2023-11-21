@@ -11,7 +11,13 @@ import type {
   UserId,
 } from '@vessel/types';
 
-import { alert as alertSchema, selectAlertSchema } from './schema/alert';
+import { IdGenerator } from './id-generator';
+import {
+  alert as alertSchema,
+  CreateAlert,
+  insertAlertSchema,
+  selectAlertSchema,
+} from './schema/alert';
 import {
   alertEvent as alertEventSchema,
   selectAlertEventSchema,
@@ -53,6 +59,14 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     list: async (...args: Parameters<typeof db.query.alert.findMany>) => {
       const alerts = await db.query.alert.findMany(...args);
       return alerts.map((a) => selectAlertSchema.parse(a));
+    },
+    create: async (alert: Omit<CreateAlert, 'id'>) => {
+      const newAlert = insertAlertSchema.parse({
+        id: IdGenerator.alert(),
+        ...alert,
+      });
+      const dbAlert = await db.insert(alertSchema).values(newAlert).returning();
+      return selectAlertSchema.parse(dbAlert);
     },
   },
   alertEvent: {
