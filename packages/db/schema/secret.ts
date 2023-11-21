@@ -2,7 +2,7 @@ import { sql } from 'drizzle-orm';
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import type { SecretId} from '@vessel/types';
+import type { SecretId } from '@vessel/types';
 import { SecretIdRegex } from '@vessel/types';
 
 export const secret = pgTable('secret', {

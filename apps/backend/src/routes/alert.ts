@@ -3,12 +3,9 @@ import { useJsonBody, useServices } from '@exobase/hooks';
 import z from 'zod';
 
 import { vessel } from '@vessel/api/src/exobase/hooks/common-hooks';
-import type {
-  Logger} from '@vessel/api/src/exobase/services/make-logger';
-import {
-  makeLogger,
-} from '@vessel/api/src/exobase/services/make-logger';
-import type { Aws} from '@vessel/api/src/services/aws';
+import type { Logger } from '@vessel/api/src/exobase/services/make-logger';
+import { makeLogger } from '@vessel/api/src/exobase/services/make-logger';
+import type { Aws } from '@vessel/api/src/services/aws';
 import { makeAws } from '@vessel/api/src/services/aws';
 
 const schema = z.object({});

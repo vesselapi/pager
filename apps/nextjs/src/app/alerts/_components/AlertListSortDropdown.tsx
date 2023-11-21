@@ -16,7 +16,10 @@ const SortItem = ({
   onSort: TOnSort;
 }) => {
   return (
-    <button onClick={(_) => onSort(value)} className="cursor-pointer w-full text-left">
+    <button
+      onClick={(_) => onSort(value)}
+      className="w-full cursor-pointer text-left"
+    >
       {label}
     </button>
   );
@@ -36,7 +39,9 @@ const AlertListSortPill = ({
   return (
     <Pill>
       <div>{title}</div>
-      <button onClick={onFlipOrder}>{order === 'asc' ? <BsSortUp /> : <BsSortDown />}</button>
+      <button onClick={onFlipOrder}>
+        {order === 'asc' ? <BsSortUp /> : <BsSortDown />}
+      </button>
       <button onClick={onRemove}>
         <MdOutlineClose />
       </button>

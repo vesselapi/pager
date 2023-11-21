@@ -9,8 +9,7 @@ import type { SqsLambdaFramework } from './use-lambda';
 type Zod = typeof zod;
 type KeyOfType<T, Value> = { [P in keyof T]: Value };
 
-const isZodError = (e: any): e is ZodError =>
-  e?.issues && isArray(e.issues);
+const isZodError = (e: any): e is ZodError => e?.issues && isArray(e.issues);
 
 export const withSqsArgs = async (
   func: Handler,

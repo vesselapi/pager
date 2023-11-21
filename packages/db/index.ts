@@ -14,12 +14,8 @@ import {
   organization as organizationSchema,
   selectOrgSchema,
 } from './schema/organization';
-import type {
-  insertSecretSchema} from './schema/secret';
-import {
-  secret as secretSchema,
-  selectSecretSchema,
-} from './schema/secret';
+import type { insertSecretSchema } from './schema/secret';
+import { secret as secretSchema, selectSecretSchema } from './schema/secret';
 import { selectUserSchema, user as userSchema } from './schema/user';
 
 export const schema = {

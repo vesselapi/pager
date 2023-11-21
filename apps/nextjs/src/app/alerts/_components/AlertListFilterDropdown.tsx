@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
 import { MdFilterList, MdOutlineClose } from 'react-icons/md';
 
+import CheckboxSelect from '../../_components/CheckboxSelect';
 import Dropdown from '../../_components/Dropdown';
 import Pill from '../../_components/Pill';
 import RadioSelect from '../../_components/RadioSelect';
-import CheckboxSelect from '../../_components/CheckboxSelect';
 
 const AlertListFilterPill = ({
   property,
@@ -25,19 +25,27 @@ const AlertListFilterPill = ({
   onChangeCondition: (condition: string) => void;
   onChangeValue: (value: string | string[]) => void;
 }) => {
-  const arrayValue = Array.isArray(value) ? value : [value]
+  const arrayValue = Array.isArray(value) ? value : [value];
 
   return (
     <Pill>
       <div>{property}</div>
       <Dropdown OpenButton={<div>{condition}</div>}>
-        <RadioSelect value={condition} options={conditionOptions} onChange={(e: string) => {
-          onChangeCondition(e)
-        }}
+        <RadioSelect
+          value={condition}
+          options={conditionOptions}
+          onChange={(e: string) => {
+            onChangeCondition(e);
+          }}
         />
       </Dropdown>
       <Dropdown OpenButton={<div>{arrayValue.join(', ')}</div>}>
-        <CheckboxSelect value={arrayValue} options={valueOptions} onChange={values => onChangeValue(values)} preventDefault />
+        <CheckboxSelect
+          value={arrayValue}
+          options={valueOptions}
+          onChange={(values) => onChangeValue(values)}
+          preventDefault
+        />
       </Dropdown>
       <button onClick={onRemove}>
         <MdOutlineClose />
@@ -85,7 +93,7 @@ const AlertListFilterDropdown = ({
       {options.map((o) => (
         <button
           key={o.value}
-          className='w-full text-left'
+          className="w-full text-left"
           onClick={(e) => {
             if (selectedFilter) {
               onFilter({
@@ -93,7 +101,10 @@ const AlertListFilterDropdown = ({
                 value: [o.value],
                 // We'll always apply the first condition for now.
                 condition: selectedFilter.conditions[0]!,
-                conditionOptions: selectedFilter.conditions.map(a => ({ label: a, value: a })),
+                conditionOptions: selectedFilter.conditions.map((a) => ({
+                  label: a,
+                  value: a,
+                })),
                 valueOptions: selectedFilter.options,
               });
               setSelected(null);

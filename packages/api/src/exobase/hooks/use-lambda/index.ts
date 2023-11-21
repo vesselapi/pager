@@ -99,7 +99,7 @@ const makeRequest = (event: APIGatewayEvent, _context: Context): Request => {
     ip: (req as any)?.http?.sourceIp ?? req.identity?.sourceIp,
     startedAt: Date.now(),
     protocol: req.protocol || '',
-    httpVersion: (req.protocol?.split('/')[1]!) ?? '',
+    httpVersion: req.protocol?.split('/')[1]! ?? '',
     params: event.pathParameters as Record<string, string>,
   };
 };

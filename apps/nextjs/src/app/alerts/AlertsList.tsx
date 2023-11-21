@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 
 import { api } from '~/utils/api';
 import type { RouterInputs } from '~/utils/api';
+import { useDebounce } from '../../hooks/useDebounce';
 import AlertListDisplayDropdown from './_components/AlertListDisplayDropdown';
 import AlertListFilterDropdown, {
   AlertListFilterPill,
@@ -12,7 +13,6 @@ import AlertListSortDropdown, {
   AlertListSortPill,
 } from './_components/AlertListSortDropdown';
 import AlertsListItem from './AlertListItem';
-import { useDebounce } from '../../hooks/useDebounce'
 
 interface DisplaySettings {
   // How the alerts should be styled
@@ -20,11 +20,15 @@ interface DisplaySettings {
 }
 
 type ExtractInnerType<T> = T extends (infer U)[] ? U : never;
-type SortSettings = ExtractInnerType<RouterInputs['alert']['all']['sorts']> & { id: string }
-type FilterSettings = ExtractInnerType<RouterInputs['alert']['all']['filters']> & {
+type SortSettings = ExtractInnerType<RouterInputs['alert']['all']['sorts']> & {
+  id: string;
+};
+type FilterSettings = ExtractInnerType<
+  RouterInputs['alert']['all']['filters']
+> & {
   id: string;
   conditionOptions?: string[];
-  valueOptions?: string[]
+  valueOptions?: string[];
 };
 
 const AlertsList = () => {
@@ -34,14 +38,19 @@ const AlertsList = () => {
   const [sorts, setSorts] = useState<SortSettings[]>([]);
   const [filters, setFilters] = useState<FilterSettings[]>([]);
   const [search, setSearch] = useState<string>();
-  const debouncedSearch = useDebounce<string | undefined>(search, 200)
-
+  const debouncedSearch = useDebounce<string | undefined>(search, 200);
 
   const allFilters = useMemo(() => {
-    const searchFilter = [{ property: 'title', value: debouncedSearch, condition: "CONTAINS" }]
-    const otherFilters = filters?.map(f => ({ property: f.property, value: f.value, condition: f.condition }))
-    return [...(otherFilters ?? []), ...(debouncedSearch ? searchFilter : [])]
-  }, [filters, debouncedSearch])
+    const searchFilter = [
+      { property: 'title', value: debouncedSearch, condition: 'CONTAINS' },
+    ];
+    const otherFilters = filters?.map((f) => ({
+      property: f.property,
+      value: f.value,
+      condition: f.condition,
+    }));
+    return [...(otherFilters ?? []), ...(debouncedSearch ? searchFilter : [])];
+  }, [filters, debouncedSearch]);
 
   const alerts = api.alert.all.useQuery({
     sorts,
@@ -112,20 +121,28 @@ const AlertsList = () => {
         <div className="mt-2 flex">
           {sorts?.map((s) => (
             <div className="mr-2" key={s.property}>
-              <AlertListSortPill onFlipOrder={() =>
-                setSorts(srts => {
-                  return [...srts].map((sort) => {
-                    if (sort === s) {
-                      return { ...sort, order: sort.order === 'asc' ? 'desc' : 'asc' };
-                    }
-                    return sort;
-                  });
-                })
-              }
-                onRemove={() => setSorts(srts => {
-                  return [...srts].filter(sort => sort !== s)
-                })}
-                title={s.property} order={s.order} />
+              <AlertListSortPill
+                onFlipOrder={() =>
+                  setSorts((srts) => {
+                    return [...srts].map((sort) => {
+                      if (sort === s) {
+                        return {
+                          ...sort,
+                          order: sort.order === 'asc' ? 'desc' : 'asc',
+                        };
+                      }
+                      return sort;
+                    });
+                  })
+                }
+                onRemove={() =>
+                  setSorts((srts) => {
+                    return [...srts].filter((sort) => sort !== s);
+                  })
+                }
+                title={s.property}
+                order={s.order}
+              />
             </div>
           ))}
           {filters?.map((f) => (
@@ -136,9 +153,23 @@ const AlertsList = () => {
                 value={f.value}
                 conditionOptions={f.conditionOptions}
                 valueOptions={f.valueOptions}
-                onRemove={() => setFilters(flts => [...flts].filter(rf => rf !== f))}
-                onChangeValue={(value) => setFilters((fts) => [...fts].map((filter) => filter === f ? { ...filter, value } : filter))}
-                onChangeCondition={(condition) => setFilters((fts) => [...fts].map((filter) => (filter === f ? { ...filter, condition } : filter)))}
+                onRemove={() =>
+                  setFilters((flts) => [...flts].filter((rf) => rf !== f))
+                }
+                onChangeValue={(value) =>
+                  setFilters((fts) =>
+                    [...fts].map((filter) =>
+                      filter === f ? { ...filter, value } : filter,
+                    ),
+                  )
+                }
+                onChangeCondition={(condition) =>
+                  setFilters((fts) =>
+                    [...fts].map((filter) =>
+                      filter === f ? { ...filter, condition } : filter,
+                    ),
+                  )
+                }
               />
             </div>
           ))}

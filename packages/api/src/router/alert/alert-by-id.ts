@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import type { Db } from '@vessel/db';
 import { db } from '@vessel/db';
-import type { AlertId} from '@vessel/types';
+import type { AlertId } from '@vessel/types';
 import { AlertIdRegex } from '@vessel/types';
 
 import { useLogger } from '../../middlewares/use-logger';

@@ -4,11 +4,8 @@ import { z } from 'zod';
 
 import { vessel } from '@vessel/api/src/exobase/hooks/common-hooks';
 import { useSqsArgs } from '@vessel/api/src/exobase/hooks/use-sqs-args';
-import type {
-  Logger} from '@vessel/api/src/exobase/services/make-logger';
-import {
-  makeLogger,
-} from '@vessel/api/src/exobase/services/make-logger';
+import type { Logger } from '@vessel/api/src/exobase/services/make-logger';
+import { makeLogger } from '@vessel/api/src/exobase/services/make-logger';
 
 const schema = z.object({ a: z.string() });
 type Args = z.infer<typeof schema>;
