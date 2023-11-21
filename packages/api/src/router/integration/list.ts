@@ -37,11 +37,8 @@ export const integrationConnect = publicProcedure
       if (auth.type === 'oauth2') return pick(auth, ['type', 'authUrl']);
     };
 
-    const connectedIntegrations = db.
-
     return {
       display: integration.display,
       auth: getAuth(),
-      isConnected: 
     };
   });
