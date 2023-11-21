@@ -25,17 +25,21 @@ const SortItem = ({
 const AlertListSortPill = ({
   title,
   order,
+  onFlipOrder,
+  onRemove,
 }: {
   title: string;
   order?: 'asc' | 'desc';
+  onFlipOrder: () => void;
+  onRemove: () => void;
 }) => {
   return (
     <Pill>
       <div>{title}</div>
-      <button>{order === 'asc' ? <BsSortUp /> : <BsSortDown />}</button>
-      {/* <button onClick={onRemove}> */}
-      <MdOutlineClose />
-      {/* </button> */}
+      <button onClick={onFlipOrder}>{order === 'asc' ? <BsSortUp /> : <BsSortDown />}</button>
+      <button onClick={onRemove}>
+        <MdOutlineClose />
+      </button>
     </Pill>
   );
 };

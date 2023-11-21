@@ -12,15 +12,15 @@ const AlertListFilterPill = ({
   property: string;
   condition: string;
   value: string | string[];
-}) => {
+}) => { 
   return (
-    <Pill>
+    <Pill>   
       <div>{property}</div>
-      <button>{condition}</button>
-      <div>{value}</div>
-      {/* <button onClick={onRemove}> */}
-      <MdOutlineClose />
-      {/* </button> */}
+      <Dropdown>{condition}</Dropdown>
+      <Dropdown>{value}</Dropdown>
+      <button onClick={onRemove}>
+        <MdOutlineClose />  
+      </button>
     </Pill>
   );
 };

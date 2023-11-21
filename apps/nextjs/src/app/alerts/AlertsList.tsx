@@ -26,10 +26,13 @@ const AlertsList = () => {
   });
   const [sorts, setSorts] = useState<SortSettings>([]);
   const [filters, setFilters] = useState<FilterSettings>([]);
+  const [search, setSearch] = useState<string | null>(null);
+  const debouncedSearch = useDebounce<string>(search, 500)
+
 
   const alerts = api.alert.all.useQuery({
     sorts,
-    filters,
+    filters: [...filters, ...(search ? [{ property: 'title', value: debouncedSearch, condition: "CONTAINS" }] : [])],
   });
   const users = api.user.all.useQuery();
 
@@ -38,6 +41,8 @@ const AlertsList = () => {
       <div className="px-10 pt-4">
         <div className="flex items-center justify-between">
           <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value) }
             className="w-[300px] rounded border border-gray-300 px-2 py-1"
             type="text"
             placeholder="Search"
@@ -48,9 +53,9 @@ const AlertsList = () => {
                 {
                   property: 'Status',
                   options: [
-                    { label: 'ACKED', value: 'ACKED' },
-                    { label: 'OPEN', value: 'OPEN' },
-                    { label: 'CLOSED', value: 'CLOSED' },
+                    { label: 'Acked', value: 'ACKED' },
+                    { label: 'Open', value: 'OPEN' },
+                    { label: 'Closed', value: 'CLOSED' },
                   ],
                   condition: 'IS',
                 },
@@ -94,7 +99,20 @@ const AlertsList = () => {
         <div className="mt-2 flex">
           {sorts?.map((s) => (
             <div className="mr-2" key={s.property}>
-              <AlertListSortPill title={s.property} order={s.order} />
+              <AlertListSortPill onFlipOrder={() =>
+                setSorts(srts => {
+                  return [...srts].map((sort) => {
+                    if (sort === s) {
+                      return { ...sort, order: sort.order === 'asc' ? 'desc' : 'asc' };
+                    }
+                    return sort;
+                  });
+                })
+              }
+                onRemove={() => setSorts(srts => {
+                  return [...srts].filter(sort => sort === s)
+                })}
+                title={s.property} order={s.order} />
             </div>
           ))}
           {filters?.map((f) => (
