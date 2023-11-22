@@ -30,6 +30,6 @@ export const integrationList = trpc
     return integrations.map((integration) => ({
       ...integration.display,
       authType: integration.auth.type,
-      isConnected: userIntegrationsByAppId[integration.appId] ?? false,
+      isConnected: !!userIntegrationsByAppId[integration.appId] ?? false,
     }));
   });
