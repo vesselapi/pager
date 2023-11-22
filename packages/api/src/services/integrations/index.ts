@@ -30,7 +30,7 @@ export const makeIntegrations = () => {
   }) => {
     const integration = find(appId);
     if (integration.auth.type !== 'oauth2') {
-      throw new Error('Cannot store credentials becaues it is not OAuth2');
+      throw new Error('Cannot store credentials because it is not OAuth2');
     }
     const secretManager = makeSecretManager();
     await secretManager.integration.create({ orgId, appId, secret });
