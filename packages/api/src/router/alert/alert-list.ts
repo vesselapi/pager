@@ -4,8 +4,8 @@ import type { Db, SQL } from '@vessel/db';
 import { and, asc, db, desc, eq, ilike, not, or, schema } from '@vessel/db';
 import { UserIdRegex } from '@vessel/types';
 
-import { useServicesHook } from '../../middlewares/use-services-hook';
-import { publicProcedure } from '../../trpc';
+import { trpc } from '../../middlewares/trpc/common-trpc-hook';
+import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 
 interface Context {
   db: Db;
@@ -117,7 +117,7 @@ const input = z
   })
   .strict();
 
-export const alertList = publicProcedure
+export const alertList = trpc
   .use(
     useServicesHook<Context>({
       db: () => db,
