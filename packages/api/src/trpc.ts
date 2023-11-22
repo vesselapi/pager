@@ -12,6 +12,13 @@ import { initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 
+export type UserAuth = JwtPayload & {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+};
+
 /**
  * 1. CONTEXT
  *
@@ -21,9 +28,9 @@ import { ZodError } from 'zod';
  * processing a request
  *
  */
-export type CreateContextOptions<TAuth extends JwtPayload> = {
+export type CreateContextOptions = {
   req: NextRequest;
-  auth: TAuth | null;
+  auth: { claims: UserAuth | null };
 };
 
 /**
@@ -44,9 +51,7 @@ const createInnerTRPCContext = (opts: { req: NextRequest }) => {
  * process every request that goes through your tRPC endpoint
  * @link https://trpc.io/docs/context
  */
-export const createTRPCContext = <TAuth extends JwtPayload>(
-  opts: CreateContextOptions<TAuth>,
-) => {
+export const createTRPCContext = (opts: CreateContextOptions) => {
   return { req: opts.req, auth: opts.auth, ...createInnerTRPCContext(opts) };
 };
 

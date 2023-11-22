@@ -1,9 +1,8 @@
 import * as crypto from 'crypto';
-// import { getPinoTransport } from '@hyperdx/node-opentelemetry';
 import { experimental_standaloneMiddleware } from '@trpc/server';
 import bunyan from 'bunyan';
 
-import { CreateContextOptions } from '../trpc';
+import { CreateContextOptions } from '../../trpc';
 
 export const logger = bunyan.createLogger({ name: 'logger' });
 
