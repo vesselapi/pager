@@ -3,7 +3,7 @@ import { isArray } from 'radash';
 
 import { ApiToken, OrgId } from '@vessel/types';
 
-import { SecretManager } from '../../services/secret-manager';
+import { SecretManager } from '../../../services/secret-manager';
 import * as errors from '../errors';
 
 const API_TOKEN_HEADER_KEY = 'x-vessel-api-token';

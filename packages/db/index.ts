@@ -131,6 +131,13 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       if (!user) return null;
       return selectUserSchema.parse(user);
     },
+    findByEmail: async (email: string) => {
+      const user = await db.query.user.findFirst({
+        where: eq(userSchema.email, email),
+      });
+      if (!user) return null;
+      return selectUserSchema.parse(user);
+    },
     list: async (...args: Parameters<typeof db.query.user.findMany>) => {
       const users = await db.query.user.findMany(...args);
       return users.map((a) => selectUserSchema.parse(a));
