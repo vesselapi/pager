@@ -3,7 +3,7 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 import { APP_ID, IntegrationIdRegex } from '@vessel/types';
-import type { AppId, IntegrationId } from '@vessel/types';
+import type { AppId, IntegrationId, OrgId } from '@vessel/types';
 
 import { organization } from './organization';
 
@@ -18,14 +18,20 @@ export const integration = pgTable('integration', {
 
 export const selectIntegrationSchema = createSelectSchema(integration, {
   id: (schema) => schema.id.transform((x) => x as IntegrationId),
+  organizationId: (schema) =>
+    schema.organizationId.transform((x) => x as OrgId),
 });
 
 export const insertIntegrationSchema = createInsertSchema(integration, {
   id: (schema) =>
-    schema.id.regex(
-      IntegrationIdRegex,
-      `Invalid id, expected format ${IntegrationIdRegex}`,
-    ),
+    schema.id
+      .regex(
+        IntegrationIdRegex,
+        `Invalid id, expected format ${IntegrationIdRegex}`,
+      )
+      .transform((x) => x as IntegrationId),
+  organizationId: (schema) =>
+    schema.organizationId.transform((x) => x as OrgId),
 });
 
 export type CreateIntegration = z.infer<typeof insertIntegrationSchema>;
