@@ -7,6 +7,7 @@ import { headers } from 'next/headers';
 
 import SideNav from './_components/SideNav';
 import { TRPCReactProvider } from './providers';
+import classNames from 'classnames';
 
 const fontSans = Inter({
   subsets: ['latin'],
@@ -42,14 +43,14 @@ export const dynamic = 'force-dynamic';
  */
 export default function Layout(props: { children: React.ReactNode }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={['font-sans', fontSans.variable].join(' ')}>
-          <TRPCReactProvider headers={headers()}>
-            <SideNav>{props.children}</SideNav>
-          </TRPCReactProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    // <ClerkProvider>
+    <html lang="en">
+      <body className={classNames(['font-sans', fontSans.variable].join(' '), 'overflow-y-hidden')}>
+        <TRPCReactProvider headers={headers()}>
+          <SideNav>{props.children}</SideNav>
+        </TRPCReactProvider>
+      </body>
+    </html>
+    // </ClerkProvider>
   );
 }

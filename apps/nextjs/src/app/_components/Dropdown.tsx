@@ -11,7 +11,7 @@ const Dropdown = ({
   position = 'left',
   noHighlight = false,
 }: {
-  children: ReactElement | Element;
+  children: ReactElement;
   OpenButton: ReactElement;
   position?: 'left' | 'right';
   noHighlight?: boolean;
@@ -34,7 +34,7 @@ const Dropdown = ({
         <Menu.Items
           className={classNames(
             position === 'left' ? 'right-0' : 'left-0',
-            'absolute z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
+            'absolute z-10 mt-1.5 w-[170px] origin-top-right rounded-md bg-white text-smr text-zinc-600 shadow border-zinc-200 border-[1px] border-opacity-20 focus:outline-none',
           )}
         >
           {React.Children.map(children, (child) => (
@@ -43,9 +43,9 @@ const Dropdown = ({
                 <div
                   className={classNames(
                     !noHighlight && active
-                      ? 'bg-gray-100 text-gray-900'
-                      : 'text-gray-700',
-                    'block px-4 py-2 text-sm',
+                      ? 'bg-gray-200'
+                      : '',
+                    'h-[28px] m-1 rounded flex items-center px-2',
                   )}
                 >
                   {child}

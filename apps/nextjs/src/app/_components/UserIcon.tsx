@@ -1,5 +1,5 @@
-import { currentUser } from '@clerk/nextjs';
-import classnames from 'classnames';
+import { useUser } from '@clerk/nextjs';
+import Image from 'next/image';
 
 const createInitials = (
   firstName: string | null,
@@ -9,31 +9,23 @@ const createInitials = (
   return initials.toUpperCase();
 };
 
-const UserIcon = async ({ size = 'small' }: { size?: 'small' | 'large' }) => {
-  const user = await currentUser();
+const UserIcon = () => {
+  const auth = useUser()
+  if (!auth?.user) return <div className='h-[18px] w-[18px]  rounded-full bg-gray-500 ring-1 ring-gray-400'></div>;
 
-  if (!user) return <div>N/A</div>;
-
-  //   return user.imageUrl ? (
-  //     <Image
-  //       src={user.imageUrl}
-  //       width={width}
-  //       height={height}
-  //       alt="Profile Picture"
-  //     />
-  //   ) : (
-  //     <div>{createInitials(user.firstName, user.lastName)}</div>
-  //   );
-  return (
+  return auth.user.hasImage ? (
+    <Image
+      className='object-cover rounded-full h-[18px] w-[18px] ring-1 ring-gray-400'
+      src={auth.user.imageUrl}
+      width={20}
+      height={20}
+      alt="Profile Picture"
+    />
+  ) : (
     <div
-      className={classnames(
-        {
-          'h-6 w-6': size === 'small',
-        },
-        'flex items-center justify-center rounded-full bg-white ring-2 ring-black',
-      )}
+      className={'flex items-center justify-center  h-[18px] w-[18px]  rounded-full bg-gray-500 ring-2 ring-gray-400'}
     >
-      {createInitials(user.firstName, user.lastName)}
+      {createInitials(auth.user.firstName, auth.user.lastName)}
     </div>
   );
 };

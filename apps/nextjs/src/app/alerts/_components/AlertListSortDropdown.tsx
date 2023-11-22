@@ -4,46 +4,51 @@ import { MdOutlineClose, MdSort } from 'react-icons/md';
 import Dropdown from '../../_components/Dropdown';
 import Pill from '../../_components/Pill';
 
-type TOnSort = (s: string) => void;
+type TOnSort = (s: { property: string, label: string }) => void;
 
 const SortItem = ({
   label,
   value,
   onSort,
+  Icon,
 }: {
   label: string;
   value: string;
   onSort: TOnSort;
+  Icon: React.ReactElement
 }) => {
   return (
     <button
-      onClick={(_) => onSort(value)}
+      onClick={(_) => onSort({ property: value, label })}
       className="w-full cursor-pointer text-left"
     >
-      {label}
+      <div className="flex justify-between items-center">
+        {label}
+        {Icon}
+      </div>
     </button>
   );
 };
 
 const AlertListSortPill = ({
-  title,
+  label,
   order,
   onFlipOrder,
   onRemove,
 }: {
-  title: string;
+  label: string;
   order?: 'asc' | 'desc';
   onFlipOrder: () => void;
   onRemove: () => void;
 }) => {
   return (
     <Pill>
-      <div>{title}</div>
+      <div className='text-bold'>{label}</div>
       <button onClick={onFlipOrder}>
-        {order === 'asc' ? <BsSortUp /> : <BsSortDown />}
+        {order === 'desc' ? <BsSortDown /> : <BsSortUp />}
       </button>
       <button onClick={onRemove}>
-        <MdOutlineClose />
+        <MdOutlineClose className="text-lg" />
       </button>
     </Pill>
   );
@@ -53,14 +58,14 @@ const AlertListSortDropdown = ({
   sorts,
   onSort,
 }: {
-  sorts: { label: string; value: string }[];
+  sorts: { label: string; value: string; Icon: React.ReactElement }[];
   onSort: TOnSort;
 }) => {
   return (
     <Dropdown
       OpenButton={
-        <div className="mr-1 flex items-center rounded bg-gray-200 px-2 py-1">
-          <MdSort className="mr-1" />
+        <div className="mr-1.5 flex items-center rounded bg-gray-200 px-2 py-1 text-zinc-600">
+          <MdSort className="mr-1.5" />
           Sort
         </div>
       }
@@ -71,6 +76,7 @@ const AlertListSortDropdown = ({
           onSort={onSort}
           label={s.label}
           value={s.value}
+          Icon={s.Icon}
         />
       ))}
     </Dropdown>

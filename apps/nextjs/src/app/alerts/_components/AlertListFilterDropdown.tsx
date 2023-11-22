@@ -57,8 +57,9 @@ const AlertListFilterPill = ({
 interface FilterOption {
   property: string;
   label: string;
-  options: { label: string; value: string }[];
+  options: { label: string; value: string, Icon: React.ReactElement }[];
   conditions: string[];
+  Icon: React.ReactElement
 }
 interface SelectedFilter {
   property: string;
@@ -78,14 +79,14 @@ const AlertListFilterDropdown = ({
   const options = useMemo(() => {
     return selectedFilter
       ? selectedFilter.options
-      : filterOptions.map((f) => ({ label: f.label, value: f.property }));
+      : filterOptions.map((f) => ({ label: f.label, value: f.property, Icon: f.Icon }));
   }, [selectedFilter, filterOptions]);
 
   return (
     <Dropdown
       OpenButton={
-        <div className="mr-1 flex items-center rounded bg-gray-200 px-2 py-1">
-          <MdFilterList className="mr-1" />
+        <div className="mr-1.5 flex items-center rounded bg-gray-200 px-2 py-1 text-zinc-600">
+          <MdFilterList className="mr-1.5" />
           Filter
         </div>
       }
@@ -115,7 +116,10 @@ const AlertListFilterDropdown = ({
             }
           }}
         >
-          {o.label}
+          <div className="flex justify-between items-center">
+            {o.label}
+            {o.Icon}
+          </div>
         </button>
       ))}
     </Dropdown>

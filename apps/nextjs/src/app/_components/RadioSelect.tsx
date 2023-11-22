@@ -1,8 +1,10 @@
+import classNames from 'classnames';
 import React from 'react';
 
 interface Option {
   value: any;
   label: string;
+  Icon: React.ReactElement;
 }
 
 const RadioSelect = ({
@@ -15,16 +17,17 @@ const RadioSelect = ({
   onChange: (value: any) => void;
 }) => {
   return (
-    <div>
-      {options.map(({ value: optionValue, label }) => (
-        <label key={optionValue}>
+    <div className='flex'>
+      {options.map(({ value: optionValue, label, Icon }, index) => (
+        <label key={optionValue} className={classNames('cursor-pointer flex items-center border px-2 py-1', { 'bg-gray-200': optionValue === value, 'rounded-l-lg': index === 0, 'rounded-r-lg': index === options.length - 1 })}>
           <input
+            className='hidden peer'
             type="radio"
             value={optionValue}
             checked={value === optionValue}
             onChange={() => onChange(optionValue)}
           />
-          {label}
+          {Icon ?? label}
         </label>
       ))}
     </div>
