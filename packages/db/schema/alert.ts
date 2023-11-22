@@ -1,5 +1,6 @@
 import { json, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import type { z } from 'zod';
 
 import type { AlertId, UserId } from '@vessel/types';
 import { AlertIdRegex, UserIdRegex } from '@vessel/types';
@@ -31,3 +32,5 @@ export const insertAlertSchema = createInsertSchema(alert, {
   assignedToId: (schema) =>
     schema.id.regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`),
 });
+
+export type UpsertAlert = Omit<z.infer<typeof insertAlertSchema>, 'id'>;

@@ -14,13 +14,14 @@ import AlertListSortDropdown, {
   AlertListSortPill,
 } from './_components/AlertListSortDropdown';
 import AlertsListItem from './AlertListItem';
-import { TbClock, TbLetterCase, TbMinus, TbMoodEmpty, TbMoodHappy, TbMoodSad, TbPlus, TbSearch } from 'react-icons/tb';
+import { TbClock, TbLetterCase, TbMinus, TbPlus, TbSearch } from 'react-icons/tb';
 import { GrStatusGood } from 'react-icons/gr'
 import { RxAvatar } from "react-icons/rx";
 import Spinner from '../_components/Spinner';
 import { MdOutlineClose, } from 'react-icons/md';
 import type { ConfigOption } from './AlertListTypes';
 import classNames from 'classnames';
+import { useAuth } from '@clerk/nextjs';
 
 
 interface DisplaySettings {
@@ -77,9 +78,16 @@ const AlertsList = () => {
     sorts: allSorts,
     filters: allFilters,
   });
+
+  const updateAlert = api.alert.update.useMutation()
   // const alerts = { data: [{ title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }], isLoading: false }
   const users = api.user.all.useQuery();
+  const currentUser = useAuth()
   // const users = { data: [] }
+
+  const me = useMemo(() => {
+    return users.data?.find(u => u.id === currentUser.userId)
+  }, [currentUser, users])
 
   return (
     <div className="flex flex-col">
@@ -221,7 +229,7 @@ const AlertsList = () => {
             <div className="px-10"><Spinner /></div>
             : alerts.data?.map((a) => {
               const user = users.data?.find(u => u.id === a.assignedToId) ?? {}
-              return <AlertsListItem key={a.id} style={display.style} createdAt={a.createdAt} title={a.title} status={a.status} firstName={user.firstName} lastName={user.lastName} />
+              return <AlertsListItem key={a.id} style={display.style} createdAt={a.createdAt} title={a.title} status={a.status} firstName={user.firstName} lastName={user.lastName} onAck={() => updateAlert({ id: a.id, alert: { status: 'ACKED' } })} onClose={() => updateAlert({ id: a.id, alert: { status: 'CLOSED' } })} onSelfAssign={() => updateAlert({ id: a.id, alert: { assignedToId: me.id } })} onReopen={() => updateAlert({ id: a.id, alert: { status: 'OPEN' } })} />
             })
           }
           <div className="mt-52"></div>

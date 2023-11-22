@@ -32,6 +32,6 @@ export const alertUpdate = publicProcedure
     }),
   )
   .input(input)
-  .query(({ ctx, input }) => {
-    return ctx.db.alerts.find(input.id);
+  .mutation(({ ctx, input }) => {
+    return ctx.db.alerts.update(input.id, input.alert);
   });

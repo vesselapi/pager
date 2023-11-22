@@ -8,56 +8,70 @@ const Styles = {
   ButtonShared: (color: string) => `border mr-2 text-${color}-500 border-${color}-500 text-lg hover:bg-${color}-500 hover:bg-opacity-40 flex items-center justify-between px-2 whitespace-nowrap`
 }
 
-const ActionButtons = ({ status, expanded = false }: { status: string; expanded?: boolean }) => {
+const ActionButtons = ({ status, expanded = false, onAck, onClose, onSelfAssign, onReopen }: { status: string; expanded?: boolean }) => {
   return status === 'ACKED' ? <>
-    <button className={classNames(
-      expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-      Styles.ButtonShared('green')
-    )}>
+    <button
+      onClick={onClose}
+      className={classNames(
+        expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
+        Styles.ButtonShared('green')
+      )}>
       {expanded ? <div>Close</div> : null}
       <TbCheck />
     </button>
-    <button className={classNames(
-      expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-      Styles.ButtonShared('blue')
-    )}>
+    <button
+      onClick={onSelfAssign}
+      className={classNames(
+        expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
+        Styles.ButtonShared('blue')
+      )}>
       {expanded ? <div className="mr-1.5">Take up</div> : null}
       <TbHandStop />
     </button>
   </> : status === 'CLOSED' ? <>
-    <button className={classNames(
-      expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-      Styles.ButtonShared('red')
-    )}>
+    <button
+      onClick={onReopen}
+      className={classNames(
+        expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
+        Styles.ButtonShared('red')
+      )}>
       {expanded ? <div>Re-open</div> : null}
       <TbArrowUpRightCircle />
     </button>
-    <button className={classNames(
-      expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-      Styles.ButtonShared('blue')
-    )}>
+    <button
+      onClick={onSelfAssign}
+      className={classNames(
+        expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
+        Styles.ButtonShared('blue')
+      )}>
       {expanded ? <div className="mr-1.5">Take up</div> : null}
       <TbHandStop />
     </button> </> :
     <>
-      <button className={classNames(
-        expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-        Styles.ButtonShared('yellow')
-      )}>
+      <button
+        onClick={onAck}
+        className={classNames(
+          expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
+          Styles.ButtonShared('yellow')
+        )}>
         {expanded ? <div>Ack</div> : null}
         <TbThumbUpFilled />
       </button>
-      <button className={classNames(
-        expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-        Styles.ButtonShared('green')
-      )}>
+      <button
+        onClick={onClose}
+        className={classNames(
+          expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
+          Styles.ButtonShared('green')
+        )}>
         {expanded ? <div>Close</div> : null}
         <TbCheck />
       </button>
-      <button className={classNames(
-        expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-        Styles.ButtonShared('blue')
-      )}>
+      <button
+        onClick={onSelfAssign}
+        className={classNames(
+          expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
+          Styles.ButtonShared('blue')
+        )}>
         {expanded ? <div className="mr-1.5">Take up</div> : null}
         <TbHandStop />
       </button>
@@ -70,7 +84,7 @@ const AlertToColor = {
   'CLOSED': 'text-green-800 bg-green-200'
 }
 
-const AlertsListItem = ({ className, status, title, createdAt, style, firstName, lastName }: { className?: string, status: string; title: string; createdAt: string; style: 'condensed' | 'expanded'; firstName: string; lastName: string; }) => {
+const AlertsListItem = ({ className, status, title, createdAt, style, firstName, lastName, onAck, onClose, onSelfAssign, onReopen }: { className?: string, status: string; title: string; createdAt: string; style: 'condensed' | 'expanded'; firstName: string; lastName: string; onAck: () => void; onClose: () => void; onSelfAssign: () => void; onReopen: () => void }) => {
   const condensedStyle = style === 'condensed';
 
   if (condensedStyle) {
@@ -91,7 +105,7 @@ const AlertsListItem = ({ className, status, title, createdAt, style, firstName,
         </div>
 
         <div className="flex items-center justify-end">
-          <ActionButtons status={status} />
+          <ActionButtons status={status} onAck={onAck} onClose={onClose} onReopen={onReopen} onSelfAssign={onSelfAssign} />
         </div>
       </div>
     );
@@ -113,7 +127,7 @@ const AlertsListItem = ({ className, status, title, createdAt, style, firstName,
             Timeline
             <li className="whitespace-nowrap">{format(new Date(createdAt), 'dd/MM p')}</li>
           </ul>
-          <div className="flex flex-col"><ActionButtons status={status} expanded /></div>
+          <div className="flex flex-col"><ActionButtons status={status} onAck={onAck} onClose={onClose} onReopen={onReopen} onSelfAssign={onSelfAssign} expanded /></div>
         </div>
       </div>
     </div >
