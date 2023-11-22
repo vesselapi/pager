@@ -1,5 +1,7 @@
-import { AppId } from '@vessel/types';
+import { db } from '@vessel/db';
+import { AppId, OrgId } from '@vessel/types';
 
+import { Json, makeSecretManager } from '../secret-manager';
 import { sentry } from './app/sentry';
 import { Platform } from './platform';
 
@@ -17,7 +19,25 @@ export const makeIntegrations = () => {
 
   const list = () => Object.values(integrations);
 
-  return { find, list };
+  const create = async <T extends Json>({
+    orgId,
+    appId,
+    secret,
+  }: {
+    orgId: OrgId;
+    appId: AppId;
+    secret: T;
+  }) => {
+    const integration = find(appId);
+    if (integration.auth.type !== 'oauth2') {
+      throw new Error('Cannot store credentials becaues it is not OAuth2');
+    }
+    const secretManager = makeSecretManager();
+    await secretManager.integration.create({ orgId, appId, secret });
+    await db.integrations.create({ organizationId: orgId, appId });
+  };
+
+  return { find, list, create };
 };
 
 export type Integrations = ReturnType<typeof makeIntegrations>;

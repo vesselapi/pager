@@ -8,7 +8,10 @@ import {
   useApiTokenAuth,
 } from '@vessel/api/src/exobase/hooks/use-api-token-auth';
 import { makePubSub, PubSub } from '@vessel/api/src/services/pubsub';
-import { makeSecret, Secret } from '@vessel/api/src/services/secret';
+import {
+  makeSecretManager,
+  SecretManager,
+} from '@vessel/api/src/services/secret-manager';
 
 import { db } from '../../../../packages/db';
 import { insertAlertSchema } from '../../../../packages/db/schema/alert';
@@ -25,7 +28,7 @@ type Args = z.infer<typeof schema>;
 
 type Services = {
   pubsub: PubSub;
-  secret: Secret;
+  secretManager: SecretManager;
 };
 
 type Result = {
@@ -52,7 +55,7 @@ export const main = vessel()
   .hook(
     useServices<Services>({
       pubsub: makePubSub(),
-      secret: makeSecret(),
+      secretManager: makeSecretManager(),
     }),
   )
   .hook(useApiTokenAuth())

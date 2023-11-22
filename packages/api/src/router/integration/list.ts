@@ -1,4 +1,3 @@
-import { pick } from 'radash';
 import { z } from 'zod';
 
 import { Db, db } from '@vessel/db';
@@ -28,17 +27,12 @@ export const integrationConnect = publicProcedure
   )
   .input(input)
   .query(({ ctx, input }) => {
-    const { integrations, db } = ctx;
+    const { integrations } = ctx;
     const { appId } = input;
     const integration = integrations.find(appId);
 
-    const getAuth = () => {
-      const { auth } = integration;
-      if (auth.type === 'oauth2') return pick(auth, ['type', 'authUrl']);
-    };
-
     return {
-      display: integration.display,
-      auth: getAuth(),
+      ...integration.display,
+      authType: integration.auth.type,
     };
   });

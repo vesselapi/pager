@@ -23,6 +23,8 @@ import {
   selectAlertEventSchema,
 } from './schema/alertEvent';
 import {
+  CreateIntegration,
+  insertIntegrationSchema,
   integration as integrationSchema,
   selectIntegrationSchema,
 } from './schema/integration';
@@ -93,6 +95,17 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         where: eq(integrationSchema.organizationId, orgId),
       });
       return integrations.map((x) => selectIntegrationSchema.parse(x));
+    },
+    create: async (integration: Omit<CreateIntegration, 'id'>) => {
+      const newIntegration = insertIntegrationSchema.parse({
+        id: IdGenerator.alert(),
+        ...alert,
+      });
+      const dbAlert = await db
+        .insert(alertSchema)
+        .values(newIntegration)
+        .returning();
+      return selectAlertSchema.parse(dbAlert);
     },
   },
   organizations: {
