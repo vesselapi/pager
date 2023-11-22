@@ -42,7 +42,6 @@ const toSimpleOauth2Config = (config: OAuth2Config): SimpleOauth2Config => {
   };
 };
 
-
 export const makeOauth2Client = () => ({
   authorizeURL: ({
     config,
@@ -75,7 +74,7 @@ export const makeOauth2Client = () => ({
   }): Promise<{
     accessToken: string;
     refreshToken: string | null;
-    oauthResponse: Record<string, unknown>;
+    oauthResponse: Record<string, string | number>;
   }> => {
     const client = new AuthorizationCode(toSimpleOauth2Config(config));
     const accessToken = await client.getToken({

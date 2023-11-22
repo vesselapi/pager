@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { Db, db } from '@vessel/db';
 import { APP_ID, AppId } from '@vessel/types';
 
-import { useServicesHook } from '../../middlewares/use-services-hook';
+import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 import { Integrations, makeIntegrations } from '../../services/integrations';
 import { publicProcedure } from '../../trpc';
 
