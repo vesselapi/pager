@@ -20,6 +20,7 @@ import { RxAvatar } from "react-icons/rx";
 import Spinner from '../_components/Spinner';
 import { MdOutlineClose, } from 'react-icons/md';
 import type { ConfigOption } from './AlertListTypes';
+import classNames from 'classnames';
 
 
 interface DisplaySettings {
@@ -43,12 +44,20 @@ interface FilterSettings {
   Icon: React.ReactElement;
 };
 
+export const StatusToIcon = {
+  'ACKED': <TbMoodEmpty className="text-yellow-600" />,
+  'OPEN': <TbMoodSad className="text-red-600" />,
+  'CLOSED': <TbMoodHappy className="text-green-600" />,
+}
 
-
+const ConditionToIcon = {
+  'IS': <TbPlus />,
+  'IS_NOT': <TbMinus />
+}
 
 const AlertsList = () => {
   const [display, setDisplay] = useState<DisplaySettings>({
-    style: 'expanded',
+    style: 'condensed',
   });
   const [sorts, setSorts] = useState<SortSettings[]>([]);
   // TODO: Add filter for not closed by default.
@@ -72,13 +81,15 @@ const AlertsList = () => {
     return sorts.map(s => ({ property: s.property, order: s.order }))
   }, [sorts])
 
-  // const alerts = api.alert.all.useQuery({
-  //   sorts: allSorts,
-  //   filters: allFilters,
-  // });
-  const alerts = { data: [{ title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }], isLoading: false }
-  // const users = api.user.all.useQuery();
-  const users = { data: [] }
+  const configsAreApplied = useMemo(() => filters.length || sorts.length, [sorts, filters])
+
+  const alerts = api.alert.all.useQuery({
+    sorts: allSorts,
+    filters: allFilters,
+  });
+  // const alerts = { data: [{ title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }], isLoading: false }
+  const users = api.user.all.useQuery();
+  // const users = { data: [] }
 
   return (
     <div className="flex flex-col">
@@ -146,7 +157,7 @@ const AlertsList = () => {
 
         {/* The Sub-title bar is used to show the views active state like what the display is and what filters are applied */}
         {
-          sorts.length || filters.length ?
+          configsAreApplied ?
             <div className="flex mt-4 border-t-[1px] border-b-[1px] border-zinc-200 py-3 px-10">
               {sorts?.map((s) => (
                 <div className="mr-2" key={s.property}>
@@ -213,12 +224,15 @@ const AlertsList = () => {
         }
       </div>
 
-      {/* TODO: Change out for virtualized scroll */}
+      {/* TODO(@zkirby): Change out for virtualized scroll */}
       <div className="h-screen overflow-y-auto">
-        <div className="px-10 pt-4">
+        <div className={classNames({ 'px-10': display.style === 'expanded', 'mt-4': !configsAreApplied, 'border-t-[1px]': !configsAreApplied && display.style === 'condensed' })}>
           {alerts.isLoading ?
-            <Spinner />
-            : alerts.data?.map((a) => <AlertsListItem className="mt-5" key={a.id} style={display.style} title={a.title} status={a.status} />)
+            <div className="px-10"><Spinner /></div>
+            : alerts.data?.map((a) => {
+              const user = users.data?.find(u => u.id === a.assignedToId) ?? {}
+              return <AlertsListItem key={a.id} style={display.style} createdAt={a.createdAt} title={a.title} status={a.status} initials={`${user.firstName?.slice(0, 1)}${user.lastName?.slice(0, 1)}`} />
+            })
           }
           <div className="mt-52"></div>
         </div>

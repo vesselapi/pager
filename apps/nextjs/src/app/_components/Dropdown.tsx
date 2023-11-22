@@ -19,10 +19,8 @@ const Dropdown = ({
   noHighlight?: boolean;
 }) => {
   return (
-    <Menu as="div" className="relative inline-block text-left">
-      <div>
-        <Menu.Button>{OpenButton}</Menu.Button>
-      </div>
+    <Menu as="div" className="relative inline-block">
+      <Menu.Button>{OpenButton}</Menu.Button>
 
       <Transition
         as={Fragment}

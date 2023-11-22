@@ -43,18 +43,23 @@ const AlertListFilterPill = ({
         )}
       </Dropdown>
       <Dropdown position="right" OpenButton={
-        <div className='flex items-center'>{value.map(a =>
+        <div className='flex items-center h-full'>{value.map((a, index) =>
           <div key={a.label} className="mr-0.5 flex font-semibold justify-between items-center">
-            <div className="mr-1">{a.Icon}</div>
+            <div className="mr-0.5">{a.Icon}</div>
             {a.label}
+            {value.length > 1 && index !== value.length - 1 ? ',' : ''}
           </div>
         )}</div>
       }>
         {valueOptions.map(v =>
           <button onClick={e => {
-
+            const updatedValue = value.includes(v)
+              ? value.filter((vf) => vf !== v)
+              : [...value, v];
+            onChangeValue(updatedValue);
+            e.preventDefault();
           }} className='flex items-center w-full' key={v.value}>
-            <input type="checkbox" className='mr-2' />
+            <input type="checkbox" className='mr-2' checked={value.includes(v)} />
             <div className='mr-1'>{v.Icon}</div>
             <div>{v.label}</div>
           </button>
