@@ -5,7 +5,10 @@ import { SENTRY_URI } from './logo';
 
 export const sentry = platform('sentry', {
   auth: auth.oauth2({
-    authUrl: 'https://sentry.io/sentry-apps/vessel/external-install/',
+    authUrl: {
+      url: 'https://sentry.io/sentry-apps/vessel/external-install/',
+      override: true,
+    },
     tokenUrl:
       'https://sentry.io/api/0/sentry-app-installations/{}/authorizations/',
     clientId: env.INTEGRATION_SENTRY_CLIENT_ID,
