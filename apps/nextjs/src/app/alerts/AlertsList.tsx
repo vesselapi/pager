@@ -17,7 +17,6 @@ import {
 import { api } from '~/utils/api';
 import type { RouterInputs } from '~/utils/api';
 import Spinner from '../_components/Spinner';
-import { useDebounce } from '../../hooks/useDebounce';
 import AlertListDisplayDropdown from './_components/AlertListDisplayDropdown';
 import type { SelectedFilter } from './_components/AlertListFilterDropdown';
 import AlertListFilterDropdown, {
@@ -28,6 +27,7 @@ import AlertListSortDropdown, {
 } from './_components/AlertListSortDropdown';
 import AlertsListItem from './AlertListItem';
 import type { ConfigOption } from './AlertListTypes';
+import { useSearch } from './_hooks/useSearch';
 
 interface DisplaySettings {
   // How the alerts should be styled
@@ -43,11 +43,11 @@ type SortSettings = ExtractInnerType<RouterInputs['alert']['all']['sorts']> & {
 interface FilterSettings {
   property: string;
   label: string;
+  Icon: React.ReactElement;
   value: ConfigOption[];
   condition: ConfigOption;
   valueOptions: ConfigOption[];
   conditionOptions: ConfigOption[];
-  Icon: React.ReactElement;
 }
 
 const AlertsList = () => {
@@ -57,20 +57,19 @@ const AlertsList = () => {
   const [sorts, setSorts] = useState<SortSettings[]>([]);
   // TODO: Add filter for not closed by default.
   const [filters, setFilters] = useState<FilterSettings[]>([]);
-  const [search, setSearch] = useState<string>();
-  const debouncedSearch = useDebounce<string | undefined>(search, 200);
+  const [search, setSearch] = useSearch();
 
   const allFilters = useMemo(() => {
     const searchFilter = [
-      { property: 'title', value: debouncedSearch, condition: 'CONTAINS' },
+      { property: 'title', value: search, condition: 'CONTAINS' },
     ];
     const otherFilters = filters?.map((f) => ({
       property: f.property,
       value: f.value.map((v) => v.value),
       condition: f.condition.value,
     }));
-    return [...(otherFilters ?? []), ...(debouncedSearch ? searchFilter : [])];
-  }, [filters, debouncedSearch]);
+    return [...(otherFilters ?? []), ...(search ? searchFilter : [])];
+  }, [filters, search]);
 
   const allSorts = useMemo(() => {
     return sorts.map((s) => ({ property: s.property, order: s.order }));
@@ -87,10 +86,8 @@ const AlertsList = () => {
   });
 
   const updateAlert = api.alert.update.useMutation();
-  // const alerts = { data: [{ title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }, { title: "Example alert", status: 'ACKED' }], isLoading: false }
   const users = api.user.all.useQuery();
   const currentUser = useAuth();
-  // const users = { data: [] }
 
   const me = useMemo(() => {
     return users.data?.find((u) => u.id === currentUser.userId);

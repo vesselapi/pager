@@ -16,13 +16,15 @@ const input = z.object({
     .string()
     .regex(AlertIdRegex, `Invalid id, expected format ${AlertIdRegex}`)
     .transform((x) => x as AlertId),
-  alert: z.object({
-    assignedToId: z
-      .string()
-      .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`)
-      .transform((x) => x as UserId),
-    status: z.enum(['ACKED', 'OPEN', 'CLOSED']),
-  }),
+  alert: z
+    .object({
+      assignedToId: z
+        .string()
+        .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`)
+        .transform((x) => x as UserId),
+      status: z.enum(['ACKED', 'OPEN', 'CLOSED']),
+    })
+    .partial(),
 });
 
 export const alertUpdate = publicProcedure
