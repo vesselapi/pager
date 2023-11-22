@@ -19,7 +19,7 @@ const SortItem = ({
 }) => {
   return (
     <button
-      onClick={(_) => onSort({ property: value, label })}
+      onClick={(_) => onSort({ property: value, label, Icon })}
       className="w-full cursor-pointer text-left"
     >
       <div className="flex justify-between items-center">
@@ -33,22 +33,27 @@ const SortItem = ({
 const AlertListSortPill = ({
   label,
   order,
+  Icon,
   onFlipOrder,
   onRemove,
 }: {
   label: string;
+  Icon: React.ReactElement;
   order?: 'asc' | 'desc';
   onFlipOrder: () => void;
   onRemove: () => void;
 }) => {
   return (
     <Pill>
-      <div className='text-bold'>{label}</div>
+      <div className="flex font-semibold justify-between items-center">
+        <div className="mr-1">{Icon}</div>
+        {label}
+      </div>
       <button onClick={onFlipOrder}>
         {order === 'desc' ? <BsSortDown /> : <BsSortUp />}
       </button>
       <button onClick={onRemove}>
-        <MdOutlineClose className="text-lg" />
+        <MdOutlineClose className="text-lg text-slate-500" />
       </button>
     </Pill>
   );

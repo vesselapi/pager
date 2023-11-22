@@ -10,7 +10,7 @@ const Pill = ({ children }: { children: ReactNode }) => {
       {childArray.map((child, index: number) => (
         <div
           key={index}
-          className={`flex items-center border px-2 py-0.5 ${index === 0 ? 'rounded-l' : ''
+          className={`flex items-center border bg-zinc-200 border-white text-zinc-600 px-2 ${index === 0 ? 'rounded-l' : ''
             } ${index === tLength ? 'rounded-r' : ''} ${index !== tLength ? 'border-r-0' : ''
             }`}
         >
