@@ -3,7 +3,7 @@ import { auth } from '../../auth';
 import { platform } from '../../platform';
 import { SENTRY_URI } from './logo';
 
-export const sentry = platform({
+export const sentry = platform('sentry', {
   auth: auth.oauth2({
     authUrl: 'https://sentry.io/sentry-apps/vessel/external-install/',
     tokenUrl:

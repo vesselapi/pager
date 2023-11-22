@@ -1,3 +1,5 @@
+import { AppId } from '@vessel/types';
+
 import { AuthConfig } from './auth';
 
 type Display = {
@@ -10,8 +12,13 @@ type PlatformParams = {
   display: Display;
 };
 
-export type Platform = PlatformParams;
+export type Platform = {
+  appId: AppId;
+} & PlatformParams;
 
-export const platform = ({ auth, display }: PlatformParams): Platform => {
-  return { auth, display };
+export const platform = (
+  appId: AppId,
+  { auth, display }: PlatformParams,
+): Platform => {
+  return { appId, auth, display };
 };

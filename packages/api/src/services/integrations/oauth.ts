@@ -85,7 +85,7 @@ export const makeOauth2Client = () => ({
     return {
       accessToken: accessToken.token.access_token as string,
       refreshToken: (accessToken.token.refresh_token as string) ?? null,
-      oauthResponse: accessToken.token,
+      oauthResponse: accessToken.token as Record<string, string | number>,
     };
   },
   refresh: async ({

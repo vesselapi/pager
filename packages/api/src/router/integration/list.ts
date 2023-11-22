@@ -1,38 +1,35 @@
-import { z } from 'zod';
+import { objectify } from 'radash';
 
 import { Db, db } from '@vessel/db';
-import { APP_ID, AppId } from '@vessel/types';
 
+import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 import { Integrations, makeIntegrations } from '../../services/integrations';
-import { publicProcedure } from '../../trpc';
 
 interface Context {
   db: Db;
   integrations: Integrations;
 }
-const input = z.object({
-  appId: z
-    .string()
-    .transform((x) => x as AppId)
-    .refine((appId: string) => APP_ID.includes(appId as AppId)),
-});
 
-export const integrationList = publicProcedure
+export const integrationList = trpc
   .use(
     useServicesHook<Context>({
       db: () => db,
       integrations: makeIntegrations,
     }),
   )
-  .input(input)
-  .query(({ ctx, input }) => {
-    const { integrations } = ctx;
-    const { appId } = input;
-    const integration = integrations.find(appId);
+  .query(async ({ ctx }) => {
+    const { user } = ctx.auth;
+    const integrations = ctx.integrations.list();
 
-    return {
+    const userIntegrations = await ctx.db.integrations.listByOrgId(
+      user.organizationId,
+    );
+    const userIntegrationsByAppId = objectify(userIntegrations, (x) => x.appId);
+
+    return integrations.map((integration) => ({
       ...integration.display,
       authType: integration.auth.type,
-    };
+      isConnected: userIntegrationsByAppId[integration.appId] ?? false,
+    }));
   });
