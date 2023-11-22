@@ -4,9 +4,8 @@ import type { Db } from '@vessel/db';
 import { db } from '@vessel/db';
 import { AlertId, AlertIdRegex } from '@vessel/types';
 
-import { useLogger } from '../../middlewares/use-logger';
-import { useServicesHook } from '../../middlewares/use-services-hook';
-import { publicProcedure } from '../../trpc';
+import { trpc } from '../../middlewares/trpc/common-trpc-hook';
+import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 
 interface Context {
   db: Db;
@@ -18,13 +17,12 @@ const input = z.object({
     .transform((x) => x as AlertId),
 });
 
-export const alertById = publicProcedure
+export const alertById = trpc
   .use(
     useServicesHook<Context>({
       db: () => db,
     }),
   )
-  .use(useLogger())
   .input(input)
   .query(({ ctx, input }) => {
     return ctx.db.alerts.find(input.id);

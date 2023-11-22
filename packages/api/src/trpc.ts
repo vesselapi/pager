@@ -12,7 +12,7 @@ import { initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
 
-export type UserAuth = JwtPayload & {
+export type JwtClaims = JwtPayload & {
   id: string;
   first_name: string;
   last_name: string;
@@ -30,7 +30,7 @@ export type UserAuth = JwtPayload & {
  */
 export type CreateContextOptions = {
   req: NextRequest;
-  auth: { claims: UserAuth | null };
+  auth: { claims: JwtClaims | null };
 };
 
 /**
