@@ -18,7 +18,7 @@ const input = z.object({
     .refine((appId: string) => APP_ID.includes(appId as AppId)),
 });
 
-export const integrationConnect = publicProcedure
+export const integrationList = publicProcedure
   .use(
     useServicesHook<Context>({
       db: () => db,

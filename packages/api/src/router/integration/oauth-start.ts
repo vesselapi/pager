@@ -1,7 +1,8 @@
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { Db, db } from '@vessel/db';
-import { APP_ID, AppId } from '@vessel/types';
+import { APP_ID } from '@vessel/types';
 
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
@@ -18,10 +19,9 @@ interface Context {
 }
 const input = z.object({
   appId: z.enum(APP_ID),
-  code: z.string(),
 });
 
-export const integrationConnect = trpc
+export const integrationOAuthStart = trpc
   .use(
     useServicesHook<Context>({
       db: () => db,
@@ -31,25 +31,24 @@ export const integrationConnect = trpc
   )
   .input(input)
   .mutation(async ({ ctx, input }) => {
-    const {
-      integrations,
-      oauth2Client,
-      auth: { user },
-    } = ctx;
-    const { code, appId } = input;
+    const { integrations, oauth2Client } = ctx;
+    const { appId } = input;
     const integration = integrations.find(appId);
-
     const { auth } = integration;
+
     if (auth.type !== 'oauth2') {
-      throw new Error('Integration provided is not oauth2');
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Integration provided is not oauth2',
+      });
     }
 
-    const secret = await oauth2Client.exchange({
+    const authUrl = await oauth2Client.authorizeURL({
       config: auth,
-      code,
       // TODO: set redirect URI accordingly
       redirectUri: `https://app.vessel.dev/settings/integrations/${appId}`,
     });
-    await integrations.create({ orgId: user.organizationId, appId, secret });
-    return { success: true };
+    return {
+      authUrl,
+    };
   });
