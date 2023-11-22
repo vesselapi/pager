@@ -2,7 +2,7 @@ import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { UserIdRegex } from '@vessel/types';
-import type { UserId } from '@vessel/types';
+import type { OrgId, UserId } from '@vessel/types';
 
 import { organization } from './organization';
 
@@ -17,6 +17,8 @@ export const user = pgTable('user', {
 
 export const selectUserSchema = createSelectSchema(user, {
   id: (schema) => schema.id.transform((x) => x as UserId),
+  organizationId: (schema) =>
+    schema.organizationId.transform((x) => x as OrgId),
 });
 
 export const insertUserSchema = createInsertSchema(user, {
