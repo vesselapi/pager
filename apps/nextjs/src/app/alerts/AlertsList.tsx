@@ -44,16 +44,6 @@ interface FilterSettings {
   Icon: React.ReactElement;
 };
 
-export const StatusToIcon = {
-  'ACKED': <TbMoodEmpty className="text-yellow-600" />,
-  'OPEN': <TbMoodSad className="text-red-600" />,
-  'CLOSED': <TbMoodHappy className="text-green-600" />,
-}
-
-const ConditionToIcon = {
-  'IS': <TbPlus />,
-  'IS_NOT': <TbMinus />
-}
 
 const AlertsList = () => {
   const [display, setDisplay] = useState<DisplaySettings>({
@@ -109,9 +99,9 @@ const AlertsList = () => {
                   property: 'status',
                   label: 'Status',
                   valueOptions: [
-                    { label: 'Acked', value: 'ACKED', Icon: <TbMoodEmpty className="text-yellow-600" /> },
-                    { label: 'Open', value: 'OPEN', Icon: <TbMoodSad className="text-red-600" /> },
-                    { label: 'Closed', value: 'CLOSED', Icon: <TbMoodHappy className="text-green-600" /> },
+                    { label: 'Acked', value: 'ACKED', Icon: <div className="bg-blue-400 w-[12px] h-[12px] rounded-full" /> },
+                    { label: 'Open', value: 'OPEN', Icon: <div className="bg-red-400 w-[12px] h-[12px] rounded-full" /> },
+                    { label: 'Closed', value: 'CLOSED', Icon: <div className="bg-green-400 w-[12px] h-[12px] rounded-full" /> },
                   ],
                   conditionOptions: [
                     { label: 'Is', value: "IS", Icon: <TbPlus /> },
@@ -231,7 +221,7 @@ const AlertsList = () => {
             <div className="px-10"><Spinner /></div>
             : alerts.data?.map((a) => {
               const user = users.data?.find(u => u.id === a.assignedToId) ?? {}
-              return <AlertsListItem key={a.id} style={display.style} createdAt={a.createdAt} title={a.title} status={a.status} initials={`${user.firstName?.slice(0, 1)}${user.lastName?.slice(0, 1)}`} />
+              return <AlertsListItem key={a.id} style={display.style} createdAt={a.createdAt} title={a.title} status={a.status} firstName={user.firstName} lastName={user.lastName} />
             })
           }
           <div className="mt-52"></div>

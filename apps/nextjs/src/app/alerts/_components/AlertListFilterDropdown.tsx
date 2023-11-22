@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { MdFilterList, MdOutlineClose } from 'react-icons/md';
 
-import CheckboxSelect from '../../_components/CheckboxSelect';
 import Dropdown from '../../_components/Dropdown';
 import Pill from '../../_components/Pill';
 import classNames from 'classnames';
