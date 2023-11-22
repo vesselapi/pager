@@ -6,18 +6,20 @@ import { api } from '~/utils/api';
 import type { RouterInputs } from '~/utils/api';
 import { useDebounce } from '../../hooks/useDebounce';
 import AlertListDisplayDropdown from './_components/AlertListDisplayDropdown';
+import type { SelectedFilter } from './_components/AlertListFilterDropdown';
 import AlertListFilterDropdown, {
-  AlertListFilterPill,
+  AlertListFilterPill
 } from './_components/AlertListFilterDropdown';
 import AlertListSortDropdown, {
   AlertListSortPill,
 } from './_components/AlertListSortDropdown';
 import AlertsListItem from './AlertListItem';
-import { TbClock, TbLetterCase, TbMoodEmpty, TbMoodHappy, TbMoodSad, TbSearch } from 'react-icons/tb';
+import { TbClock, TbLetterCase, TbMinus, TbMoodEmpty, TbMoodHappy, TbMoodSad, TbPlus, TbSearch } from 'react-icons/tb';
 import { GrStatusGood } from 'react-icons/gr'
 import { RxAvatar } from "react-icons/rx";
 import Spinner from '../_components/Spinner';
-import { MdOutlineAdd, MdOutlineClose, MdOutlineHdrPlus, MdOutlinePlusOne } from 'react-icons/md';
+import { MdOutlineClose, } from 'react-icons/md';
+import type { ConfigOption } from './AlertListTypes';
 
 
 interface DisplaySettings {
@@ -31,13 +33,16 @@ type SortSettings = ExtractInnerType<RouterInputs['alert']['all']['sorts']> & {
   label: string;
   Icon: React.ReactElement;
 };
-type FilterSettings = ExtractInnerType<
-  RouterInputs['alert']['all']['filters']
-> & {
-  id: string;
-  conditionOptions?: string[];
-  valueOptions?: string[];
+interface FilterSettings {
+  property: string;
+  label: string;
+  value: ConfigOption[];
+  condition: ConfigOption;
+  valueOptions: ConfigOption[];
+  conditionOptions: ConfigOption[];
+  Icon: React.ReactElement;
 };
+
 
 
 
@@ -57,8 +62,8 @@ const AlertsList = () => {
     ];
     const otherFilters = filters?.map((f) => ({
       property: f.property,
-      value: f.value,
-      condition: f.condition,
+      value: f.value.map(v => v.value),
+      condition: f.condition.value,
     }));
     return [...(otherFilters ?? []), ...(debouncedSearch ? searchFilter : [])];
   }, [filters, debouncedSearch]);
@@ -92,32 +97,34 @@ const AlertsList = () => {
                 {
                   property: 'status',
                   label: 'Status',
-                  options: [
+                  valueOptions: [
                     { label: 'Acked', value: 'ACKED', Icon: <TbMoodEmpty className="text-yellow-600" /> },
                     { label: 'Open', value: 'OPEN', Icon: <TbMoodSad className="text-red-600" /> },
                     { label: 'Closed', value: 'CLOSED', Icon: <TbMoodHappy className="text-green-600" /> },
                   ],
-                  conditions: ['IS', 'IS_NOT'],
+                  conditionOptions: [
+                    { label: 'Is', value: "IS", Icon: <TbPlus /> },
+                    { label: 'Is not', value: "IS_NOT", Icon: <TbMinus /> }
+                  ],
                   Icon: <GrStatusGood />
                 },
                 {
                   property: 'assignedToId',
                   label: 'Assigned To',
-                  options:
+                  valueOptions:
                     users.data?.map((u) => ({
                       label: u.email ?? u.id,
                       value: u.id,
                       Icon: <></>
                     })) ?? [],
-                  conditions: ['IS', 'IS_NOT'],
+                  conditionOptions: [
+                    { label: 'Is', value: "IS", Icon: <TbPlus /> },
+                    { label: 'Is not', value: "IS_NOT", Icon: <TbMinus /> }
+                  ],
                   Icon: <RxAvatar />
                 },
               ]}
-              onFilter={(f: {
-                property: string;
-                value: string[];
-                condition: string;
-              }) => setFilters((pf) => [...pf, f] as FilterSettings)}
+              onFilter={(f: SelectedFilter) => setFilters((pf) => [...pf, f] as FilterSettings)}
             />
             <AlertListSortDropdown
               sorts={[
@@ -171,7 +178,8 @@ const AlertsList = () => {
               {filters?.map((f) => (
                 <div className="mr-2" key={f.property}>
                   <AlertListFilterPill
-                    property={f.property}
+                    label={f.label}
+                    Icon={f.Icon}
                     condition={f.condition}
                     value={f.value}
                     conditionOptions={f.conditionOptions}
@@ -197,6 +205,7 @@ const AlertsList = () => {
                 </div>
               ))}
               <div className="flex items-center">
+                {/* TODO(@zkirby): Add 'Add filter' button from pills list */}
                 {/* <MdOutlineAdd  onClick={} className="text-slate-600 w-[18px] h-[18px] mr-1 ml-1" /> */}
                 <MdOutlineClose onClick={() => { setFilters([]); setSorts([]) }} className="cursor-pointer rounded-full w-[15px] h-[15px] p-0.5 ring-1 text-slate-400 ring-slate-400 hover:text-white hover:bg-slate-400 transition-colors" />
               </div>

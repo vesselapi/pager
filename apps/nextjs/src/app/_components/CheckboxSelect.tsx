@@ -24,7 +24,7 @@ const CheckboxSelect = ({
   };
 
   return (
-    <div>
+    <div className='flex flex-col'>
       {options.map(({ value: optionValue, label }) => (
         <label key={optionValue}>
           <input

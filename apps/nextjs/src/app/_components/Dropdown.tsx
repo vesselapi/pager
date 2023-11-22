@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
@@ -9,11 +9,13 @@ const Dropdown = ({
   children,
   OpenButton,
   position = 'left',
+  size = 'md',
   noHighlight = false,
 }: {
-  children: ReactElement;
+  children: ReactElement | ReactNode[];
   OpenButton: ReactElement;
   position?: 'left' | 'right';
+  size?: 'sm' | 'md' | 'lg';
   noHighlight?: boolean;
 }) => {
   return (
@@ -33,8 +35,13 @@ const Dropdown = ({
       >
         <Menu.Items
           className={classNames(
-            position === 'left' ? 'right-0' : 'left-0',
-            'absolute z-10 mt-1.5 w-[170px] origin-top-right rounded-md bg-white text-smr text-zinc-600 shadow border-zinc-200 border-[1px] border-opacity-20 focus:outline-none',
+            {
+              'right-0': position === 'left',
+              'left-0': position === 'right',
+              'w-[85px]': size === 'sm',
+              'w-[170px]': size === 'md',
+            },
+            'absolute z-10 mt-1.5 origin-top-right rounded-md bg-white text-smr text-zinc-600 shadow border-zinc-200 border-[1px] border-opacity-20 focus:outline-none',
           )}
         >
           {React.Children.map(children, (child) => (
@@ -55,7 +62,7 @@ const Dropdown = ({
           ))}
         </Menu.Items>
       </Transition>
-    </Menu>
+    </Menu >
   );
 };
 
