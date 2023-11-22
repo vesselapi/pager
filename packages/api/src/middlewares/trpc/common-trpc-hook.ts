@@ -1,5 +1,5 @@
-import { publicProcedure } from '../../trpc';
+import { procedure } from '../../trpc';
 import { useLogger } from './use-logger';
 import { useUserAuth } from './use-user-auth';
 
-export const trpc = publicProcedure.use(useLogger()).use(useUserAuth());
+export const trpc = procedure.use(useLogger()).use(useUserAuth());
