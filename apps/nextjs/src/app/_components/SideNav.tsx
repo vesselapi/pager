@@ -1,18 +1,17 @@
-'use client'
+'use client';
 
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { SignOutButton } from '@clerk/nextjs';
+import classNames from 'classnames';
+import { FaGithub, FaSlack } from 'react-icons/fa';
+import { HiOutlineMail } from 'react-icons/hi';
 import { TbBell, TbBook2, TbCalendarFilled } from 'react-icons/tb';
-import { FaGithub, FaSlack } from 'react-icons/fa'
-import { HiOutlineMail } from 'react-icons/hi'
-
 
 import Dropdown from './Dropdown';
 import UserIcon from './UserIcon';
-import Image from 'next/image';
-import classNames from 'classnames';
-import { usePathname } from 'next/navigation';
 
 const NavItem = ({
   title,
@@ -28,10 +27,13 @@ const NavItem = ({
   return (
     <Link
       href={route}
-      className={classNames("mt-1 flex cursor-pointer items-center px-2 py-1 hover:bg-gray-200 rounded", { 'bg-gray-200': activeRoute === route })}
+      className={classNames(
+        'mt-1 flex cursor-pointer items-center rounded px-2 py-1 hover:bg-gray-200',
+        { 'bg-gray-200': activeRoute === route },
+      )}
     >
       <Icon className="mr-1.5 font-bold text-zinc-600" />
-      <div className='text-smr'>{title}</div>
+      <div className="text-smr">{title}</div>
     </Link>
   );
 };
@@ -47,10 +49,19 @@ const SideNav = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className="flex text-sm">
-      <div className="relative left-0 top-0 flex h-screen w-[220px] flex-col justify-between bg-light-grey text-black px-3 border-r-[1px] border-zinc-200">
+      <div className="bg-light-grey relative left-0 top-0 flex h-screen w-[220px] flex-col justify-between border-r-[1px] border-zinc-200 px-3 text-black">
         <div>
           <div className="flex items-center justify-between px-2 py-3">
-            <div className='flex text-smr'><Image src="/vessel-icon.svg" width={18} height={18} alt="My SVG" className='rounded-[4px] mr-1.5' />Vessel</div>
+            <div className="text-smr flex">
+              <Image
+                src="/vessel-icon.svg"
+                width={18}
+                height={18}
+                alt="My SVG"
+                className="mr-1.5 rounded-[4px]"
+              />
+              Vessel
+            </div>
             <Dropdown position="right" OpenButton={<UserIcon />}>
               {/* TODO(@zkirby): Enable dark mode */}
               {/* <Switch
@@ -65,22 +76,50 @@ const SideNav = ({ children }: { children: ReactNode }) => {
                     } inline-block h-4 w-4 transform rounded-full bg-white transition`}
                 />
               </Switch> */}
-              <SignOutButton className={"text-left w-full text-red-400"} />
+              <SignOutButton className={'w-full text-left text-red-400'} />
             </Dropdown>
           </div>
-          <div className='mt-2'>
-            <NavItem route="/alerts" title="Alerts" Icon={TbBell} activeRoute={pathname} />
-            <NavItem route="/schedule" title="Schedule" Icon={TbCalendarFilled} activeRoute={pathname} />
+          <div className="mt-2">
+            <NavItem
+              route="/alerts"
+              title="Alerts"
+              Icon={TbBell}
+              activeRoute={pathname}
+            />
+            <NavItem
+              route="/schedule"
+              title="Schedule"
+              Icon={TbCalendarFilled}
+              activeRoute={pathname}
+            />
           </div>
         </div>
-        <div className={`grid grid-cols-2 m-3 text-smr opacity-40`}>
-          <div className='flex items-center cursor-pointer'><FaSlack className="mr-1" />Slack</div>
-          <div className='flex items-center cursor-pointer '><HiOutlineMail className="mr-1" />Contact</div>
-          <div className='flex items-center cursor-pointer mt-1'><TbBook2 className="mr-1" />Docs</div>
-          <div className='flex items-center cursor-pointer mt-1'><FaGithub className="mr-1" />GitHub</div>
+        <div className={`text-smr m-3 grid grid-cols-2 opacity-40`}>
+          <div className="flex cursor-pointer items-center">
+            <FaSlack className="mr-1" />
+            Slack
+          </div>
+          <div className="flex cursor-pointer items-center ">
+            <HiOutlineMail className="mr-1" />
+            Contact
+          </div>
+          <div className="mt-1 flex cursor-pointer items-center">
+            <TbBook2 className="mr-1" />
+            Docs
+          </div>
+          <div className="mt-1 flex cursor-pointer items-center">
+            <FaGithub className="mr-1" />
+            GitHub
+          </div>
         </div>
       </div>
-      <div className={classNames("h-screen w-screen transition-colors", { dark: false })}>{children}</div>
+      <div
+        className={classNames('h-screen w-screen transition-colors', {
+          dark: false,
+        })}
+      >
+        {children}
+      </div>
     </div>
   );
 };

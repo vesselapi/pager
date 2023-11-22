@@ -1,5 +1,5 @@
-import classNames from 'classnames';
 import React from 'react';
+import classNames from 'classnames';
 
 interface Option {
   value: any;
@@ -17,11 +17,21 @@ const RadioSelect = ({
   onChange: (value: any) => void;
 }) => {
   return (
-    <div className='flex'>
+    <div className="flex">
       {options.map(({ value: optionValue, label, Icon }, index) => (
-        <label key={optionValue} className={classNames('cursor-pointer flex items-center border px-2 py-1', { 'bg-gray-200': optionValue === value, 'rounded-l-lg': index === 0, 'rounded-r-lg': index === options.length - 1 })}>
+        <label
+          key={optionValue}
+          className={classNames(
+            'flex cursor-pointer items-center border px-2 py-1',
+            {
+              'bg-gray-200': optionValue === value,
+              'rounded-l-lg': index === 0,
+              'rounded-r-lg': index === options.length - 1,
+            },
+          )}
+        >
           <input
-            className='hidden peer'
+            className="peer hidden"
             type="radio"
             value={optionValue}
             checked={value === optionValue}

@@ -4,7 +4,7 @@ import { MdOutlineClose, MdSort } from 'react-icons/md';
 import Dropdown from '../../_components/Dropdown';
 import Pill from '../../_components/Pill';
 
-type TOnSort = (s: { property: string, label: string }) => void;
+type TOnSort = (s: { property: string; label: string }) => void;
 
 const SortItem = ({
   label,
@@ -15,14 +15,14 @@ const SortItem = ({
   label: string;
   value: string;
   onSort: TOnSort;
-  Icon: React.ReactElement
+  Icon: React.ReactElement;
 }) => {
   return (
     <button
       onClick={(_) => onSort({ property: value, label, Icon })}
       className="w-full cursor-pointer text-left"
     >
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         {label}
         {Icon}
       </div>
@@ -45,7 +45,7 @@ const AlertListSortPill = ({
 }) => {
   return (
     <Pill>
-      <div className="flex font-semibold justify-between items-center">
+      <div className="flex items-center justify-between font-semibold">
         <div className="mr-1">{Icon}</div>
         {label}
       </div>

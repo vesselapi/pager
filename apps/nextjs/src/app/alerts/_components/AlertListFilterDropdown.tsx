@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
+import classNames from 'classnames';
 import { MdFilterList, MdOutlineClose } from 'react-icons/md';
 
 import Dropdown from '../../_components/Dropdown';
 import Pill from '../../_components/Pill';
-import classNames from 'classnames';
 import type { ConfigOption } from '../AlertListTypes';
 
 const AlertListFilterPill = ({
@@ -29,40 +29,64 @@ const AlertListFilterPill = ({
 }) => {
   return (
     <Pill>
-      <div className="flex font-semibold justify-between items-center">
+      <div className="flex items-center justify-between font-semibold">
         <div className="mr-1">{Icon}</div>
         {label}
       </div>
-      <Dropdown size="sm" position="right" OpenButton={<div>{condition.label}</div>}>
-        {conditionOptions.map(c =>
-          <button key={c.value} onClick={() => onChangeCondition(c)} className={classNames('flex items-center w-full rounded')}>
-            <div className='mr-1'>{c.Icon}</div>
+      <Dropdown
+        size="sm"
+        position="right"
+        OpenButton={<div>{condition.label}</div>}
+      >
+        {conditionOptions.map((c) => (
+          <button
+            key={c.value}
+            onClick={() => onChangeCondition(c)}
+            className={classNames('flex w-full items-center rounded')}
+          >
+            <div className="mr-1">{c.Icon}</div>
             {c.label}
           </button>
-        )}
+        ))}
       </Dropdown>
-      <Dropdown position="right" OpenButton={
-        <div className='flex items-center h-full'>{value.map((a, index) =>
-          <div key={a.label} className="mr-0.5 flex font-semibold justify-between items-center">
-            <div className="mr-0.5">{a.Icon}</div>
-            {a.label}
-            {value.length > 1 && index !== value.length - 1 ? ',' : ''}
+      <Dropdown
+        position="right"
+        OpenButton={
+          <div className="flex h-full items-center">
+            {value.map((a, index) => (
+              <div
+                key={a.label}
+                className="mr-0.5 flex items-center justify-between font-semibold"
+              >
+                <div className="mr-0.5">{a.Icon}</div>
+                {a.label}
+                {value.length > 1 && index !== value.length - 1 ? ',' : ''}
+              </div>
+            ))}
           </div>
-        )}</div>
-      }>
-        {valueOptions.map(v =>
-          <button onClick={e => {
-            const updatedValue = value.includes(v)
-              ? value.filter((vf) => vf !== v)
-              : [...value, v];
-            onChangeValue(updatedValue);
-            e.preventDefault();
-          }} className='flex items-center w-full' key={v.value}>
-            <input type="checkbox" className='mr-2' checked={value.includes(v)} />
-            <div className='mr-1'>{v.Icon}</div>
+        }
+      >
+        {valueOptions.map((v) => (
+          <button
+            onClick={(e) => {
+              const updatedValue = value.includes(v)
+                ? value.filter((vf) => vf !== v)
+                : [...value, v];
+              onChangeValue(updatedValue);
+              e.preventDefault();
+            }}
+            className="flex w-full items-center"
+            key={v.value}
+          >
+            <input
+              type="checkbox"
+              className="mr-2"
+              checked={value.includes(v)}
+            />
+            <div className="mr-1">{v.Icon}</div>
             <div>{v.label}</div>
           </button>
-        )}
+        ))}
       </Dropdown>
       <MdOutlineClose onClick={onRemove} />
     </Pill>
@@ -98,7 +122,11 @@ const AlertListFilterDropdown = ({
   const options = useMemo(() => {
     return selectedFilter
       ? selectedFilter.valueOptions
-      : filterOptions.map((f) => ({ label: f.label, value: f.property, Icon: f.Icon }));
+      : filterOptions.map((f) => ({
+          label: f.label,
+          value: f.property,
+          Icon: f.Icon,
+        }));
   }, [selectedFilter, filterOptions]);
 
   return (
@@ -134,7 +162,7 @@ const AlertListFilterDropdown = ({
             }
           }}
         >
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             {o.label}
             {o.Icon}
           </div>

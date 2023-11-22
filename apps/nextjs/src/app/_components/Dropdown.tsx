@@ -39,7 +39,7 @@ const Dropdown = ({
               'w-[85px]': size === 'sm',
               'w-[170px]': size === 'md',
             },
-            'absolute z-10 mt-1.5 origin-top-right rounded-md bg-white text-smr text-zinc-600 shadow border-zinc-200 border-[1px] border-opacity-20 focus:outline-none',
+            'text-smr absolute z-10 mt-1.5 origin-top-right rounded-md border-[1px] border-zinc-200 border-opacity-20 bg-white text-zinc-600 shadow focus:outline-none',
           )}
         >
           {React.Children.map(children, (child) => (
@@ -47,10 +47,8 @@ const Dropdown = ({
               {({ active }) => (
                 <div
                   className={classNames(
-                    !noHighlight && active
-                      ? 'bg-gray-200'
-                      : '',
-                    'h-[28px] m-1 rounded flex items-center px-2',
+                    !noHighlight && active ? 'bg-gray-200' : '',
+                    'm-1 flex h-[28px] items-center rounded px-2',
                   )}
                 >
                   {child}
@@ -60,7 +58,7 @@ const Dropdown = ({
           ))}
         </Menu.Items>
       </Transition>
-    </Menu >
+    </Menu>
   );
 };
 

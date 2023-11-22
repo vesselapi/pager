@@ -4,10 +4,10 @@ import { ClerkProvider } from '@clerk/nextjs';
 import '~/styles/globals.css';
 
 import { headers } from 'next/headers';
+import classNames from 'classnames';
 
 import SideNav from './_components/SideNav';
 import { TRPCReactProvider } from './providers';
-import classNames from 'classnames';
 
 const fontSans = Inter({
   subsets: ['latin'],
@@ -45,7 +45,12 @@ export default function Layout(props: { children: React.ReactNode }) {
   return (
     // <ClerkProvider>
     <html lang="en">
-      <body className={classNames(['font-sans', fontSans.variable].join(' '), 'overflow-y-hidden')}>
+      <body
+        className={classNames(
+          ['font-sans', fontSans.variable].join(' '),
+          'overflow-y-hidden',
+        )}
+      >
         <TRPCReactProvider headers={headers()}>
           <SideNav>{props.children}</SideNav>
         </TRPCReactProvider>

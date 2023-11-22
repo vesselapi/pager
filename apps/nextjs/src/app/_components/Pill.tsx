@@ -6,13 +6,15 @@ const Pill = ({ children }: { children: ReactNode }) => {
   const tLength = childArray.length - 1;
 
   return (
-    <div className="flex text-smr">
+    <div className="text-smr flex">
       {childArray.map((child, index: number) => (
         <div
           key={index}
-          className={`flex items-center border bg-zinc-200 border-white text-zinc-600 px-2 ${index === 0 ? 'rounded-l' : ''
-            } ${index === tLength ? 'rounded-r' : ''} ${index !== tLength ? 'border-r-0' : ''
-            }`}
+          className={`flex items-center border border-white bg-zinc-200 px-2 text-zinc-600 ${
+            index === 0 ? 'rounded-l' : ''
+          } ${index === tLength ? 'rounded-r' : ''} ${
+            index !== tLength ? 'border-r-0' : ''
+          }`}
         >
           {child}
         </div>

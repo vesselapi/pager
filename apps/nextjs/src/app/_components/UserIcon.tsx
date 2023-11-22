@@ -12,7 +12,6 @@ const createInitials = (
 const UserIcon = () => {
   // const auth = useUser()
   // if (!auth?.user) return <div className='h-[18px] w-[18px]  rounded-full bg-gray-500 ring-1 ring-gray-400'></div>;
-
   // return auth.user.hasImage ? (
   //   <Image
   //     className='object-cover rounded-full h-[18px] w-[18px] ring-1 ring-gray-400'

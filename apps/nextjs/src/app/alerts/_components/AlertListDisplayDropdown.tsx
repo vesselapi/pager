@@ -1,9 +1,9 @@
+import { BsList } from 'react-icons/bs';
+import { RxCardStack } from 'react-icons/rx';
 import { VscSettings } from 'react-icons/vsc';
 
 import Dropdown from '../../_components/Dropdown';
 import RadioSelect from '../../_components/RadioSelect';
-import { RxCardStack } from 'react-icons/rx';
-import { BsList } from 'react-icons/bs';
 
 const AlertListDisplayDropdown = ({
   display,
@@ -22,7 +22,7 @@ const AlertListDisplayDropdown = ({
         </div>
       }
     >
-      <div className='flex justify-between items-center w-full'>
+      <div className="flex w-full items-center justify-between">
         <div>Alert Style</div>
         <RadioSelect
           options={[
