@@ -8,8 +8,10 @@ import { organization } from './organization';
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(), // v_user_[hash]
-  email: text('email').unique(),
-  organizationId: text('organization_id').references(() => organization.id),
+  email: text('email').unique().notNull(),
+  organizationId: text('organization_id')
+    .references(() => organization.id)
+    .notNull(),
   firstName: text('first_name'),
   lastName: text('last_name'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
