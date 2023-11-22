@@ -3,7 +3,7 @@ import { getAuth } from '@clerk/nextjs/server';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 
 import { appRouter, createTRPCContext } from '@vessel/api';
-import { UserAuth } from '@vessel/api/src/trpc';
+import { JwtClaims } from '@vessel/api/src/trpc';
 
 /**
  * Configure basic CORS headers
@@ -26,7 +26,7 @@ export function OPTIONS() {
 
 const handler = async (req: NextRequest) => {
   const auth = getAuth(req);
-  const sessionClaims = auth.sessionClaims as UserAuth;
+  const sessionClaims = auth.sessionClaims as JwtClaims;
   const response = await fetchRequestHandler({
     endpoint: '/api/trpc',
     router: appRouter,
