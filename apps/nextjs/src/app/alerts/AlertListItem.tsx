@@ -10,11 +10,17 @@ import {
 const Styles = {
   ButtonCondensed: 'h-[35px] w-[35px] rounded-full',
   ButtonExpanded: 'rounded mb-2 text-smr',
-  ButtonShared: (color: string) =>
-    `border mr-2 text-${color}-500 border-${color}-500 text-lg hover:bg-${color}-500 hover:bg-opacity-40 flex items-center justify-between px-2 whitespace-nowrap`,
+  ButtonShared: (colors: string) =>
+    `${colors} border mr-2 text-lg hover:bg-opacity-40 flex items-center justify-between px-2 whitespace-nowrap`,
 };
 
-interface ActionButtons {
+const StatusToColor = {
+  ACKED: 'text-blue-800 bg-blue-200',
+  OPEN: 'text-red-800 bg-red-200',
+  CLOSED: 'text-green-800 bg-green-200',
+};
+
+interface TActionButtons {
   onAck: () => void;
   onClose: () => void;
   onSelfAssign: () => void;
@@ -28,14 +34,16 @@ const ActionButtons = ({
   onClose,
   onSelfAssign,
   onReopen,
-}: { status: string; expanded?: boolean } & ActionButtons) => {
+}: { status: string; expanded?: boolean } & TActionButtons) => {
   return status === 'ACKED' ? (
     <>
       <button
         onClick={onClose}
         className={classNames(
           expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-          Styles.ButtonShared('green'),
+          Styles.ButtonShared(
+            'border-green-500 text-green-500 hover:bg-green-500',
+          ),
         )}
       >
         {expanded ? <div>Close</div> : null}
@@ -45,7 +53,9 @@ const ActionButtons = ({
         onClick={onSelfAssign}
         className={classNames(
           expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-          Styles.ButtonShared('blue'),
+          Styles.ButtonShared(
+            'border-blue-500 text-blue-500 hover:bg-blue-500',
+          ),
         )}
       >
         {expanded ? <div className="mr-1.5">Take up</div> : null}
@@ -58,7 +68,7 @@ const ActionButtons = ({
         onClick={onReopen}
         className={classNames(
           expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-          Styles.ButtonShared('red'),
+          Styles.ButtonShared('border-red-500 text-red-500 hover:bg-red-500'),
         )}
       >
         {expanded ? <div>Re-open</div> : null}
@@ -68,7 +78,9 @@ const ActionButtons = ({
         onClick={onSelfAssign}
         className={classNames(
           expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-          Styles.ButtonShared('blue'),
+          Styles.ButtonShared(
+            'border-blue-500 text-blue-500 hover:bg-blue-500',
+          ),
         )}
       >
         {expanded ? <div className="mr-1.5">Take up</div> : null}
@@ -81,7 +93,9 @@ const ActionButtons = ({
         onClick={onAck}
         className={classNames(
           expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-          Styles.ButtonShared('yellow'),
+          Styles.ButtonShared(
+            'border-yellow-500 text-yellow-500 hover:bg-yellow-500',
+          ),
         )}
       >
         {expanded ? <div>Ack</div> : null}
@@ -91,7 +105,9 @@ const ActionButtons = ({
         onClick={onClose}
         className={classNames(
           expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-          Styles.ButtonShared('green'),
+          Styles.ButtonShared(
+            'border-green-500 text-green-500 hover:bg-green-500',
+          ),
         )}
       >
         {expanded ? <div>Close</div> : null}
@@ -101,7 +117,9 @@ const ActionButtons = ({
         onClick={onSelfAssign}
         className={classNames(
           expanded ? Styles.ButtonExpanded : Styles.ButtonCondensed,
-          Styles.ButtonShared('blue'),
+          Styles.ButtonShared(
+            'border-blue-500 text-blue-500 hover:bg-blue-500',
+          ),
         )}
       >
         {expanded ? <div className="mr-1.5">Take up</div> : null}
@@ -109,12 +127,6 @@ const ActionButtons = ({
       </button>
     </>
   );
-};
-
-const AlertToColor = {
-  ACKED: 'text-blue-800 bg-blue-200',
-  OPEN: 'text-red-800 bg-red-200',
-  CLOSED: 'text-green-800 bg-green-200',
 };
 
 const AlertsListItem = ({
@@ -132,15 +144,13 @@ const AlertsListItem = ({
 }: {
   className?: string;
   status: string;
-  title: string;
-  createdAt: string;
+  title: string | null;
+  createdAt: Date;
   style: 'condensed' | 'expanded';
-  firstName: string;
-  lastName: string;
-} & ActionButtons) => {
-  const condensedStyle = style === 'condensed';
-
-  if (condensedStyle) {
+  firstName: string | null;
+  lastName: string | null;
+} & TActionButtons) => {
+  if (style === 'condensed') {
     return (
       <div
         className={classNames(
@@ -148,12 +158,12 @@ const AlertsListItem = ({
           className,
         )}
       >
-        <div className="flex items-center">
-          <div
-            className={`${AlertToColor[status]} text-smr rounded px-3 py-0.5 font-bold`}
-          >
-            {status}
-          </div>
+        <div
+          className={`${
+            StatusToColor[status as keyof typeof StatusToColor]
+          } text-smr flex items-center rounded px-3 py-0.5 font-bold`}
+        >
+          {status}
         </div>
 
         <div className="flex items-center">
@@ -166,10 +176,10 @@ const AlertsListItem = ({
 
         <div className="flex items-center">
           <div className="mr-2 font-bold text-zinc-600">
-            {firstName?.slice(0, 1) + lastName?.slice(0, 1)}
+            {firstName?.slice(0, 1) ?? '' + lastName?.slice(0, 1) ?? ''}
           </div>
           <div className="mr-4 whitespace-nowrap">
-            {format(new Date(createdAt), 'dd/MM p')}
+            {format(createdAt, 'dd/MM p')}
           </div>
         </div>
 
@@ -196,7 +206,7 @@ const AlertsListItem = ({
       <div className="flex items-start justify-between">
         <div className="w-2/4">
           <div className="mb-2 mr-4 flex items-center text-lg">{status}</div>
-          <div className={`mb-1 font-bold`}>{title}</div>
+          <div className="mb-1 font-bold">{title}</div>
           <div>
             {firstName} {lastName}
           </div>

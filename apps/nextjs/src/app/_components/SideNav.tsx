@@ -42,9 +42,6 @@ const NavItem = ({
  * Sidebar navigation
  */
 const SideNav = ({ children }: { children: ReactNode }) => {
-  // TODO(@zkirby): Enable darkmode
-  // const [darkMode, setDarkMode] = useState(false)
-
   const pathname = usePathname();
 
   return (
@@ -76,6 +73,7 @@ const SideNav = ({ children }: { children: ReactNode }) => {
                     } inline-block h-4 w-4 transform rounded-full bg-white transition`}
                 />
               </Switch> */}
+              {/* @ts-expect-error Signout Button props are broken, it definitely accepts a className... */}
               <SignOutButton className={'w-full text-left text-red-400'} />
             </Dropdown>
           </div>
@@ -94,7 +92,7 @@ const SideNav = ({ children }: { children: ReactNode }) => {
             />
           </div>
         </div>
-        <div className={`text-smr m-3 grid grid-cols-2 opacity-40`}>
+        <div className="text-smr m-3 grid grid-cols-2 opacity-40">
           <div className="flex cursor-pointer items-center">
             <FaSlack className="mr-1" />
             Slack

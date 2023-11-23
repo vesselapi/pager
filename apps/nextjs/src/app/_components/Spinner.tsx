@@ -1,6 +1,6 @@
-const Spinner = () => {
+const Spinner = ({ className }: { className?: string }) => {
   return (
-    <div role="status" className="mt-5">
+    <div role="status" className={className}>
       <svg
         aria-hidden="true"
         className="h-8 w-8 animate-spin fill-zinc-600 text-gray-200"

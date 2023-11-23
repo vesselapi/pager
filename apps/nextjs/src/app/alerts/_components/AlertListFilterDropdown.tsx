@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 import { MdFilterList, MdOutlineClose } from 'react-icons/md';
 
 import Dropdown from '../../_components/Dropdown';
 import Pill from '../../_components/Pill';
-import type { ConfigOption } from '../AlertListTypes';
+import type { ConfigOption, FilterSetting } from '../AlertListTypes';
 
 const AlertListFilterPill = ({
   label,
@@ -93,41 +93,22 @@ const AlertListFilterPill = ({
   );
 };
 
-interface FilterOption {
-  property: string;
-  label: string;
-  Icon: React.ReactElement;
-  valueOptions: ConfigOption[];
-  conditionOptions: ConfigOption[];
-}
-export interface SelectedFilter {
-  property: string;
-  label: string;
-  value: ConfigOption[];
-  condition: ConfigOption;
-  valueOptions: ConfigOption[];
-  conditionOptions: ConfigOption[];
-  Icon: React.ReactElement;
-}
+type FilterOption = Omit<FilterSetting, 'value' | 'condition'>;
 
+/**
+ * Alert list filter works by first setting the dropdown
+ * to display all the passed in filter options (the possible filters
+ * the user can pick), then by setting the dropdown options to be
+ * the possible values that the filter can have.
+ */
 const AlertListFilterDropdown = ({
   filterOptions,
   onFilter,
 }: {
   filterOptions: FilterOption[];
-  onFilter: (filter: SelectedFilter) => void;
+  onFilter: (filter: FilterSetting) => void;
 }) => {
   const [selectedFilter, setSelected] = useState<FilterOption | null>(null);
-
-  const options = useMemo(() => {
-    return selectedFilter
-      ? selectedFilter.valueOptions
-      : filterOptions.map((f) => ({
-          label: f.label,
-          value: f.property,
-          Icon: f.Icon,
-        }));
-  }, [selectedFilter, filterOptions]);
 
   return (
     <Dropdown
@@ -138,36 +119,48 @@ const AlertListFilterDropdown = ({
         </div>
       }
     >
-      {options.map((o) => (
-        <button
-          key={o.label}
-          className="w-full text-left"
-          onClick={(e) => {
-            if (selectedFilter) {
-              onFilter({
-                property: selectedFilter.property,
-                value: [o],
-                // We'll always apply the first condition for now.
-                condition: selectedFilter.conditionOptions[0]!,
-                conditionOptions: selectedFilter.conditionOptions,
-                label: selectedFilter.label,
-                Icon: selectedFilter.Icon,
-                valueOptions: selectedFilter.valueOptions,
-              });
-              setSelected(null);
-            } else {
-              const filter = filterOptions.find((f) => f.label === o.label)!;
-              setSelected(filter);
-              e.preventDefault();
-            }
-          }}
-        >
-          <div className="flex items-center justify-between">
-            {o.label}
-            {o.Icon}
-          </div>
-        </button>
-      ))}
+      {selectedFilter ? (
+        <>
+          {selectedFilter.valueOptions.map((o) => (
+            <button
+              key={o.label}
+              className="w-full text-left"
+              onClick={() => {
+                onFilter({
+                  ...selectedFilter,
+                  value: [o],
+                  // NOTE(@zkirby): We'll always apply the first condition
+                  condition: selectedFilter.conditionOptions[0]!,
+                });
+                setSelected(null);
+              }}
+            >
+              <div className="flex items-center justify-between">
+                {o.label}
+                {o.Icon}
+              </div>
+            </button>
+          ))}
+        </>
+      ) : (
+        <>
+          {filterOptions.map((o) => (
+            <button
+              key={o.label}
+              className="w-full text-left"
+              onClick={(e) => {
+                setSelected(o);
+                e.preventDefault();
+              }}
+            >
+              <div className="flex items-center justify-between">
+                {o.label}
+                {o.Icon}
+              </div>
+            </button>
+          ))}
+        </>
+      )}
     </Dropdown>
   );
 };

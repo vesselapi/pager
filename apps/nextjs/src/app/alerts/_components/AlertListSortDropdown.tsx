@@ -4,7 +4,11 @@ import { MdOutlineClose, MdSort } from 'react-icons/md';
 import Dropdown from '../../_components/Dropdown';
 import Pill from '../../_components/Pill';
 
-type TOnSort = (s: { property: string; label: string }) => void;
+type TOnSort = (s: {
+  property: string;
+  label: string;
+  Icon: React.ReactElement;
+}) => void;
 
 const SortItem = ({
   label,

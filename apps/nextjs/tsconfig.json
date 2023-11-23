@@ -1,6 +1,7 @@
 {
   "extends": "@vessel/tsconfig/base.json",
   "compilerOptions": {
+    "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
