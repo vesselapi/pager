@@ -31,7 +31,11 @@ import {
   secret as secretSchema,
   selectSecretSchema,
 } from './schema/secret';
-import { selectUserSchema, user as userSchema } from './schema/user';
+import {
+  CreateUser,
+  selectUserSchema,
+  user as userSchema,
+} from './schema/user';
 
 export const schema = {
   alert: alertSchema,
@@ -115,6 +119,13 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     list: async (...args: Parameters<typeof db.query.user.findMany>) => {
       const users = await db.query.user.findMany(...args);
       return users.map((a) => selectUserSchema.parse(a));
+    },
+    create: async (user: Omit<CreateUser, 'id'>) => {
+      const dbUser = await db.insert(userSchema).values({
+        id: IdGenerator.user(),
+        ...user,
+      });
+      return dbUser;
     },
   },
   secret: {

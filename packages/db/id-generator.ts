@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-import { AlertId } from '@vessel/types';
+import { AlertId, UserId } from '@vessel/types';
 
 export const hash = (text: string) => {
   const hash = crypto.createHash('SHA256');
@@ -15,4 +15,5 @@ export const randomString = () => {
 
 export const IdGenerator = {
   alert: (): AlertId => `v_alert_${randomString()}`,
+  user: (): UserId => `v_user_${randomString()}`,
 };
