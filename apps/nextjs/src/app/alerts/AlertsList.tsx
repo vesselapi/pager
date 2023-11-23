@@ -22,7 +22,6 @@ import AlertListSortDropdown, {
 import { useSearch } from './_hooks/useSearch';
 import AlertsListItem from './AlertListItem';
 import type {
-  ConfigOption,
   DisplaySettings,
   FilterSetting,
   SortSetting,
@@ -37,17 +36,17 @@ const StatusFilterConfig = {
     {
       label: 'Acked',
       value: 'ACKED',
-      Icon: <div className="h-[12px] w-[12px] rounded-full bg-blue-400" />,
+      Icon: <div className="h-[12px] w-[12px] rounded-full bg-blue-300" />,
     },
     {
       label: 'Open',
       value: 'OPEN',
-      Icon: <div className="h-[12px] w-[12px] rounded-full bg-red-400" />,
+      Icon: <div className="h-[12px] w-[12px] rounded-full bg-red-300" />,
     },
     {
       label: 'Closed',
       value: 'CLOSED',
-      Icon: <div className="h-[12px] w-[12px] rounded-full bg-green-400" />,
+      Icon: <div className="h-[12px] w-[12px] rounded-full bg-green-300" />,
     },
   ],
   conditionOptions: [
@@ -79,19 +78,19 @@ const AlertsList = () => {
     style: 'condensed',
   });
   const [sorts, setSorts] = useState<SortSetting[]>([]);
+  const [search, setSearch] = useSearch();
+
+  const { conditionOptions, valueOptions } = StatusFilterConfig
   const [filters, setFilters] = useState<FilterSetting[]>([
     // By default, we sort out the closed alerts.
     {
       ...StatusFilterConfig,
-      condition: StatusFilterConfig.conditionOptions.find(
-        (c) => c.value === 'IS',
-      )!,
+      condition: conditionOptions.find((c) => c.value === 'IS_NOT')!,
       value: [
-        StatusFilterConfig.valueOptions.find((v) => v.value === 'CLOSED')!,
+        valueOptions.find((v) => v.value === 'CLOSED')!,
       ],
     },
   ]);
-  const [search, setSearch] = useSearch();
 
   const allFilters = useMemo(() => {
     const searchFilter = [
@@ -114,6 +113,7 @@ const AlertsList = () => {
     [sorts, filters],
   );
 
+  const context = api.useContext();
   const alerts = api.alert.all.useQuery({
     sorts: allSorts,
     filters: allFilters,
@@ -171,9 +171,9 @@ const AlertsList = () => {
                       [...srts].map((sort) =>
                         sort === s
                           ? {
-                              ...sort,
-                              order: sort.order === 'desc' ? 'asc' : 'desc',
-                            }
+                            ...sort,
+                            order: sort.order === 'desc' ? 'asc' : 'desc',
+                          }
                           : sort,
                       ),
                     )
@@ -216,13 +216,15 @@ const AlertsList = () => {
                 />
               </div>
             ))}
-            <MdOutlineClose
-              className="flex h-[15px] w-[15px] cursor-pointer items-center rounded-full p-0.5 text-slate-400 ring-1 ring-slate-400 transition-colors hover:bg-slate-400 hover:text-white"
-              onClick={() => {
-                setFilters([]);
-                setSorts([]);
-              }}
-            />
+            <div className='flex items-center'>
+              <MdOutlineClose
+                className="h-[15px] w-[15px] cursor-pointer rounded-full p-0.5 text-slate-400 ring-1 ring-slate-400 transition-colors hover:bg-slate-400 hover:text-white"
+                onClick={() => {
+                  setFilters([]);
+                  setSorts([]);
+                }}
+              />
+            </div>
           </div>
         ) : null}
       </div>
@@ -237,7 +239,7 @@ const AlertsList = () => {
               !configsAreApplied && display.style === 'condensed',
           })}
         >
-          {alerts.isLoading ? (
+          {(alerts.isFetching) ? (
             <Spinner className="mt-5 px-10" />
           ) : (
             alerts.data?.map((a: RouterOutputs['alert']['all']['0']) => {
@@ -245,9 +247,12 @@ const AlertsList = () => {
                 firstName: '',
                 lastName: '',
               };
-              const update = (
+              const update = async (
                 alert: Partial<RouterOutputs['alert']['all']['0']>,
-              ) => updateAlert({ id: a.id, alert });
+              ) => {
+                await updateAlert.mutateAsync({ id: a.id, alert })
+                await alerts.refetch();
+              };
 
               return (
                 <AlertsListItem

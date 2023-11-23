@@ -58,7 +58,7 @@ const AlertListFilterPill = ({
                 key={a.label}
                 className="mr-0.5 flex items-center justify-between font-semibold"
               >
-                <div className="mr-0.5">{a.Icon}</div>
+                <div className="mr-1">{a.Icon}</div>
                 {a.label}
                 {value.length > 1 && index !== value.length - 1 ? ',' : ''}
               </div>
@@ -120,46 +120,42 @@ const AlertListFilterDropdown = ({
       }
     >
       {selectedFilter ? (
-        <>
-          {selectedFilter.valueOptions.map((o) => (
-            <button
-              key={o.label}
-              className="w-full text-left"
-              onClick={() => {
-                onFilter({
-                  ...selectedFilter,
-                  value: [o],
-                  // NOTE(@zkirby): We'll always apply the first condition
-                  condition: selectedFilter.conditionOptions[0]!,
-                });
-                setSelected(null);
-              }}
-            >
-              <div className="flex items-center justify-between">
-                {o.label}
-                {o.Icon}
-              </div>
-            </button>
-          ))}
-        </>
+        selectedFilter.valueOptions.map((o) => (
+          <button
+            key={o.label}
+            className="w-full text-left"
+            onClick={() => {
+              onFilter({
+                ...selectedFilter,
+                value: [o],
+                // NOTE(@zkirby): We'll always apply the first condition
+                condition: selectedFilter.conditionOptions[0]!,
+              });
+              setSelected(null);
+            }}
+          >
+            <div className="flex items-center justify-between">
+              {o.label}
+              {o.Icon}
+            </div>
+          </button>
+        ))
       ) : (
-        <>
-          {filterOptions.map((o) => (
-            <button
-              key={o.label}
-              className="w-full text-left"
-              onClick={(e) => {
-                setSelected(o);
-                e.preventDefault();
-              }}
-            >
-              <div className="flex items-center justify-between">
-                {o.label}
-                {o.Icon}
-              </div>
-            </button>
-          ))}
-        </>
+        filterOptions.map((o) => (
+          <button
+            key={o.label}
+            className="w-full text-left"
+            onClick={(e) => {
+              setSelected(o);
+              e.preventDefault();
+            }}
+          >
+            <div className="flex items-center justify-between">
+              {o.label}
+              {o.Icon}
+            </div>
+          </button>
+        ))
       )}
     </Dropdown>
   );

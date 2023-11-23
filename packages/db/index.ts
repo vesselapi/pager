@@ -6,7 +6,11 @@ import type { z } from 'zod';
 import type { AlertEventId, AlertId, OrgId, UserId } from '@vessel/types';
 
 import type { UpsertAlert } from './schema/alert';
-import { alert as alertSchema, selectAlertSchema } from './schema/alert';
+import {
+  alert as alertSchema,
+  insertAlertSchema,
+  selectAlertSchema,
+} from './schema/alert';
 import {
   alertEvent as alertEventSchema,
   selectAlertEventSchema,
@@ -15,11 +19,8 @@ import {
   organization as organizationSchema,
   selectOrgSchema,
 } from './schema/organization';
-import {
-  insertSecretSchema,
-  secret as secretSchema,
-  selectSecretSchema,
-} from './schema/secret';
+import type { insertSecretSchema } from './schema/secret';
+import { secret as secretSchema, selectSecretSchema } from './schema/secret';
 import { selectUserSchema, user as userSchema } from './schema/user';
 
 export const schema = {
@@ -52,7 +53,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     update: async (id: AlertId, alert: UpsertAlert) => {
       return db
         .update(alertSchema)
-        .set(insertSecretSchema.parse(alert))
+        .set(insertAlertSchema.parse({ id, ...alert }))
         .where(eq(alertSchema.id, id as string));
     },
   },
