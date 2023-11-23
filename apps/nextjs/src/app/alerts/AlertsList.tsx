@@ -80,15 +80,13 @@ const AlertsList = () => {
   const [sorts, setSorts] = useState<SortSetting[]>([]);
   const [search, setSearch] = useSearch();
 
-  const { conditionOptions, valueOptions } = StatusFilterConfig
+  const { conditionOptions, valueOptions } = StatusFilterConfig;
   const [filters, setFilters] = useState<FilterSetting[]>([
     // By default, we sort out the closed alerts.
     {
       ...StatusFilterConfig,
       condition: conditionOptions.find((c) => c.value === 'IS_NOT')!,
-      value: [
-        valueOptions.find((v) => v.value === 'CLOSED')!,
-      ],
+      value: [valueOptions.find((v) => v.value === 'CLOSED')!],
     },
   ]);
 
@@ -171,9 +169,9 @@ const AlertsList = () => {
                       [...srts].map((sort) =>
                         sort === s
                           ? {
-                            ...sort,
-                            order: sort.order === 'desc' ? 'asc' : 'desc',
-                          }
+                              ...sort,
+                              order: sort.order === 'desc' ? 'asc' : 'desc',
+                            }
                           : sort,
                       ),
                     )
@@ -216,7 +214,7 @@ const AlertsList = () => {
                 />
               </div>
             ))}
-            <div className='flex items-center'>
+            <div className="flex items-center">
               <MdOutlineClose
                 className="h-[15px] w-[15px] cursor-pointer rounded-full p-0.5 text-slate-400 ring-1 ring-slate-400 transition-colors hover:bg-slate-400 hover:text-white"
                 onClick={() => {
@@ -239,7 +237,7 @@ const AlertsList = () => {
               !configsAreApplied && display.style === 'condensed',
           })}
         >
-          {(alerts.isFetching) ? (
+          {alerts.isFetching ? (
             <Spinner className="mt-5 px-10" />
           ) : (
             alerts.data?.map((a: RouterOutputs['alert']['all']['0']) => {
@@ -250,7 +248,7 @@ const AlertsList = () => {
               const update = async (
                 alert: Partial<RouterOutputs['alert']['all']['0']>,
               ) => {
-                await updateAlert.mutateAsync({ id: a.id, alert })
+                await updateAlert.mutateAsync({ id: a.id, alert });
                 await alerts.refetch();
               };
 

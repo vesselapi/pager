@@ -1,12 +1,12 @@
 import classNames from 'classnames';
 import { format } from 'date-fns';
+import { capitalize } from 'radash';
 import {
   TbArrowUpRightCircle,
   TbCheck,
   TbHandStop,
   TbThumbUpFilled,
 } from 'react-icons/tb';
-import { capitalize } from 'radash'
 
 const Styles = {
   ButtonCondensed: 'h-[35px] w-[35px] rounded-full',
@@ -159,8 +159,15 @@ const AlertsListItem = ({
           className,
         )}
       >
-        <div className="text-smr flex items-center" >
-          <div className={classNames(StatusToColor[status as keyof typeof StatusToColor], 'text-smr rounded px-2 bg-opacity-80 font-medium')}>{capitalize(status)}</div>
+        <div className="text-smr flex items-center">
+          <div
+            className={classNames(
+              StatusToColor[status as keyof typeof StatusToColor],
+              'text-smr rounded bg-opacity-80 px-2 font-medium',
+            )}
+          >
+            {capitalize(status)}
+          </div>
         </div>
 
         <div className="flex items-center whitespace-nowrap">
@@ -201,7 +208,7 @@ const AlertsListItem = ({
       )}
     >
       <div className="flex items-start justify-between">
-        <div className='bg-zinc-600 text-zinc-200 w-full h-[130px] flex items-center justify-center p-5 rounded mx-2'>
+        <div className="mx-2 flex h-[130px] w-full items-center justify-center rounded bg-zinc-600 p-5 text-zinc-200">
           <i>Work In Progress</i>
         </div>
         <div className="flex">
