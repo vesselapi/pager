@@ -1,5 +1,5 @@
-import AlertsList from "./AlertsList";
+import AlertsList from './AlertsList';
 
-const AlertListPage = () => <AlertsList />
+const AlertListPage = () => <AlertsList />;
 
-export default AlertListPage
+export default AlertListPage;

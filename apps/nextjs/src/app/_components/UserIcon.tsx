@@ -1,6 +1,7 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
+
 import { api } from '~/utils/api';
 
 const createInitials = (
@@ -12,17 +13,17 @@ const createInitials = (
 };
 
 const UserIcon = () => {
-  const [user, setUser] = useState()
+  const [user, setUser] = useState();
 
   const createOrGetUser = api.user.me.useMutation({
     onSuccess: (result) => setUser(result?.user),
-  })
+  });
 
   useEffect(() => {
     createOrGetUser.mutate({ id: 'hey ' });
-  }, [])
+  }, []);
 
-  console.log(user)
+  console.log(user);
   if (!user) {
     return (
       <div className="h-[18px] w-[18px]  rounded-full bg-gray-500 ring-1 ring-gray-400"></div>
@@ -38,13 +39,15 @@ const UserIcon = () => {
   //   alt="Profile Picture"
   // />
 
-  return (<div
-    className={
-      'flex h-[20px] w-[20px] items-center justify-center rounded-full bg-gray-500 text-slate-200 text-[9px]'
-    }
-  >
-    <div>{createInitials(user.firstName, user.lastName)}</div>
-  </div >)
+  return (
+    <div
+      className={
+        'flex h-[20px] w-[20px] items-center justify-center rounded-full bg-gray-500 text-[9px] text-slate-200'
+      }
+    >
+      <div>{createInitials(user.firstName, user.lastName)}</div>
+    </div>
+  );
 };
 
 export default UserIcon;
