@@ -59,7 +59,7 @@ export const makeSecret = () => {
     const encrypted = encrypt(value);
     await db.secret.create({
       id: key,
-      organizationId: orgId,
+      orgId,
       ...encrypted,
     });
   };
@@ -72,7 +72,7 @@ export const makeSecret = () => {
       return null;
     }
     const value = decrypt(encrypted);
-    return { orgId: encrypted.organizationId, value };
+    return { orgId: encrypted.orgId, value };
   };
 
   const makeApiToken = () => {
