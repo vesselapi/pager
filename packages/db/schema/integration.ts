@@ -5,12 +5,12 @@ import { z } from 'zod';
 import { APP_ID, IntegrationIdRegex } from '@vessel/types';
 import type { IntegrationId, OrgId } from '@vessel/types';
 
-import { organization } from './organization';
+import { org } from './org';
 
 export const integration = pgTable('integration', {
   id: text('id').primaryKey(), // v_integration_[hash]
   orgId: text('org_id')
-    .references(() => organization.id)
+    .references(() => org.id)
     .notNull(),
   appId: text('app_id', { enum: APP_ID }).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
