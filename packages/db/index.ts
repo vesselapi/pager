@@ -22,10 +22,7 @@ import {
   alertEvent as alertEventSchema,
   selectAlertEventSchema,
 } from './schema/alertEvent';
-import {
-  organization as organizationSchema,
-  selectOrgSchema,
-} from './schema/organization';
+import { org as orgSchema, selectOrgSchema } from './schema/org';
 import {
   insertSecretSchema,
   secret as secretSchema,
@@ -40,7 +37,7 @@ import {
 export const schema = {
   alert: alertSchema,
   alertEvent: alertEventSchema,
-  organization: organizationSchema,
+  org: orgSchema,
   user: userSchema,
   secret: secretSchema,
 };
@@ -86,19 +83,17 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return alertEvents.map((a) => selectAlertEventSchema.parse(a));
     },
   },
-  organizations: {
+  orgs: {
     find: async (id: OrgId) => {
-      const organization = await db.query.organization.findFirst({
-        where: eq(organizationSchema.id, id as string),
+      const org = await db.query.org.findFirst({
+        where: eq(orgSchema.id, id as string),
       });
-      if (!organization) return null;
-      return selectOrgSchema.parse(organization);
+      if (!org) return null;
+      return selectOrgSchema.parse(org);
     },
-    list: async (
-      ...args: Parameters<typeof db.query.organization.findMany>
-    ) => {
-      const organizations = await db.query.organization.findMany(...args);
-      return organizations.map((a) => selectOrgSchema.parse(a));
+    list: async (...args: Parameters<typeof db.query.org.findMany>) => {
+      const orgs = await db.query.org.findMany(...args);
+      return orgs.map((a) => selectOrgSchema.parse(a));
     },
     create: async () => {
       const org = await db.insert(organizationSchema).values({
