@@ -22,9 +22,7 @@ export const integrationList = trpc
     const { user } = ctx.auth;
     const integrations = ctx.integrations.list();
 
-    const userIntegrations = await ctx.db.integrations.listByOrgId(
-      user.organizationId,
-    );
+    const userIntegrations = await ctx.db.integrations.listByOrgId(user.orgId);
     const userIntegrationsByAppId = objectify(userIntegrations, (x) => x.appId);
 
     return {

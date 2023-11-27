@@ -54,6 +54,6 @@ export const integrationOAuthCallback = trpc
       // TODO: set redirect URI accordingly
       redirectUri: `https://app.vessel.dev/settings/integrations/${appId}`,
     });
-    await integrations.create({ orgId: user.organizationId, appId, secret });
+    await integrations.create({ orgId: user.orgId, appId, secret });
     return { success: true };
   });

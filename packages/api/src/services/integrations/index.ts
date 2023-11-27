@@ -34,7 +34,7 @@ export const makeIntegrations = () => {
     }
     const secretManager = makeSecretManager();
     await secretManager.integration.create({ orgId, appId, secret });
-    await db.integrations.create({ organizationId: orgId, appId });
+    await db.integrations.create({ orgId, appId });
   };
 
   return { find, list, create };
