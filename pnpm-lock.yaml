@@ -390,9 +390,6 @@ importers:
       '@vessel/types':
         specifier: workspace:^
         version: link:../types
-      cron-schedule:
-        specifier: ^4.0.0
-        version: 4.0.0
       cron-validate:
         specifier: ^1.4.5
         version: 1.4.5
@@ -8332,11 +8329,6 @@ packages:
   /create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
-
-  /cron-schedule@4.0.0:
-    resolution: {integrity: sha512-+WIxWa9yE9AKeFzVkIVn9Qp/p69EJMZfAYV+xMQ40zI1Gfx+eZJf4l6Ub/wBNc7Cw2/1+Jn+wUbUPlpqdDxH8Q==}
-    engines: {node: '>=16'}
-    dev: false
 
   /cron-validate@1.4.5:
     resolution: {integrity: sha512-nKlOJEnYKudMn/aNyNH8xxWczlfpaazfWV32Pcx/2St51r2bxWbGhZD7uwzMcRhunA/ZNL+Htm/i0792Z59UMQ==}
