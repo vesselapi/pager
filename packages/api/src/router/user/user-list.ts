@@ -1,19 +1,21 @@
 import type { Db } from '@vessel/db';
 import { db } from '@vessel/db';
 
-import { useServicesHook } from '../../middlewares/use-services-hook';
-import { publicProcedure } from '../../trpc';
+import { trpc } from '../../middlewares/trpc/common-trpc-hook';
+import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 
 interface Context {
   db: Db;
 }
 
-export const userList = publicProcedure
+export const userList = trpc
   .use(
     useServicesHook<Context>({
       db: () => db,
     }),
   )
   .query(({ ctx }) => {
-    return ctx.db.user.list();
+    return ctx.db.user.list({
+      orgId: ctx.auth.user.organizationId,
+    });
   });

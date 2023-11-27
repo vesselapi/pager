@@ -10,6 +10,7 @@ const createInitials = (
 };
 
 const UserIcon = () => {
+  // TODO(@zkirby): replace with /user/me
   const auth = useUser();
   if (!auth?.user)
     return (

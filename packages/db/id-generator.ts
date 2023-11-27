@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-import { AlertId } from '@vessel/types';
+import type { AlertId } from '@vessel/types';
 
 export const hash = (text: string) => {
   const hash = crypto.createHash('SHA256');
