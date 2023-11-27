@@ -1,7 +1,9 @@
 import type { NextRequest } from 'next/server';
+import { getAuth } from '@clerk/nextjs/server';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 
 import { appRouter, createTRPCContext } from '@vessel/api';
+import { JwtClaims } from '@vessel/api/src/trpc';
 
 /**
  * Configure basic CORS headers
@@ -23,11 +25,14 @@ export function OPTIONS() {
 }
 
 const handler = async (req: NextRequest) => {
+  const auth = getAuth(req);
+  const sessionClaims = auth.sessionClaims as JwtClaims;
   const response = await fetchRequestHandler({
     endpoint: '/api/trpc',
     router: appRouter,
     req,
-    createContext: () => createTRPCContext({ req }),
+    createContext: () =>
+      createTRPCContext({ req, auth: { claims: sessionClaims } }),
     onError({ error, path }) {
       console.error(`>>> tRPC Error on '${path}'`, error);
     },

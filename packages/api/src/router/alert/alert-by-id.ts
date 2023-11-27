@@ -5,8 +5,8 @@ import { db } from '@vessel/db';
 import type { AlertId } from '@vessel/types';
 import { AlertIdRegex } from '@vessel/types';
 
-import { useServicesHook } from '../../middlewares/use-services-hook';
-import { publicProcedure } from '../../trpc';
+import { trpc } from '../../middlewares/trpc/common-trpc-hook';
+import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 
 interface Context {
   db: Db;
@@ -18,7 +18,7 @@ const input = z.object({
     .transform((x) => x as AlertId),
 });
 
-export const alertById = publicProcedure
+export const alertById = trpc
   .use(
     useServicesHook<Context>({
       db: () => db,

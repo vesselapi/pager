@@ -3,18 +3,29 @@ import { useJsonBody, useServices } from '@exobase/hooks';
 import z from 'zod';
 
 import { vessel } from '@vessel/api/src/exobase/hooks/common-hooks';
-import type { Logger } from '@vessel/api/src/exobase/services/make-logger';
-import { makeLogger } from '@vessel/api/src/exobase/services/make-logger';
-import type { Aws } from '@vessel/api/src/services/aws';
-import { makeAws } from '@vessel/api/src/services/aws';
+import type { ApiTokenAuth } from '@vessel/api/src/exobase/hooks/use-api-token-auth';
+import { useApiTokenAuth } from '@vessel/api/src/exobase/hooks/use-api-token-auth';
+import type { PubSub } from '@vessel/api/src/services/pubsub';
+import { makePubSub } from '@vessel/api/src/services/pubsub';
+import type { Secret } from '@vessel/api/src/services/secret';
+import { makeSecret } from '@vessel/api/src/services/secret';
 
-const schema = z.object({});
+import { db } from '../../../../packages/db';
+import { insertAlertSchema } from '../../../../packages/db/schema/alert';
+
+const schema = z.object({
+  alert: insertAlertSchema.pick({
+    title: true,
+    status: true,
+    metadata: true,
+  }),
+});
 
 type Args = z.infer<typeof schema>;
 
 interface Services {
-  aws: Aws;
-  logger: Logger;
+  pubsub: PubSub;
+  secret: Secret;
 }
 
 interface Result {
@@ -24,27 +35,26 @@ interface Result {
 const alert = async ({
   args,
   services,
-  framework,
-}: Props<Args, Services>): Promise<Result> => {
-  const {
-    aws: { sqs },
-    logger,
-  } = services;
+  auth,
+}: Props<Args, Services, ApiTokenAuth>): Promise<Result> => {
+  const { alert } = args;
+  const { pubsub } = services;
 
-  await sqs.publish({
-    topic: sqs.TOPIC.ALERT,
-    payload: { test: '1' },
+  const dbAlert = await db.alerts.create({
+    organizationId: auth.orgId,
+    ...alert,
   });
-  logger.info('Alert sent to topic');
+  await pubsub.alert.publish(dbAlert);
   return { success: true };
 };
 
 export const main = vessel()
   .hook(
     useServices<Services>({
-      aws: makeAws,
-      logger: makeLogger,
+      pubsub: makePubSub(),
+      secret: makeSecret(),
     }),
   )
+  .hook(useApiTokenAuth())
   .hook(useJsonBody<Args>(schema))
   .endpoint(alert);

@@ -9,9 +9,9 @@ async function run() {
 
   const db = drizzle(queryClient, { schema });
 
-  await migrate(db, { migrationsFolder: 'drizzle' });
+  await migrate(db, { migrationsFolder: './drizzle' });
 
-  queryClient.end();
+  await queryClient.end();
 }
 
 run();

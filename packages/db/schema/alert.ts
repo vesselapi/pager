@@ -5,11 +5,15 @@ import type { z } from 'zod';
 import type { AlertId, UserId } from '@vessel/types';
 import { AlertIdRegex, UserIdRegex } from '@vessel/types';
 
+import { organization } from './organization';
 import { user } from './user';
 
 export const alert = pgTable('alert', {
   id: text('id').primaryKey(), // v_alert_[hash]
-  title: text('title'),
+  organizationId: text('organization_id')
+    .references(() => organization.id)
+    .notNull(),
+  title: text('title').notNull(),
   status: text('status', { enum: ['ACKED', 'OPEN', 'CLOSED'] })
     .default('OPEN')
     .notNull(),
@@ -25,12 +29,15 @@ export const selectAlertSchema = createSelectSchema(alert, {
 
 export const insertAlertSchema = createInsertSchema(alert, {
   id: (schema) =>
-    schema.id.regex(
-      AlertIdRegex,
-      `Invalid id, expected format ${AlertIdRegex}`,
-    ),
+    schema.id
+      .regex(AlertIdRegex, `Invalid id, expected format ${AlertIdRegex}`)
+      .transform((x) => x as AlertId),
   assignedToId: (schema) =>
-    schema.id.regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`),
+    schema.id
+      .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`)
+      .transform((x) => x as UserId),
 });
 
+export type Alert = z.infer<typeof selectAlertSchema>;
 export type UpsertAlert = Omit<z.infer<typeof insertAlertSchema>, 'id'>;
+export type CreateAlert = Omit<z.infer<typeof insertAlertSchema>, 'id'>;

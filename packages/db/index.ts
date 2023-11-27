@@ -3,9 +3,16 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import type { z } from 'zod';
 
-import type { AlertEventId, AlertId, OrgId, UserId } from '@vessel/types';
+import type {
+  AlertEventId,
+  AlertId,
+  OrgId,
+  SecretId,
+  UserId,
+} from '@vessel/types';
 
-import type { UpsertAlert } from './schema/alert';
+import { IdGenerator } from './id-generator';
+import type { CreateAlert, UpsertAlert } from './schema/alert';
 import {
   alert as alertSchema,
   insertAlertSchema,
@@ -56,6 +63,14 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .set(insertAlertSchema.parse({ id, ...alert }))
         .where(eq(alertSchema.id, id as string));
     },
+    create: async (alert: Omit<CreateAlert, 'id'>) => {
+      const newAlert = insertAlertSchema.parse({
+        id: IdGenerator.alert(),
+        ...alert,
+      });
+      const dbAlert = await db.insert(alertSchema).values(newAlert).returning();
+      return selectAlertSchema.parse(dbAlert);
+    },
   },
   alertEvent: {
     find: async (id: AlertEventId) => {
@@ -93,13 +108,20 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       if (!user) return null;
       return selectUserSchema.parse(user);
     },
+    findByEmail: async (email: string) => {
+      const user = await db.query.user.findFirst({
+        where: eq(userSchema.email, email),
+      });
+      if (!user) return null;
+      return selectUserSchema.parse(user);
+    },
     list: async (...args: Parameters<typeof db.query.user.findMany>) => {
       const users = await db.query.user.findMany(...args);
       return users.map((a) => selectUserSchema.parse(a));
     },
   },
   secret: {
-    find: async (id: UserId) => {
+    find: async (id: SecretId) => {
       const secret = await db.query.secret.findFirst({
         where: eq(secretSchema.id, id as string),
       });
