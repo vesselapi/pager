@@ -6,6 +6,8 @@ export default {
   content: ['./src/**/*.{ts,tsx}'],
   presets: [baseConfig],
   theme: {
+    // TODO(@zkirby): Add base styles here as named-variables
+    // to ensure consistency.
     extend: {
       colors: {
         'light-grey': '#fafafa',

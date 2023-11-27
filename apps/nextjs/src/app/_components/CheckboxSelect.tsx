@@ -34,7 +34,6 @@ const CheckboxSelect = ({
             onChange={(e) => {
               if (preventDefault) e.preventDefault();
               handleChange(optionValue);
-              e.preventDefault();
             }}
           />
           {label}

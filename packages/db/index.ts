@@ -63,7 +63,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .set(insertAlertSchema.parse({ id, ...alert }))
         .where(eq(alertSchema.id, id as string));
     },
-    create: async (alert: Omit<CreateAlert, 'id'>) => {
+    create: async (alert: CreateAlert) => {
       const newAlert = insertAlertSchema.parse({
         id: IdGenerator.alert(),
         ...alert,

@@ -37,10 +37,6 @@ export const dynamic = 'force-dynamic';
 //     creator: '@jullerino',
 //   },
 // };
-/**
- * TODO:
- * - Should show "please use desktop" for mobile view.
- */
 export default function Layout(props: { children: React.ReactNode }) {
   return (
     <ClerkProvider>

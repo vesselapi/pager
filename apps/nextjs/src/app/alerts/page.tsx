@@ -1,7 +1,1 @@
-import AlertsList from './AlertsList';
-
-const AlertsListPage = () => {
-  return <AlertsList />;
-};
-
-export default AlertsListPage;
+export { default as AlertsList } from './AlertsList';
