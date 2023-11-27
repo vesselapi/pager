@@ -15,5 +15,5 @@ export const userList = trpc
     }),
   )
   .query(({ ctx }) => {
-    return ctx.db.user.listByOrgId(ctx.auth.user.organizationId);
+    return ctx.db.user.listByOrgId(ctx.auth.user.orgId);
   });
