@@ -44,7 +44,7 @@ const alert = async ({
   const { pubsub } = services;
 
   const dbAlert = await db.alerts.create({
-    organizationId: auth.orgId,
+    orgId: auth.orgId,
     ...alert,
   });
   await pubsub.alert.publish(dbAlert);

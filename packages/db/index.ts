@@ -28,10 +28,7 @@ import {
   integration as integrationSchema,
   selectIntegrationSchema,
 } from './schema/integration';
-import {
-  organization as organizationSchema,
-  selectOrgSchema,
-} from './schema/organization';
+import { org as orgSchema, selectOrgSchema } from './schema/org';
 import {
   insertSecretSchema,
   secret as secretSchema,
@@ -43,7 +40,7 @@ export const schema = {
   alert: alertSchema,
   alertEvent: alertEventSchema,
   integration: integrationSchema,
-  organization: organizationSchema,
+  org: orgSchema,
   user: userSchema,
   secret: secretSchema,
 };
@@ -92,14 +89,14 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
   integrations: {
     listByOrgId: async (orgId: OrgId) => {
       const integrations = await db.query.integration.findMany({
-        where: eq(integrationSchema.organizationId, orgId),
+        where: eq(integrationSchema.orgId, orgId),
       });
       return integrations.map((x) => selectIntegrationSchema.parse(x));
     },
     create: async (integration: Omit<CreateIntegration, 'id'>) => {
       const newIntegration = insertIntegrationSchema.parse({
         id: IdGenerator.integration({
-          orgId: integration.organizationId,
+          orgId: integration.orgId,
           appId: integration.appId,
         }),
         ...alert,
@@ -111,19 +108,17 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return selectAlertSchema.parse(dbAlert);
     },
   },
-  organizations: {
+  orgs: {
     find: async (id: OrgId) => {
-      const organization = await db.query.organization.findFirst({
-        where: eq(organizationSchema.id, id as string),
+      const org = await db.query.org.findFirst({
+        where: eq(orgSchema.id, id as string),
       });
-      if (!organization) return null;
-      return selectOrgSchema.parse(organization);
+      if (!org) return null;
+      return selectOrgSchema.parse(org);
     },
-    list: async (
-      ...args: Parameters<typeof db.query.organization.findMany>
-    ) => {
-      const organizations = await db.query.organization.findMany(...args);
-      return organizations.map((a) => selectOrgSchema.parse(a));
+    list: async (...args: Parameters<typeof db.query.org.findMany>) => {
+      const orgs = await db.query.org.findMany(...args);
+      return orgs.map((a) => selectOrgSchema.parse(a));
     },
   },
   user: {

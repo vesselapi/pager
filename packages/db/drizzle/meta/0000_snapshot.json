@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "0ddfb00a-5d87-445f-b866-fb87fd94dee5",
+  "id": "0d9972d7-b6d6-4ec3-8a5c-50dd6c4079fc",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "alert": {
@@ -14,11 +14,17 @@
           "primaryKey": true,
           "notNull": true
         },
+        "org_id": {
+          "name": "org_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "title": {
           "name": "title",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "status": {
           "name": "status",
@@ -37,7 +43,8 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "metadata": {
           "name": "metadata",
@@ -48,12 +55,29 @@
       },
       "indexes": {},
       "foreignKeys": {
+        "alert_org_id_org_id_fk": {
+          "name": "alert_org_id_org_id_fk",
+          "tableFrom": "alert",
+          "tableTo": "org",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "alert_assigned_to_id_user_id_fk": {
           "name": "alert_assigned_to_id_user_id_fk",
           "tableFrom": "alert",
           "tableTo": "user",
-          "columnsFrom": ["assigned_to_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "assigned_to_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -75,7 +99,8 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
         "message": {
           "name": "message",
@@ -90,8 +115,12 @@
           "name": "alert_event_id_alert_id_fk",
           "tableFrom": "alert_event",
           "tableTo": "alert",
-          "columnsFrom": ["id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -99,8 +128,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "organization": {
-      "name": "organization",
+    "org": {
+      "name": "org",
       "schema": "",
       "columns": {
         "id": {
@@ -120,7 +149,7 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -144,6 +173,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "org_id": {
+          "name": "org_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "encrypted_data": {
           "name": "encrypted_data",
           "type": "text",
@@ -155,11 +190,25 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "secret_org_id_org_id_fk": {
+          "name": "secret_org_id_org_id_fk",
+          "tableFrom": "secret",
+          "tableTo": "org",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -177,13 +226,13 @@
           "name": "email",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "organization_id": {
-          "name": "organization_id",
+        "org_id": {
+          "name": "org_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "first_name": {
           "name": "first_name",
@@ -202,17 +251,21 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "user_organization_id_organization_id_fk": {
-          "name": "user_organization_id_organization_id_fk",
+        "user_org_id_org_id_fk": {
+          "name": "user_org_id_org_id_fk",
           "tableFrom": "user",
-          "tableTo": "organization",
-          "columnsFrom": ["organization_id"],
-          "columnsTo": ["id"],
+          "tableTo": "org",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -222,7 +275,9 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       }
     }

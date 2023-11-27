@@ -4,20 +4,19 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { OrgId, SecretId, SecretIdRegex } from '@vessel/types';
 
-import { organization } from './organization';
+import { org } from './org';
 
 export const secret = pgTable('secret', {
   id: text('id').primaryKey(),
   iv: text('iv').notNull(),
-  organizationId: text('organization_id').references(() => organization.id),
+  orgId: text('org_id').references(() => org.id),
   encryptedData: text('encrypted_data').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
 export const selectSecretSchema = createSelectSchema(secret, {
   id: (schema) => schema.id.transform((x) => x as SecretId),
-  organizationId: (schema) =>
-    schema.organizationId.transform((x) => x as OrgId),
+  orgId: (schema) => schema.orgId.transform((x) => x as OrgId),
 });
 
 export const insertSecretSchema = createInsertSchema(secret, {
