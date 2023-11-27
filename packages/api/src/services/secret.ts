@@ -59,7 +59,7 @@ export const makeSecret = () => {
     const encrypted = encrypt(value);
     await db.secret.create({
       id: key,
-      orgId: orgId,
+      orgId,
       ...encrypted,
     });
   };

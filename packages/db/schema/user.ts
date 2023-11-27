@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import { UserIdRegex } from '@vessel/types';
+import { OrgIdRegex, UserIdRegex } from '@vessel/types';
 import type { OrgId, UserId } from '@vessel/types';
 
 import { organization } from './organization';
@@ -24,5 +24,11 @@ export const selectUserSchema = createSelectSchema(user, {
 
 export const insertUserSchema = createInsertSchema(user, {
   id: (schema) =>
-    schema.id.regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`),
+    schema.id
+      .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`)
+      .transform((x) => x as UserId),
+  id: (schema) =>
+    schema.id
+      .regex(OrgIdRegex, `Invalid id, expected format ${OrgIdRegex}`)
+      .transform((x) => x as OrgId),
 });
