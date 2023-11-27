@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import type {
   AlertEventId,
@@ -12,9 +12,9 @@ import type {
 } from '@vessel/types';
 
 import { IdGenerator } from './id-generator';
+import type { CreateAlert, UpsertAlert } from './schema/alert';
 import {
   alert as alertSchema,
-  CreateAlert,
   insertAlertSchema,
   selectAlertSchema,
 } from './schema/alert';
@@ -46,11 +46,8 @@ import {
   secret as secretSchema,
   selectSecretSchema,
 } from './schema/secret';
-import {
-  CreateUser,
-  selectUserSchema,
-  user as userSchema,
-} from './schema/user';
+import type { CreateUser } from './schema/user';
+import { selectUserSchema, user as userSchema } from './schema/user';
 
 export const schema = {
   alert: alertSchema,
@@ -82,13 +79,23 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       const alerts = await db.query.alert.findMany(...args);
       return alerts.map((a) => selectAlertSchema.parse(a));
     },
-    create: async (alert: Omit<CreateAlert, 'id'>) => {
+    update: async (id: AlertId, alert: UpsertAlert) => {
+      return db
+        .update(alertSchema)
+        .set(insertAlertSchema.parse({ id, ...alert }))
+        .where(eq(alertSchema.id, id as string))
+        .returning();
+    },
+    create: async (alert: CreateAlert) => {
       const newAlert = insertAlertSchema.parse({
         id: IdGenerator.alert(),
         ...alert,
       });
-      const dbAlert = await db.insert(alertSchema).values(newAlert).returning();
-      return selectAlertSchema.parse(dbAlert);
+      const dbAlerts = await db
+        .insert(alertSchema)
+        .values(newAlert)
+        .returning();
+      return dbAlerts[0];
     },
   },
   alertEvent: {
@@ -139,11 +146,18 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return orgs.map((a) => selectOrgSchema.parse(a));
     },
     create: async () => {
-      const org = await db.insert(orgSchema).values({
-        id: IdGenerator.org(),
-        name: 'My Organization',
-      });
-      return selectOrgSchema.parse(org);
+      const org = await db
+        .insert(orgSchema)
+        .values({
+          id: IdGenerator.org(),
+          name: 'My Organization',
+        })
+        .returning();
+      if (org.length !== 1)
+        throw new Error(
+          `Expected exactly one org to be created, got ${org.length}`,
+        );
+      return org[0];
     },
   },
   user: {
@@ -161,16 +175,25 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       if (!user) return null;
       return selectUserSchema.parse(user);
     },
-    list: async (...args: Parameters<typeof db.query.user.findMany>) => {
-      const users = await db.query.user.findMany(...args);
+    listByOrgId: async (orgId: OrgId) => {
+      const users = await db.query.user.findMany({
+        where: eq(userSchema.orgId, orgId as string),
+      });
       return users.map((a) => selectUserSchema.parse(a));
     },
     create: async (user: Omit<CreateUser, 'id'>) => {
-      const dbUser = await db.insert(userSchema).values({
-        id: IdGenerator.user(),
-        ...user,
-      });
-      return dbUser;
+      const dbUser = await db
+        .insert(userSchema)
+        .values({
+          id: IdGenerator.user(),
+          ...user,
+        })
+        .returning();
+      if (dbUser.length !== 1)
+        throw new Error(
+          `Expected exactly one user to be created, got ${dbUser.length}`,
+        );
+      return dbUser[0];
     },
   },
   secret: {

@@ -3,21 +3,15 @@ import { z } from 'zod';
 
 import type { Db } from '@vessel/db';
 import { db } from '@vessel/db';
-import { AlertId, AlertIdRegex } from '@vessel/types';
 
-import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 import { procedure } from '../../trpc';
 
 interface Context {
   db: Db;
 }
-const input = z.object({
-  id: z
-    .string()
-    .regex(AlertIdRegex, `Invalid id, expected format ${AlertIdRegex}`)
-    .transform((x) => x as AlertId),
-});
+
+const input = z.object({ id: z.string() });
 
 export const userMe = procedure
   .use(
@@ -39,6 +33,8 @@ export const userMe = procedure
     if (foundUser) return { user: foundUser };
 
     const org = await db.orgs.create();
+    console.log(org);
+    console.log('new user');
     const newUser = await ctx.db.user.create({
       email: claims.email,
       orgId: org.id,

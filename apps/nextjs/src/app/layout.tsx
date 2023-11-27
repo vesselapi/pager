@@ -1,11 +1,12 @@
-import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 
 import '~/styles/globals.css';
 
 import { headers } from 'next/headers';
+import classNames from 'classnames';
 
+import SideNav from './_components/SideNav';
 import { TRPCReactProvider } from './providers';
 
 const fontSans = Inter({
@@ -20,29 +21,34 @@ const fontSans = Inter({
  */
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
-  title: 'Create T3 Turbo',
-  description: 'Simple monorepo with shared backend for web & mobile apps',
-  openGraph: {
-    title: 'Create T3 Turbo',
-    description: 'Simple monorepo with shared backend for web & mobile apps',
-    url: 'https://create-t3-turbo.vercel.app',
-    siteName: 'Create T3 Turbo',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@jullerino',
-    creator: '@jullerino',
-  },
-};
-
+// TODO: Fill this in when we're closer to GA
+// export const metadata: Metadata = {
+//   title: 'Create T3 Turbo',
+//   description: 'Simple monorepo with shared backend for web & mobile apps',
+//   openGraph: {
+//     title: 'Create T3 Turbo',
+//     description: 'Simple monorepo with shared backend for web & mobile apps',
+//     url: 'https://create-t3-turbo.vercel.app',
+//     siteName: 'Create T3 Turbo',
+//   },
+//   twitter: {
+//     card: 'summary_large_image',
+//     site: '@jullerino',
+//     creator: '@jullerino',
+//   },
+// };
 export default function Layout(props: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={['font-sans', fontSans.variable].join(' ')}>
+        <body
+          className={classNames(
+            ['font-sans', fontSans.variable].join(' '),
+            'overflow-y-hidden',
+          )}
+        >
           <TRPCReactProvider headers={headers()}>
-            {props.children}
+            <SideNav>{props.children}</SideNav>
           </TRPCReactProvider>
         </body>
       </html>

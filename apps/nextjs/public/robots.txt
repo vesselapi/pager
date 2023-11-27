@@ -1,0 +1,3 @@
+# Block all crawlers across all routes, we have no need for them to index our API 
+User-agent: *
+Disallow: /

@@ -1,8 +1,8 @@
-import { sql } from 'drizzle-orm';
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import { OrgId, SecretId, SecretIdRegex } from '@vessel/types';
+import type { OrgId, SecretId } from '@vessel/types';
+import { SecretIdRegex } from '@vessel/types';
 
 import { org } from './org';
 

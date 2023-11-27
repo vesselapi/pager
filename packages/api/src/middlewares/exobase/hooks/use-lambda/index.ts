@@ -5,17 +5,17 @@ import { isString, lowerize, partial, tryit } from 'radash';
 
 import { responseFromError, responseFromResult } from './response';
 
-export type SqsLambdaFramework = {
+export interface SqsLambdaFramework {
   context: Context;
   event: SQSEvent;
   lambdaType: 'sqs';
-};
+}
 
-export type ApiLambdaFramework = {
+export interface ApiLambdaFramework {
   context: Context;
   event: APIGatewayEvent;
   lambdaType: 'api';
-};
+}
 
 export type LambdaFramework = SqsLambdaFramework | ApiLambdaFramework;
 
@@ -99,7 +99,7 @@ const makeRequest = (event: APIGatewayEvent, _context: Context): Request => {
     ip: (req as any)?.http?.sourceIp ?? req.identity?.sourceIp,
     startedAt: Date.now(),
     protocol: req.protocol || '',
-    httpVersion: (req.protocol?.split('/')[1] as string) ?? '',
+    httpVersion: req.protocol?.split('/')[1]! ?? '',
     params: event.pathParameters as Record<string, string>,
   };
 };

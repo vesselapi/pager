@@ -1,4 +1,4 @@
-import { Response } from '@exobase/core';
+import type { Response } from '@exobase/core';
 import { isNumber, isString } from 'radash';
 
 import { isError } from '../../errors';
