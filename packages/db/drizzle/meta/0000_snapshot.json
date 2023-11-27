@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "ee4133b9-052e-4008-adf0-aee4b3180237",
+  "id": "07ff91f3-6614-4643-b67f-29eb65d197f4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "alert": {
@@ -59,8 +59,12 @@
           "name": "alert_org_id_org_id_fk",
           "tableFrom": "alert",
           "tableTo": "org",
-          "columnsFrom": ["org_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -68,8 +72,12 @@
           "name": "alert_assigned_to_id_user_id_fk",
           "tableFrom": "alert",
           "tableTo": "user",
-          "columnsFrom": ["assigned_to_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "assigned_to_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -107,9 +115,12 @@
           "name": "alert_event_id_alert_id_fk",
           "tableFrom": "alert_event",
           "tableTo": "alert",
-          "columnsFrom": ["id"],
-          "columnsTo": ["id"],
-<<<<<<< HEAD
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -153,10 +164,12 @@
           "name": "integration_org_id_org_id_fk",
           "tableFrom": "integration",
           "tableTo": "org",
-          "columnsFrom": ["org_id"],
-          "columnsTo": ["id"],
-=======
->>>>>>> main
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -235,8 +248,12 @@
           "name": "secret_org_id_org_id_fk",
           "tableFrom": "secret",
           "tableTo": "org",
-          "columnsFrom": ["org_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -292,8 +309,12 @@
           "name": "user_org_id_org_id_fk",
           "tableFrom": "user",
           "tableTo": "org",
-          "columnsFrom": ["org_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -303,7 +324,9 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       }
     }
