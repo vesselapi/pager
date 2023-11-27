@@ -111,7 +111,6 @@ const AlertsList = () => {
     [sorts, filters],
   );
 
-  const context = api.useContext();
   const alerts = api.alert.all.useQuery({
     sorts: allSorts,
     filters: allFilters,
@@ -169,9 +168,9 @@ const AlertsList = () => {
                       [...srts].map((sort) =>
                         sort === s
                           ? {
-                              ...sort,
-                              order: sort.order === 'desc' ? 'asc' : 'desc',
-                            }
+                            ...sort,
+                            order: sort.order === 'desc' ? 'asc' : 'desc',
+                          }
                           : sort,
                       ),
                     )

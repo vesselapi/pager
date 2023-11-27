@@ -59,15 +59,19 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return db
         .update(alertSchema)
         .set(insertAlertSchema.parse({ id, ...alert }))
-        .where(eq(alertSchema.id, id as string));
+        .where(eq(alertSchema.id, id as string))
+        .returning();
     },
     create: async (alert: CreateAlert) => {
       const newAlert = insertAlertSchema.parse({
         id: IdGenerator.alert(),
         ...alert,
       });
-      const dbAlert = await db.insert(alertSchema).values(newAlert).returning();
-      return selectAlertSchema.parse(dbAlert);
+      const dbAlerts = await db
+        .insert(alertSchema)
+        .values(newAlert)
+        .returning();
+      return dbAlerts[0];
     },
   },
   alertEvent: {
@@ -96,11 +100,18 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return orgs.map((a) => selectOrgSchema.parse(a));
     },
     create: async () => {
-      const org = await db.insert(orgSchema).values({
-        id: IdGenerator.org(),
-        name: 'My Organization',
-      });
-      return selectOrgSchema.parse(org);
+      const org = await db
+        .insert(orgSchema)
+        .values({
+          id: IdGenerator.org(),
+          name: 'My Organization',
+        })
+        .returning();
+      if (org.length !== 1)
+        throw new Error(
+          `Expected exactly one org to be created, got ${org.length}`,
+        );
+      return org[0];
     },
   },
   user: {
@@ -125,11 +136,18 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return users.map((a) => selectUserSchema.parse(a));
     },
     create: async (user: Omit<CreateUser, 'id'>) => {
-      const dbUser = await db.insert(userSchema).values({
-        id: IdGenerator.user(),
-        ...user,
-      });
-      return dbUser;
+      const dbUser = await db
+        .insert(userSchema)
+        .values({
+          id: IdGenerator.user(),
+          ...user,
+        })
+        .returning();
+      if (dbUser.length !== 1)
+        throw new Error(
+          `Expected exactly one user to be created, got ${dbUser.length}`,
+        );
+      return dbUser[0];
     },
   },
   secret: {
