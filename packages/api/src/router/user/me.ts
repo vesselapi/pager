@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import type { Db } from '@vessel/db';
@@ -24,6 +25,24 @@ export const alertById = trpc
     }),
   )
   .input(input)
-  .query(({ ctx, input }) => {
-    return ctx.db.alerts.find(input.id);
+  .mutation(async ({ ctx, input }) => {
+    const claims = ctx.auth.claims;
+    if (!claims) {
+      throw new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'Claims not found',
+      });
+    }
+
+    const foundUser = await ctx.db.user.findByEmail(claims.email);
+    if (foundUser) return { user: foundUser };
+
+    const org = await db.organizations.create();
+    const newUser = await ctx.db.user.create({
+      email: claims.email,
+      organizationId: org.id,
+      firstName: claims.first_name,
+      lastName: claims.last_name,
+    });
+    return { user: newUser };
   });
