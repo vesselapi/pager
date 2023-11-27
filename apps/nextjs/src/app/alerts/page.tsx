@@ -1,1 +1,5 @@
-export { default as AlertsList } from './AlertsList';
+import AlertsList from "./AlertsList";
+
+const AlertListPage = () => <AlertsList />
+
+export default AlertListPage
