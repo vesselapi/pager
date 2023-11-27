@@ -5,7 +5,7 @@ import type { OrgId } from '@vessel/types';
 import { OrgIdRegex } from '@vessel/types';
 
 export const organization = pgTable('organization', {
-  id: text('id').primaryKey(), // v_organization_[hash]
+  id: text('id').primaryKey(), // v_org_[hash]
   name: text('name'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });

@@ -9,7 +9,7 @@ import { organization } from './organization';
 export const user = pgTable('user', {
   id: text('id').primaryKey(), // v_user_[hash]
   email: text('email').unique().notNull(),
-  organizationId: text('organization_id')
+  orgId: text('org_id')
     .references(() => organization.id)
     .notNull(),
   firstName: text('first_name'),
@@ -19,8 +19,7 @@ export const user = pgTable('user', {
 
 export const selectUserSchema = createSelectSchema(user, {
   id: (schema) => schema.id.transform((x) => x as UserId),
-  organizationId: (schema) =>
-    schema.organizationId.transform((x) => x as OrgId),
+  orgId: (schema) => schema.orgId.transform((x) => x as OrgId),
 });
 
 export const insertUserSchema = createInsertSchema(user, {

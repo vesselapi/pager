@@ -10,7 +10,7 @@ import { user } from './user';
 
 export const alert = pgTable('alert', {
   id: text('id').primaryKey(), // v_alert_[hash]
-  organizationId: text('organization_id')
+  orgId: text('org_id')
     .references(() => organization.id)
     .notNull(),
   title: text('title').notNull(),

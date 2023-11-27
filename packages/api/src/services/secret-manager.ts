@@ -1,8 +1,15 @@
 import crypto from 'crypto';
 
 import { db } from '@vessel/db';
-import { hash, randomString } from '@vessel/db/id-generator';
-import { ApiToken, ApiTokenId, OrgId, SecretId } from '@vessel/types';
+import { IdGenerator, randomString } from '@vessel/db/id-generator';
+import {
+  ApiToken,
+  ApiTokenId,
+  AppId,
+  OrgId,
+  SecretId,
+  SecretIntegrationId,
+} from '@vessel/types';
 
 import { env } from '../../env.mjs';
 
@@ -21,7 +28,7 @@ type Encrypted = {
   encryptedData: string;
 };
 
-export const makeSecret = () => {
+export const makeSecretManager = () => {
   const encrypt = (json: Json) => {
     const iv = crypto.randomBytes(16);
     let cipher = crypto.createCipheriv(
@@ -59,7 +66,7 @@ export const makeSecret = () => {
     const encrypted = encrypt(value);
     await db.secret.create({
       id: key,
-      orgId: orgId,
+      orgId,
       ...encrypted,
     });
   };
@@ -76,19 +83,17 @@ export const makeSecret = () => {
   };
 
   const makeApiToken = () => {
-    const toApiTokenId = (apiToken: ApiToken): ApiTokenId =>
-      `v_secret_apiToken_${hash(apiToken)}`;
     const create = async (
       orgId: OrgId,
     ): Promise<{ apiTokenId: ApiTokenId; apiToken: ApiToken }> => {
       const apiToken: ApiToken = `v_apiToken_${randomString()}`;
-      const apiTokenId = toApiTokenId(apiToken);
+      const apiTokenId = IdGenerator.apiToken(apiToken);
       await put({ key: apiTokenId, value: apiToken, orgId });
       return { apiTokenId, apiToken };
     };
 
     const find = async (apiToken: ApiToken) => {
-      const apiTokenId = toApiTokenId(apiToken);
+      const apiTokenId = IdGenerator.apiToken(apiToken);
       const dbApiToken = await get<ApiToken>(apiTokenId);
       if (!dbApiToken) {
         return null;
@@ -98,7 +103,37 @@ export const makeSecret = () => {
     return { create, find };
   };
 
-  return { apiToken: makeApiToken() };
+  const makeIntegration = () => {
+    const find = async <T>(id: SecretIntegrationId): Promise<T | null> => {
+      const secret = await get<T>(id);
+      if (!secret) {
+        return null;
+      }
+      return secret.value;
+    };
+
+    const create = async <T extends Json>({
+      orgId,
+      appId,
+      secret,
+    }: {
+      orgId: OrgId;
+      appId: AppId;
+      secret: T;
+    }) => {
+      await put({
+        key: IdGenerator.secrets.integration({ orgId, appId }),
+        value: secret,
+        orgId,
+      });
+    };
+    return { find, create };
+  };
+
+  return {
+    apiToken: makeApiToken(),
+    integration: makeIntegration(),
+  };
 };
 
-export type Secret = ReturnType<typeof makeSecret>;
+export type SecretManager = ReturnType<typeof makeSecretManager>;
