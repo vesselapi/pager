@@ -13,6 +13,12 @@ export const UserIdRegex = /^v_user_[a-z0-9]+$/;
 export type SecretId = `v_secret_${string}_${string}`; // v_secret_{entity}_{suffix}
 export const SecretIdRegex = /^v_secret_[a-z0-9]+_[a-z0-9]+$/;
 
+export type ScheduleId = `v_schedule_${string}`;
+export const ScheduleIdRegex = /^v_secret_[a-z0-9]+/;
+
+export type ScheduleUserId = `v_schedule_user_${string}`;
+export const ScheduleUserIdRegex = /^v_schedule_user_[a-z0-9]+/;
+
 export type IntegrationId = `v_integration_${string}_${string}`; // v_integration_{orgId}_{appId}
 export const IntegrationIdRegex = /^v_integration_[a-z0-9]+$/;
 

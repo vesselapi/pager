@@ -30,6 +30,18 @@ import {
 } from './schema/integration';
 import { org as orgSchema, selectOrgSchema } from './schema/org';
 import {
+  CreateSchedule,
+  insertScheduleSchema,
+  schedule as scheduleSchema,
+  selectScheduleSchema,
+} from './schema/schedule';
+import {
+  CreateScheduleUser,
+  insertScheduleUserSchema,
+  scheduleUser as scheduleUserSchema,
+  selectScheduleUser,
+} from './schema/schedule-user';
+import {
   insertSecretSchema,
   secret as secretSchema,
   selectSecretSchema,
@@ -47,6 +59,8 @@ export const schema = {
   org: orgSchema,
   user: userSchema,
   secret: secretSchema,
+  schedule: scheduleSchema,
+  scheduleUser: scheduleUserSchema,
 };
 
 export * from 'drizzle-orm';
@@ -169,6 +183,44 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     },
     create: async (secret: z.infer<typeof insertSecretSchema>) => {
       await db.insert(secretSchema).values(secret);
+    },
+  },
+  schedules: {
+    listByOrgId: async (orgId: OrgId) => {
+      const schedules = await db.query.schedule.findMany({
+        where: eq(scheduleSchema.orgId, orgId),
+      });
+      return schedules.map((schedule) => selectScheduleSchema.parse(schedule));
+    },
+    create: async (schedule: Omit<CreateSchedule, 'id'>) => {
+      const parsedSchedule = insertScheduleSchema.parse(schedule);
+      const dbSchedule = await db
+        .insert(scheduleSchema)
+        .values(parsedSchedule)
+        .returning();
+      const newSchedule = dbSchedule[0];
+      if (!newSchedule) {
+        throw new Error('Failed to create schedule');
+      }
+      return selectScheduleSchema.parse(newSchedule);
+    },
+  },
+  scheduleUsers: {
+    createMany: async (scheduleUsers: Omit<CreateScheduleUser, 'id'>[]) => {
+      const insertScheduleUsers = scheduleUsers.map((scheduleUser) => {
+        const insertScheduleUser = {
+          id: IdGenerator.scheduleUser(),
+          ...scheduleUser,
+        };
+        return insertScheduleUserSchema.parse(insertScheduleUser);
+      });
+      const dbScheduleUsers = await db
+        .insert(scheduleUserSchema)
+        .values(insertScheduleUsers)
+        .returning();
+      return dbScheduleUsers.map((scheduleUser) =>
+        selectScheduleUser.parse(scheduleUser),
+      );
     },
   },
 });
