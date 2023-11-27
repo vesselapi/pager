@@ -38,10 +38,10 @@ export const userMe = procedure
     const foundUser = await ctx.db.user.findByEmail(claims.email);
     if (foundUser) return { user: foundUser };
 
-    const org = await db.organizations.create();
+    const org = await db.orgs.create();
     const newUser = await ctx.db.user.create({
       email: claims.email,
-      organizationId: org.id,
+      orgId: org.id,
       firstName: claims.first_name,
       lastName: claims.last_name,
     });

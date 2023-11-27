@@ -96,7 +96,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return orgs.map((a) => selectOrgSchema.parse(a));
     },
     create: async () => {
-      const org = await db.insert(organizationSchema).values({
+      const org = await db.insert(orgSchema).values({
         id: IdGenerator.org(),
         name: 'My Organization',
       });
