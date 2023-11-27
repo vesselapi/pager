@@ -4,13 +4,13 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { OrgIdRegex, UserIdRegex } from '@vessel/types';
 import type { OrgId, UserId } from '@vessel/types';
 
-import { organization } from './organization';
+import { org } from './org';
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(), // v_user_[hash]
   email: text('email').unique().notNull(),
   orgId: text('org_id')
-    .references(() => organization.id)
+    .references(() => org.id)
     .notNull(),
   firstName: text('first_name'),
   lastName: text('last_name'),
@@ -27,7 +27,7 @@ export const insertUserSchema = createInsertSchema(user, {
     schema.id
       .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`)
       .transform((x) => x as UserId),
-  id: (schema) =>
+  orgId: (schema) =>
     schema.id
       .regex(OrgIdRegex, `Invalid id, expected format ${OrgIdRegex}`)
       .transform((x) => x as OrgId),

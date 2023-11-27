@@ -5,13 +5,13 @@ import { z } from 'zod';
 import type { AlertId, UserId } from '@vessel/types';
 import { AlertIdRegex, UserIdRegex } from '@vessel/types';
 
-import { organization } from './organization';
+import { org } from './org';
 import { user } from './user';
 
 export const alert = pgTable('alert', {
   id: text('id').primaryKey(), // v_alert_[hash]
   orgId: text('org_id')
-    .references(() => organization.id)
+    .references(() => org.id)
     .notNull(),
   title: text('title').notNull(),
   status: text('status', { enum: ['ACKED', 'OPEN', 'CLOSED'] })
