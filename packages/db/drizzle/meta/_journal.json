@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1700237666977,
-      "tag": "0000_breezy_paper_doll",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1700242944338,
-      "tag": "0001_dazzling_nitro",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1700517070704,
-      "tag": "0002_familiar_marvel_zombies",
+      "when": 1701113538433,
+      "tag": "0000_yellow_kitty_pryde",
       "breakpoints": true
     }
   ]
