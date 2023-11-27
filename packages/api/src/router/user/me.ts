@@ -7,6 +7,7 @@ import { AlertId, AlertIdRegex } from '@vessel/types';
 
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
+import { procedure } from '../../trpc';
 
 interface Context {
   db: Db;
@@ -18,7 +19,7 @@ const input = z.object({
     .transform((x) => x as AlertId),
 });
 
-export const userMe = trpc
+export const userMe = procedure
   .use(
     useServicesHook<Context>({
       db: () => db,
