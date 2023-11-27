@@ -22,6 +22,12 @@ import {
   alertEvent as alertEventSchema,
   selectAlertEventSchema,
 } from './schema/alertEvent';
+import {
+  CreateIntegration,
+  insertIntegrationSchema,
+  integration as integrationSchema,
+  selectIntegrationSchema,
+} from './schema/integration';
 import { org as orgSchema, selectOrgSchema } from './schema/org';
 import type { insertSecretSchema } from './schema/secret';
 import { secret as secretSchema, selectSecretSchema } from './schema/secret';
@@ -31,6 +37,7 @@ import { selectUserSchema, user as userSchema } from './schema/user';
 export const schema = {
   alert: alertSchema,
   alertEvent: alertEventSchema,
+  integration: integrationSchema,
   org: orgSchema,
   user: userSchema,
   secret: secretSchema,
@@ -85,6 +92,28 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     list: async (...args: Parameters<typeof db.query.alertEvent.findMany>) => {
       const alertEvents = await db.query.alertEvent.findMany(...args);
       return alertEvents.map((a) => selectAlertEventSchema.parse(a));
+    },
+  },
+  integrations: {
+    listByOrgId: async (orgId: OrgId) => {
+      const integrations = await db.query.integration.findMany({
+        where: eq(integrationSchema.orgId, orgId),
+      });
+      return integrations.map((x) => selectIntegrationSchema.parse(x));
+    },
+    create: async (integration: Omit<CreateIntegration, 'id'>) => {
+      const newIntegration = insertIntegrationSchema.parse({
+        id: IdGenerator.integration({
+          orgId: integration.orgId,
+          appId: integration.appId,
+        }),
+        ...alert,
+      });
+      const dbAlert = await db
+        .insert(integrationSchema)
+        .values(newIntegration)
+        .returning();
+      return selectAlertSchema.parse(dbAlert);
     },
   },
   orgs: {

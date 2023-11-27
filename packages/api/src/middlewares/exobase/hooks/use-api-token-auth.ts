@@ -3,7 +3,7 @@ import { isArray } from 'radash';
 
 import { ApiToken, OrgId } from '@vessel/types';
 
-import { Secret } from '../../../services/secret';
+import { SecretManager } from '../../../services/secret-manager';
 import * as errors from '../errors';
 
 const API_TOKEN_HEADER_KEY = 'x-vessel-api-token';
@@ -14,14 +14,14 @@ export type ApiTokenAuth = {
 };
 
 type Services = {
-  secret: Secret;
+  secretManager: SecretManager;
 };
 
 export const useApiTokenAuth = () =>
   hook<Props<{}, Services>, Props<{}, {}, ApiTokenAuth>>(
     function useApiTokenAuth(func) {
       return async (props) => {
-        const { secret } = props.services;
+        const { secretManager } = props.services;
 
         const apiToken = props.request.headers[
           API_TOKEN_HEADER_KEY
@@ -38,7 +38,7 @@ export const useApiTokenAuth = () =>
           });
         }
 
-        const apiTokenSecret = await secret.apiToken.find(apiToken);
+        const apiTokenSecret = await secretManager.apiToken.find(apiToken);
         if (!apiTokenSecret) {
           throw new errors.NotAuthenticatedError({
             message: 'Invalid API token',
