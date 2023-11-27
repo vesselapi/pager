@@ -23,7 +23,6 @@ const UserIcon = () => {
     createOrGetUser.mutate({ id: 'hey ' });
   }, []);
 
-  console.log(user);
   if (!user) {
     return (
       <div className="h-[18px] w-[18px]  rounded-full bg-gray-500 ring-1 ring-gray-400"></div>

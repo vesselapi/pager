@@ -140,7 +140,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         throw new Error(
           `Expected exactly one org to be created, got ${org.length}`,
         );
-      return org[0];
+      return selectOrgSchema.parse(org[0]);
     },
   },
   user: {
