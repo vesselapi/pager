@@ -18,14 +18,14 @@ const input = z.object({
     .transform((x) => x as AlertId),
 });
 
-export const alertById = trpc
+export const userMe = trpc
   .use(
     useServicesHook<Context>({
       db: () => db,
     }),
   )
   .input(input)
-  .mutation(async ({ ctx, input }) => {
+  .mutation(async ({ ctx }) => {
     const claims = ctx.auth.claims;
     if (!claims) {
       throw new TRPCError({
