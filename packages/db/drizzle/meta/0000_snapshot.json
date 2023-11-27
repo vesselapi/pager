@@ -109,6 +109,7 @@
           "tableTo": "alert",
           "columnsFrom": ["id"],
           "columnsTo": ["id"],
+<<<<<<< HEAD
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -154,6 +155,8 @@
           "tableTo": "org",
           "columnsFrom": ["org_id"],
           "columnsTo": ["id"],
+=======
+>>>>>>> main
           "onDelete": "no action",
           "onUpdate": "no action"
         }

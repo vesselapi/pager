@@ -6,8 +6,9 @@ import {
   ApiTokenId,
   AppId,
   IntegrationId,
-  IntegrationSecretId,
   OrgId,
+  SecretIntegrationId,
+  UserId,
 } from '@vessel/types';
 
 export const hash = (text: string) => {
@@ -39,6 +40,8 @@ export const IdGenerator = {
     }: {
       orgId: OrgId;
       appId: AppId;
-    }): IntegrationSecretId => `v_secret_integration_${orgId}_${appId}`,
+    }): SecretIntegrationId => `v_secret_integration_${orgId}_${appId}`,
   },
+  org: (): OrgId => `v_org_${randomString()}`,
+  user: (): UserId => `v_user_${randomString()}`,
 };

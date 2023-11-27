@@ -34,7 +34,11 @@ import {
   secret as secretSchema,
   selectSecretSchema,
 } from './schema/secret';
-import { selectUserSchema, user as userSchema } from './schema/user';
+import {
+  CreateUser,
+  selectUserSchema,
+  user as userSchema,
+} from './schema/user';
 
 export const schema = {
   alert: alertSchema,
@@ -120,6 +124,13 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       const orgs = await db.query.org.findMany(...args);
       return orgs.map((a) => selectOrgSchema.parse(a));
     },
+    create: async () => {
+      const org = await db.insert(orgSchema).values({
+        id: IdGenerator.org(),
+        name: 'My Organization',
+      });
+      return selectOrgSchema.parse(org);
+    },
   },
   user: {
     find: async (id: UserId) => {
@@ -139,6 +150,13 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     list: async (...args: Parameters<typeof db.query.user.findMany>) => {
       const users = await db.query.user.findMany(...args);
       return users.map((a) => selectUserSchema.parse(a));
+    },
+    create: async (user: Omit<CreateUser, 'id'>) => {
+      const dbUser = await db.insert(userSchema).values({
+        id: IdGenerator.user(),
+        ...user,
+      });
+      return dbUser;
     },
   },
   secret: {
