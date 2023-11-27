@@ -13,7 +13,9 @@ interface Context {
 
 const args = z.object({
   schedule: insertScheduleSchema,
-  users: z.array(z.string().regex(UserIdRegex, 'Users must be valid user ids')),
+  userIds: z.array(
+    z.string().regex(UserIdRegex, 'Users must be valid user ids'),
+  ),
 });
 
 export const scheduleCreate = trpc
@@ -26,7 +28,7 @@ export const scheduleCreate = trpc
   .mutation(async ({ ctx, input }) => {
     const schedule = await ctx.db.schedules.create(input.schedule);
     await ctx.db.scheduleUsers.createMany(
-      input.users.map((userId, idx) => ({
+      input.userIds.map((userId, idx) => ({
         userId,
         order: idx,
         orgId: ctx.auth.user.orgId,
