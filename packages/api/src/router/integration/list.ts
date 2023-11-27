@@ -27,9 +27,11 @@ export const integrationList = trpc
     );
     const userIntegrationsByAppId = objectify(userIntegrations, (x) => x.appId);
 
-    return integrations.map((integration) => ({
-      ...integration.display,
-      authType: integration.auth.type,
-      isConnected: !!userIntegrationsByAppId[integration.appId] ?? false,
-    }));
+    return {
+      integrations: integrations.map((integration) => ({
+        ...integration.display,
+        authType: integration.auth.type,
+        isConnected: !!userIntegrationsByAppId[integration.appId] ?? false,
+      })),
+    };
   });
