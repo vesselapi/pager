@@ -23,15 +23,15 @@ export type Json =
 
 const ALGORITHM = 'aes-256-cbc';
 
-type Encrypted = {
+interface Encrypted {
   iv: string;
   encryptedData: string;
-};
+}
 
 export const makeSecretManager = () => {
   const encrypt = (json: Json) => {
     const iv = crypto.randomBytes(16);
-    let cipher = crypto.createCipheriv(
+    const cipher = crypto.createCipheriv(
       ALGORITHM,
       Buffer.from(env.DATABASE_SECRET_STORE_KEY),
       iv,
@@ -42,9 +42,9 @@ export const makeSecretManager = () => {
   };
 
   const decrypt = (encrypted: Encrypted) => {
-    let iv = Buffer.from(encrypted.iv, 'hex');
-    let encryptedText = Buffer.from(encrypted.encryptedData, 'hex');
-    let decipher = crypto.createDecipheriv(
+    const iv = Buffer.from(encrypted.iv, 'hex');
+    const encryptedText = Buffer.from(encrypted.encryptedData, 'hex');
+    const decipher = crypto.createDecipheriv(
       'aes-256-cbc',
       Buffer.from(env.DATABASE_SECRET_STORE_KEY),
       iv,

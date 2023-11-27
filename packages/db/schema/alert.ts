@@ -1,6 +1,6 @@
 import { json, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import type { AlertId, UserId } from '@vessel/types';
 import { AlertIdRegex, UserIdRegex } from '@vessel/types';
@@ -39,4 +39,7 @@ export const insertAlertSchema = createInsertSchema(alert, {
 });
 
 export type Alert = z.infer<typeof selectAlertSchema>;
+export type UpsertAlert = Partial<
+  Omit<z.infer<typeof insertAlertSchema>, 'id'>
+>;
 export type CreateAlert = Omit<z.infer<typeof insertAlertSchema>, 'id'>;

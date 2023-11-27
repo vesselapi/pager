@@ -1,4 +1,5 @@
-import { ExobaseError, Response } from '@exobase/core';
+import type { Response } from '@exobase/core';
+import { ExobaseError } from '@exobase/core';
 import { useCatch } from '@exobase/hooks';
 import { isArray } from 'radash';
 import type { AggregateError } from 'radash';
@@ -69,5 +70,5 @@ export const useErrorMapping = () =>
   });
 
 const isAggregateError = (error: any): error is AggregateError => {
-  return error && error.errors && isArray(error.errors);
+  return error?.errors && isArray(error.errors);
 };

@@ -1,17 +1,14 @@
-import { Props } from '@exobase/core';
+import type { Props } from '@exobase/core';
 import { useJsonBody, useServices } from '@exobase/hooks';
 import z from 'zod';
 
-import { vessel } from '@vessel/api/src/exobase/hooks/common-hooks';
-import {
-  ApiTokenAuth,
-  useApiTokenAuth,
-} from '@vessel/api/src/exobase/hooks/use-api-token-auth';
-import { makePubSub, PubSub } from '@vessel/api/src/services/pubsub';
-import {
-  makeSecretManager,
-  SecretManager,
-} from '@vessel/api/src/services/secret-manager';
+import { vessel } from '@vessel/api/src/middlewares/exobase/hooks/common-hooks';
+import type { ApiTokenAuth } from '@vessel/api/src/middlewares/exobase/hooks/use-api-token-auth';
+import { useApiTokenAuth } from '@vessel/api/src/middlewares/exobase/hooks/use-api-token-auth';
+import type { PubSub } from '@vessel/api/src/services/pubsub';
+import { makePubSub } from '@vessel/api/src/services/pubsub';
+import type { SecretManager } from '@vessel/api/src/services/secret-manager';
+import { makeSecretManager } from '@vessel/api/src/services/secret-manager';
 
 import { db } from '../../../../packages/db';
 import { insertAlertSchema } from '../../../../packages/db/schema/alert';
@@ -26,14 +23,14 @@ const schema = z.object({
 
 type Args = z.infer<typeof schema>;
 
-type Services = {
+interface Services {
   pubsub: PubSub;
   secretManager: SecretManager;
-};
+}
 
-type Result = {
+interface Result {
   success: true;
-};
+}
 
 const alert = async ({
   args,

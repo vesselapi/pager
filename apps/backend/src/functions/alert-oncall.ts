@@ -1,20 +1,18 @@
-import { Props } from '@exobase/core';
+import type { Props } from '@exobase/core';
 import { useServices } from '@exobase/hooks';
 import { z } from 'zod';
 
 import { vessel } from '@vessel/api/src/exobase/hooks/common-hooks';
 import { useSqsArgs } from '@vessel/api/src/exobase/hooks/use-sqs-args';
-import {
-  Logger,
-  makeLogger,
-} from '@vessel/api/src/exobase/services/make-logger';
+import type { Logger } from '@vessel/api/src/exobase/services/make-logger';
+import { makeLogger } from '@vessel/api/src/exobase/services/make-logger';
 
 const schema = z.object({ a: z.string() });
 type Args = z.infer<typeof schema>;
 
-type Services = {
+interface Services {
   logger: Logger;
-};
+}
 
 const alertOncall = async ({ args, services }: Props<Args, Services>) => {
   const { logger } = services;
