@@ -22,6 +22,8 @@ export const env = createEnv({
     TWILIO_AUTH_TOKEN: z.string(),
     TWILIO_PHONE_NUMBER: z.string(),
     RESEND_API_KEY: z.string(),
+    INTEGRATION_SENTRY_CLIENT_ID: z.string(),
+    INTEGRATION_SENTRY_SECRET: z.string(),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -47,6 +49,8 @@ export const env = createEnv({
     TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
     TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    INTEGRATION_SENTRY_CLIENT_ID: process.env.INTEGRATION_SENTRY_CLIENT_ID,
+    INTEGRATION_SENTRY_SECRET: process.env.INTEGRATION_SENTRY_SECRET,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:
