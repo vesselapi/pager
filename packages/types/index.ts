@@ -22,6 +22,6 @@ export type AppId = (typeof APP_ID)[number];
 export type ApiTokenId = `v_secret_apiToken_${string}`; // v_secret_apiToken_{hash}
 
 export type ApiToken = `v_apiToken_${string}`; // v_apiToken_{sha256(apiToken)}
-export const ApiTokenRegex = /^v_apiToken_[a-z0-9]+$/;
+export const ApiTokenRegex = /^v_apiToken_[a-z0-9]+_[a-z0-9]+$/;
 
 export type SecretIntegrationId = `v_secret_integration_${string}`;

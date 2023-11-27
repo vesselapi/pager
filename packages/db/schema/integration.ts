@@ -8,7 +8,7 @@ import type { IntegrationId, OrgId } from '@vessel/types';
 import { org } from './org';
 
 export const integration = pgTable('integration', {
-  id: text('id').primaryKey(), // v_integration_[hash]
+  id: text('id').primaryKey(),
   orgId: text('org_id')
     .references(() => org.id)
     .notNull(),
