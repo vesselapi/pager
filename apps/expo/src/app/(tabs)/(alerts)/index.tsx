@@ -7,7 +7,7 @@ import { FlashList } from '@shopify/flash-list';
 import { api } from '~/utils/api';
 import type { RouterOutputs } from '~/utils/api';
 import { useAuth } from '@clerk/clerk-expo';
-import AlertListItem from './(tabs)/alerts/_components/AlertListItem';
+import AlertListItem from './_components/AlertListItem';
 
 const AlertsList = ({ alerts }) => {
   return (
@@ -19,7 +19,7 @@ const AlertsList = ({ alerts }) => {
   )
 }
 
-const Index = () => {
+const AlertListPage = () => {
   const alerts = api.alert.all.useQuery({});
 
   return (
@@ -33,4 +33,4 @@ const Index = () => {
 
 };
 
-export default Index;
+export default AlertListPage;

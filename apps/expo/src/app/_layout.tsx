@@ -37,13 +37,7 @@ const RootLayout = () => {
     >
       <SignedIn>
         <TRPCProvider>
-          <Stack
-            screenOptions={{
-              headerStyle: {
-                backgroundColor: 'white',
-              },
-            }}
-          >
+          <Stack>
             <Stack.Screen name="(tabs)" />
           </Stack>
           <StatusBar />
