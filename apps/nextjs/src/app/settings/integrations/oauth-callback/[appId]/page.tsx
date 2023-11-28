@@ -15,8 +15,6 @@ const OAuthCallbackPage = ({ params }: PageProps) => {
     ...Object.fromEntries([...useSearchParams()]),
   } as Parameters<(typeof getOAuthCallback)['mutateAsync']>[0];
   useEffect(() => {
-    console.log({ callbackParams });
-
     getOAuthCallback
       .mutateAsync(callbackParams)
       .then(() => router.push(`/settings/integrations/${params.appId}`));

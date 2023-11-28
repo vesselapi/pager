@@ -19,28 +19,6 @@ const toSimpleOauth2Config = ({
     ? new URL(config.authUrl)
     : new URL(config.authUrl());
 
-  console.log({
-    client: {
-      id: config.clientId,
-      secret: config.clientSecret,
-    },
-    auth: {
-      tokenHost: tokenUrl.origin,
-      tokenPath: tokenUrl.pathname,
-      authorizeHost: authUrl.origin,
-      authorizePath: authUrl.pathname,
-    },
-    http: {
-      headers: {
-        'User-Agent': 'Vessel',
-      },
-    },
-    options: {
-      authorizationMethod: config.tokenAuth,
-      bodyFormat: config.oauthBodyFormat,
-      scopeSeparator: config.scopeSeparator,
-    },
-  });
   return {
     client: {
       id: config.clientId,
@@ -103,10 +81,6 @@ export const makeOauth2Client = () => ({
     refreshToken: string | null;
     oauthResponse: Record<string, string | number>;
   }> => {
-    console.log({
-      config,
-      oauthRequest,
-    });
     const client = new AuthorizationCode(
       toSimpleOauth2Config({ config, oauthRequest }),
     );
