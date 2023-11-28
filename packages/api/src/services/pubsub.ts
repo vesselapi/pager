@@ -1,6 +1,6 @@
 import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 
-import { Alert, CreateAlert } from '@vessel/db/schema/alert';
+import type { Alert } from '@vessel/db/schema/alert';
 
 import { env } from '../../env.mjs';
 

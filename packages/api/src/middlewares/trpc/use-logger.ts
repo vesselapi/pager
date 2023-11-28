@@ -2,7 +2,7 @@ import * as crypto from 'crypto';
 import { experimental_standaloneMiddleware } from '@trpc/server';
 import bunyan from 'bunyan';
 
-import { CreateContextOptions } from '../../trpc';
+import type { CreateContextOptions } from '../../trpc';
 
 export const logger = bunyan.createLogger({ name: 'logger' });
 

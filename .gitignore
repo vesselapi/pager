@@ -1,6 +1,7 @@
 .env
 .env.*
 .env.!(example)
+.env*.local
 .turbo
 .next
 .sst

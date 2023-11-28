@@ -28,10 +28,10 @@ export type JwtClaims = JwtPayload & {
  * processing a request
  *
  */
-export type CreateContextOptions = {
+export interface CreateContextOptions {
   req: NextRequest;
   auth: { claims: JwtClaims | null };
-};
+}
 
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use

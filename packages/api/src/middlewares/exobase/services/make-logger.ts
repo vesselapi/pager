@@ -1,8 +1,8 @@
 import * as crypto from 'crypto';
-import { Props, Request } from '@exobase/core';
+import type { Props, Request } from '@exobase/core';
 
 import { logger } from '../../middlewares/use-logger';
-import { LambdaFramework } from '../hooks/use-lambda';
+import type { LambdaFramework } from '../hooks/use-lambda';
 
 export type { Logger } from '../../middlewares/use-logger';
 
@@ -23,15 +23,6 @@ const makeRequestLogger = <
 >(
   props: Props<TArgs, TServices, TAuth, TRequest, TFramework>,
 ) => {
-  console.log({ request: props.request }, 'test');
-  console.log(
-    {
-      method: props.request.method,
-      path: props.request.path,
-    },
-    'remain',
-  );
-
   return createLogger({
     method: props.request.method,
     path: props.request.path,
@@ -60,7 +51,6 @@ export const makeLogger = <
   props: Props<TArgs, TServices, TAuth, TRequest, TFramework>,
 ) => {
   const framework = props.framework as unknown as LambdaFramework;
-  console.log('START', framework);
   if (framework.lambdaType === 'api') {
     return makeRequestLogger(props);
   } else if (framework.lambdaType === 'sqs') {

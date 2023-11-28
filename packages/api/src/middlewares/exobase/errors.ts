@@ -1,6 +1,6 @@
-import { Response } from '@exobase/core';
+import type { Response } from '@exobase/core';
 
-type Json = string | number | boolean | { [x: string]: Json } | Array<Json>;
+type Json = string | number | boolean | { [x: string]: Json } | Json[];
 
 /**
  * API Response codes are all upper

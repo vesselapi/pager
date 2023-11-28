@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.27.1",
+    "@headlessui/react": "^1.7.17",
     "@tanstack/react-query": "^5.8.1",
     "@tanstack/react-query-devtools": "^5.8.1",
     "@tanstack/react-query-next-experimental": "5.8.1",
@@ -23,9 +24,12 @@
     "@trpc/server": "next",
     "@vessel/api": "workspace:^0.1.0",
     "@vessel/db": "workspace:^0.1.0",
+    "classnames": "^2.3.2",
+    "date-fns": "^2.30.0",
     "next": "^14.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.12.0",
     "superjson": "2.2.0",
     "zod": "^3.22.3"
   },

@@ -28,6 +28,7 @@
     "radash": "^11.0.0",
     "resend": "^2.0.0",
     "serialize-error": "^11.0.3",
+    "simple-oauth2": "^5.0.0",
     "superjson": "2.2.0",
     "twilio": "^4.19.0",
     "zod": "^3.22.3"
@@ -35,9 +36,9 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.126",
     "@types/bunyan": "^1.8.11",
+    "@types/simple-oauth2": "5.0.7",
     "@vessel/eslint-config": "workspace:^0.2.0",
     "@vessel/prettier-config": "workspace:^0.1.0",
-    "@vessel/types": "workspace:^0.1.0",
     "@vessel/tsconfig": "workspace:^0.1.0",
     "@clerk/types": "3.58.0",
     "dotenv-cli": "^7.3.0",
