@@ -7,7 +7,7 @@ import { FlashList } from '@shopify/flash-list';
 import { api } from '~/utils/api';
 import type { RouterOutputs } from '~/utils/api';
 import { useAuth } from '@clerk/clerk-expo';
-import AlertListItem from './_components/AlertListItem';
+import AlertListItem from './(tabs)/alerts/_components/AlertListItem';
 
 const AlertsList = ({ alerts }) => {
   return (

@@ -1,14 +1,16 @@
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import * as SecureStore from 'expo-secure-store';
+import { StatusBar } from 'expo-status-bar';
 
 import { TRPCProvider } from '~/utils/api';
 
 import '../styles.css';
+
+import Constants from 'expo-constants';
 import { ClerkProvider } from '@clerk/clerk-expo';
-import Constants from "expo-constants"
-import { SignedOut, SignedIn } from '@clerk/clerk-react';
-import SignInWithOAuth from './_components/SignInWithOAuth';
+import { SignedIn, SignedOut } from '@clerk/clerk-react';
+
+import SignInWithOAuth from './(auth)/SignInWithOAuth';
 
 const tokenCache = {
   async getToken(key: string) {
@@ -29,7 +31,10 @@ const tokenCache = {
 
 const RootLayout = () => {
   return (
-    <ClerkProvider publishableKey={Constants.expoConfig?.extra?.clerkPublishableKey} tokenCache={tokenCache}>
+    <ClerkProvider
+      publishableKey={Constants.expoConfig?.extra?.clerkPublishableKey}
+      tokenCache={tokenCache}
+    >
       <SignedIn>
         <TRPCProvider>
           <Stack
@@ -38,7 +43,9 @@ const RootLayout = () => {
                 backgroundColor: 'white',
               },
             }}
-          />
+          >
+            <Stack.Screen name="(tabs)" />
+          </Stack>
           <StatusBar />
         </TRPCProvider>
       </SignedIn>
