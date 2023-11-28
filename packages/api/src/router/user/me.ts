@@ -33,8 +33,6 @@ export const userMe = procedure
     if (foundUser) return { user: foundUser };
 
     const org = await db.orgs.create();
-    console.log(org);
-    console.log('new user');
     const newUser = await ctx.db.user.create({
       email: claims.email,
       orgId: org.id,
