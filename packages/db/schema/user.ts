@@ -34,4 +34,5 @@ export const insertUserSchema = createInsertSchema(user, {
       .transform((x) => x as OrgId),
 });
 
+export type User = z.infer<typeof selectUserSchema>;
 export type CreateUser = z.infer<typeof insertUserSchema>;
