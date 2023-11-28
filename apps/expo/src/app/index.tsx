@@ -1,147 +1,110 @@
 import React from 'react';
-import { Button, Pressable, Text, TextInput, View } from 'react-native';
+import { Button, FlatList, Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link, Stack } from 'expo-router';
 import { FlashList } from '@shopify/flash-list';
 
 import { api } from '~/utils/api';
 import type { RouterOutputs } from '~/utils/api';
+import { useAuth } from '@clerk/clerk-expo';
 
-function PostCard(props: {
-  post: RouterOutputs['post']['all'][number];
-  onDelete: () => void;
-}) {
-  return (
-    <View className="flex flex-row rounded-lg bg-white/10 p-4">
-      <View className="flex-grow">
-        <Link
-          asChild
-          href={{
-            pathname: '/post/[id]',
-            params: { id: props.post.id },
-          }}
-        >
-          <Pressable>
-            <Text className="text-xl font-semibold text-pink-400">
-              {props.post.title}
-            </Text>
-            <Text className="mt-2 text-white">{props.post.content}</Text>
-          </Pressable>
-        </Link>
-      </View>
-      <Pressable onPress={props.onDelete}>
-        <Text className="font-bold uppercase text-pink-400">Delete</Text>
-      </Pressable>
-    </View>
-  );
-}
 
-function CreatePost() {
-  const utils = api.useContext();
+// const AlertsList = () => {
+//   const alerts = api.alert.all.useQuery({
+//     sorts: allSorts,
+//     filters: allFilters,
+//   });
+//   const updateAlert = api.alert.update.useMutation();
+//   const users = api.user.all.useQuery();
+//   const currentUser = useAuth();
 
-  const [title, setTitle] = React.useState('');
-  const [content, setContent] = React.useState('');
+//   return (
+//     <div className="flex flex-col">
+//       <div className="pt-4">
+//         {/* Alerts List */}
+//         <div className="h-screen overflow-y-auto">
+//           <div
+//             className={classNames({
+//               'px-10': display.style === 'expanded',
+//               'mt-4': !configsAreApplied,
+//               'border-t-[1px]':
+//                 !configsAreApplied && display.style === 'condensed',
+//             })}
+//           >
+//             {alerts.isFetching ? (
+//               <Spinner className="mt-5 px-10" />
+//             ) : (
+//               alerts.data?.map((a: RouterOutputs['alert']['all']['0']) => {
+//                 const user = users.data?.find((u) => u.id === a.assignedToId) ?? {
+//                   firstName: '',
+//                   lastName: '',
+//                 };
+//                 const update = async (
+//                   alert: Partial<RouterOutputs['alert']['all']['0']>,
+//                 ) => {
+//                   await updateAlert.mutateAsync({ id: a.id, alert });
+//                   await alerts.refetch();
+//                 };
 
-  const { mutate, error } = api.post.create.useMutation({
-    async onSuccess() {
-      setTitle('');
-      setContent('');
-      await utils.post.all.invalidate();
-    },
-  });
-
-  return (
-    <View className="mt-4">
-      <TextInput
-        className="mb-2 rounded bg-white/10 p-2 text-white"
-        placeholderTextColor="rgba(255, 255, 255, 0.5)"
-        value={title}
-        onChangeText={setTitle}
-        placeholder="Title"
-      />
-      {error?.data?.zodError?.fieldErrors.title && (
-        <Text className="mb-2 text-red-500">
-          {error.data.zodError.fieldErrors.title}
-        </Text>
-      )}
-      <TextInput
-        className="mb-2 rounded bg-white/10 p-2 text-white"
-        placeholderTextColor="rgba(255, 255, 255, 0.5)"
-        value={content}
-        onChangeText={setContent}
-        placeholder="Content"
-      />
-      {error?.data?.zodError?.fieldErrors.content && (
-        <Text className="mb-2 text-red-500">
-          {error.data.zodError.fieldErrors.content}
-        </Text>
-      )}
-      <Pressable
-        className="rounded bg-pink-400 p-2"
-        onPress={() => {
-          mutate({
-            title,
-            content,
-          });
-        }}
-      >
-        <Text className="font-semibold text-white">Publish post</Text>
-      </Pressable>
-      {error?.data?.code === 'UNAUTHORIZED' && (
-        <Text className="mt-2 text-red-500">
-          You need to be logged in to create a post
-        </Text>
-      )}
-    </View>
-  );
-}
+//                 return (
+//                   <AlertsListItem
+//                     key={a.id}
+//                     style={display.style}
+//                     createdAt={a.createdAt}
+//                     title={a.title}
+//                     status={a.status}
+//                     firstName={user.firstName}
+//                     lastName={user.lastName}
+//                     onAck={() => update({ status: 'ACKED' })}
+//                     onClose={() => update({ status: 'CLOSED' })}
+//                     onSelfAssign={() => update({ assignedToId: currentUser.userId })}
+//                     onReopen={() => update({ status: 'OPEN' })}
+//                   />
+//                 );
+//               })
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 const Index = () => {
-  const utils = api.useContext();
+  const alerts = [
+    {
+      name: 'hi',
+      id: 2
+    },
+    {
+      name: 'hello',
+      id: 3
+    },
+    {
+      name: 'hey',
+      id: 4
+    },
+    {
+      name: 'howdy',
+      id: 5
+    }
+  ]
 
-  const postQuery = api.post.all.useQuery();
-
-  const deletePostMutation = api.post.delete.useMutation({
-    onSettled: () => utils.post.all.invalidate(),
-  });
+  const currentUser = useAuth();
 
   return (
-    <SafeAreaView className="bg-[#1F104A]">
-      {/* Changes page title visible on the header */}
-      <Stack.Screen options={{ title: 'Home Page' }} />
-      <View className="h-full w-full p-4">
-        <Text className="pb-2 text-center text-5xl font-bold text-white">
-          Create <Text className="text-pink-400">T3</Text> Turbo
-        </Text>
-
-        <Button
-          onPress={() => void utils.post.all.invalidate()}
-          title="Refresh posts"
-          color={'#f472b6'}
-        />
-
-        <View className="py-2">
-          <Text className="font-semibold italic text-white">
-            Press on a post
-          </Text>
-        </View>
-
-        <FlashList
-          data={postQuery.data}
-          estimatedItemSize={20}
-          ItemSeparatorComponent={() => <View className="h-2" />}
-          renderItem={(p) => (
-            <PostCard
-              post={p.item}
-              onDelete={() => deletePostMutation.mutate(p.item.id)}
-            />
-          )}
-        />
-
-        <CreatePost />
-      </View>
+    <SafeAreaView>
+      <Stack.Screen options={{ title: 'Alerts' }} />
+      <FlatList
+        data={alerts}
+        renderItem={({ item }) => <View><Text>{item.name}</Text></View>}
+        keyExtractor={item => `${item.id}`}
+      />
+      <Text>{currentUser.isSignedIn}</Text>
+      <Text>{currentUser.userId}</Text>
     </SafeAreaView>
-  );
+  )
+
 };
 
 export default Index;
