@@ -1,3 +1,11 @@
+import {
+  Chain,
+  StateMachine,
+  TaskInput,
+  Wait,
+  WaitTime,
+} from 'aws-cdk-lib/aws-stepfunctions';
+import { SqsSendMessage } from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { isString, mapValues, shake } from 'radash';
 import type { StackContext } from 'sst/constructs';
 import { Api, Function, Queue, Topic } from 'sst/constructs';
@@ -40,5 +48,23 @@ export function CoreStack({ stack }: StackContext) {
     subscribers: {
       subscriber1: alertOncallQueue,
     },
+  });
+
+  // Step function for alerting oncall
+  const alertOncallWaitTask = new Wait(stack, 'AlertOncallWaitTask', {
+    time: WaitTime.secondsPath('$.waitSeconds'),
+  });
+  const alertOncallQueueTask = new SqsSendMessage(
+    stack,
+    'AlertOncallQueueTask',
+    {
+      queue: alertOncallQueue.cdk.queue,
+      messageBody: TaskInput.fromJsonPathAt('$.message'),
+    },
+  );
+  const stateDefinition =
+    Chain.start(alertOncallWaitTask).next(alertOncallQueueTask);
+  new StateMachine(stack, 'AlertOncallStepFn', {
+    definition: stateDefinition,
   });
 }
