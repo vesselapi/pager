@@ -44,7 +44,7 @@ const alert = async ({
     orgId: auth.orgId,
     ...alert,
   });
-  await pubsub.alert.publish(dbAlert);
+  await pubsub.alert.publish({ id: dbAlert.id });
   return { success: true };
 };
 

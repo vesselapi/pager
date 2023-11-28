@@ -78,7 +78,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .insert(alertSchema)
         .values(newAlert)
         .returning();
-      return dbAlerts[0];
+      return selectAlertSchema.parse(dbAlerts[0]);
     },
   },
   alertEvent: {
