@@ -21,6 +21,7 @@
     "@trpc/client": "next",
     "@trpc/react-query": "next",
     "@trpc/server": "next",
+    "date-fns": "^2.30.0",
     "expo": "^49.0.16",
     "expo-auth-session": "^5.2.0",
     "expo-constants": "~14.4.2",

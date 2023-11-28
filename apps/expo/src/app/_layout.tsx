@@ -9,7 +9,6 @@ import { ClerkProvider } from '@clerk/clerk-expo';
 import Constants from "expo-constants"
 import { SignedOut, SignedIn } from '@clerk/clerk-react';
 import SignInWithOAuth from './_components/SignInWithOAuth';
-import { Text } from 'react-native';
 
 const tokenCache = {
   async getToken(key: string) {
@@ -31,8 +30,8 @@ const tokenCache = {
 const RootLayout = () => {
   return (
     <ClerkProvider publishableKey={Constants.expoConfig?.extra?.clerkPublishableKey} tokenCache={tokenCache}>
-      <TRPCProvider>
-        <SignedIn>
+      <SignedIn>
+        <TRPCProvider>
           <Stack
             screenOptions={{
               headerStyle: {
@@ -41,11 +40,11 @@ const RootLayout = () => {
             }}
           />
           <StatusBar />
-        </SignedIn>
-        <SignedOut>
-          <SignInWithOAuth />
-        </SignedOut>
-      </TRPCProvider>
+        </TRPCProvider>
+      </SignedIn>
+      <SignedOut>
+        <SignInWithOAuth />
+      </SignedOut>
     </ClerkProvider>
   );
 };

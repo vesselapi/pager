@@ -168,9 +168,9 @@ const AlertsList = () => {
                       [...srts].map((sort) =>
                         sort === s
                           ? {
-                              ...sort,
-                              order: sort.order === 'desc' ? 'asc' : 'desc',
-                            }
+                            ...sort,
+                            order: sort.order === 'desc' ? 'asc' : 'desc',
+                          }
                           : sort,
                       ),
                     )
@@ -262,7 +262,7 @@ const AlertsList = () => {
                   lastName={user.lastName}
                   onAck={() => update({ status: 'ACKED' })}
                   onClose={() => update({ status: 'CLOSED' })}
-                  onSelfAssign={() => update({ assignedToId: currentUser.id })}
+                  onSelfAssign={() => update({ assignedToId: currentUser.userId })}
                   onReopen={() => update({ status: 'OPEN' })}
                 />
               );

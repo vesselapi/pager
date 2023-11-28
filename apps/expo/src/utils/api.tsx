@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/client';
 import { createTRPCReact } from '@trpc/react-query';
 import superjson from 'superjson';
+import { useAuth } from "@clerk/clerk-expo";
+
 
 import type { AppRouter } from '@vessel/api';
 
@@ -45,6 +47,7 @@ const getBaseUrl = () => {
  */
 
 export function TRPCProvider(props: { children: React.ReactNode }) {
+  const { getToken } = useAuth();
   const [queryClient] = React.useState(() => new QueryClient());
   const [trpcClient] = React.useState(() =>
     api.createClient({
@@ -52,9 +55,13 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
       links: [
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
-          headers() {
+          async headers() {
             const headers = new Map<string, string>();
             headers.set('x-trpc-source', 'expo-react');
+            const authToken = await getToken();
+            // TODO(@zkirby): Should we be throwing an error if there's no auth
+            // token? Endpoints would fail but this should never happen in theory.
+            if (authToken) headers.set('Authorization', authToken);
             return Object.fromEntries(headers);
           },
         }),
