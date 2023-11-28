@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Db, db } from '@vessel/db';
 import { APP_ID } from '@vessel/types';
 
+import { env } from '../../../env.mjs';
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 import { Integrations, makeIntegrations } from '../../services/integrations';
@@ -45,8 +46,7 @@ export const integrationOAuthStart = trpc
 
     const authUrl = await oauth2Client.authorizeURL({
       config: auth,
-      // TODO: set redirect URI accordingly
-      redirectUri: `https://app.vessel.dev/settings/integrations/${appId}`,
+      redirectUri: `${env.VERCEL_URL}/settings/integrations/oauth-callback/${appId}`,
     });
     return {
       authUrl,

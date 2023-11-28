@@ -26,21 +26,10 @@ export const IdGenerator = {
   alert: (): AlertId => `v_alert_${randomString()}`,
   apiToken: (apiToken: ApiToken): ApiTokenId =>
     `v_secret_apiToken_${hash(apiToken)}`,
-  integration: ({
-    orgId,
-    appId,
-  }: {
-    orgId: OrgId;
-    appId: AppId;
-  }): IntegrationId => `v_integration_${orgId}_${appId}`,
+  integration: (): IntegrationId => `v_integration_${randomString()}`,
   secrets: {
-    integration: ({
-      orgId,
-      appId,
-    }: {
-      orgId: OrgId;
-      appId: AppId;
-    }): SecretIntegrationId => `v_secret_integration_${orgId}_${appId}`,
+    integration: (): SecretIntegrationId =>
+      `v_secret_integration_${randomString()}`,
   },
   org: (): OrgId => `v_org_${randomString()}`,
   user: (): UserId => `v_user_${randomString()}`,

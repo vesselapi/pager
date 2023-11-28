@@ -103,17 +103,14 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     },
     create: async (integration: Omit<CreateIntegration, 'id'>) => {
       const newIntegration = insertIntegrationSchema.parse({
-        id: IdGenerator.integration({
-          orgId: integration.orgId,
-          appId: integration.appId,
-        }),
-        ...alert,
+        id: IdGenerator.integration(),
+        ...integration,
       });
-      const dbAlert = await db
+      const dbIntegration = await db
         .insert(integrationSchema)
         .values(newIntegration)
         .returning();
-      return selectAlertSchema.parse(dbAlert);
+      return selectIntegrationSchema.parse(dbIntegration[0]);
     },
   },
   orgs: {
