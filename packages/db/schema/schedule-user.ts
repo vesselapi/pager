@@ -62,4 +62,7 @@ export const insertScheduleUserSchema = createInsertSchema(scheduleUser, {
       .transform((x) => x as ScheduleId),
 });
 
-export type CreateScheduleUser = z.infer<typeof insertScheduleUserSchema>;
+export type CreateScheduleUser = Omit<
+  z.infer<typeof insertScheduleUserSchema>,
+  'id'
+>;

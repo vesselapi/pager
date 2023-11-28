@@ -32,4 +32,7 @@ export const insertIntegrationSchema = createInsertSchema(integration, {
   orgId: (schema) => schema.orgId.transform((x) => x as OrgId),
 });
 
-export type CreateIntegration = z.infer<typeof insertIntegrationSchema>;
+export type CreateIntegration = Omit<
+  z.infer<typeof insertIntegrationSchema>,
+  'id'
+>;

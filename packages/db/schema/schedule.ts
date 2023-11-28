@@ -37,4 +37,4 @@ export const insertScheduleSchema = createInsertSchema(schedule, {
       message: 'rotationCron is not valid cron',
     }),
 });
-export type CreateSchedule = z.infer<typeof insertScheduleSchema>;
+export type CreateSchedule = Omit<z.infer<typeof insertScheduleSchema>, 'id'>;

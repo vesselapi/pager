@@ -118,7 +118,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       });
       return integrations.map((x) => selectIntegrationSchema.parse(x));
     },
-    create: async (integration: Omit<CreateIntegration, 'id'>) => {
+    create: async (integration: CreateIntegration) => {
       const newIntegration = insertIntegrationSchema.parse({
         id: IdGenerator.integration({
           orgId: integration.orgId,
@@ -181,7 +181,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       });
       return users.map((a) => selectUserSchema.parse(a));
     },
-    create: async (user: Omit<CreateUser, 'id'>) => {
+    create: async (user: CreateUser) => {
       const dbUser = await db
         .insert(userSchema)
         .values({
@@ -215,7 +215,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       });
       return schedules.map((schedule) => selectScheduleSchema.parse(schedule));
     },
-    create: async (schedule: Omit<CreateSchedule, 'id'>) => {
+    create: async (schedule: CreateSchedule) => {
       const parsedSchedule = insertScheduleSchema.parse(schedule);
       const dbSchedule = await db
         .insert(scheduleSchema)
@@ -229,7 +229,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     },
   },
   scheduleUsers: {
-    createMany: async (scheduleUsers: Omit<CreateScheduleUser, 'id'>[]) => {
+    createMany: async (scheduleUsers: CreateScheduleUser[]) => {
       const insertScheduleUsers = scheduleUsers.map((scheduleUser) => {
         const insertScheduleUser = {
           id: IdGenerator.scheduleUser(),
