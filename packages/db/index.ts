@@ -185,7 +185,8 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return selectSecretSchema.parse(secret);
     },
     create: async (secret: z.infer<typeof insertSecretSchema>) => {
-      await db.insert(secretSchema).values(secret);
+      const dbSecret = await db.insert(secretSchema).values(secret).returning();
+      return selectSecretSchema.parse(dbSecret[0]);
     },
   },
 });

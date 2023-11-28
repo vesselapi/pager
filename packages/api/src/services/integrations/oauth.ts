@@ -78,7 +78,7 @@ export const makeOauth2Client = () => ({
     oauthRequest: Record<string, string>;
   }): Promise<{
     accessToken: string;
-    refreshToken: string | null;
+    refreshToken: string;
     oauthResponse: Record<string, string | number>;
   }> => {
     const client = new AuthorizationCode(
@@ -91,7 +91,7 @@ export const makeOauth2Client = () => ({
     });
     return {
       accessToken: accessToken.token.access_token as string,
-      refreshToken: (accessToken.token.refresh_token as string) ?? null,
+      refreshToken: accessToken.token.refresh_token as string,
       oauthResponse: accessToken.token as Record<string, string | number>,
     };
   },

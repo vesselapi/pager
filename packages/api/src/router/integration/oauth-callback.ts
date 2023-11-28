@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { Db, db } from '@vessel/db';
-import { APP_ID, Json } from '@vessel/types';
+import { APP_ID, Json, SecretIntegration } from '@vessel/types';
 
 import { env } from '../../../env.mjs';
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
@@ -57,16 +57,20 @@ export const integrationOAuthCallback = trpc
       });
     }
 
-    const oauthResponse = await oauth2Client.exchange({
-      config: auth,
-      code,
-      redirectUri: `${env.VERCEL_URL}/settings/integrations/oauth-callback/${appId}`,
-      oauthRequest: input as Record<string, string>,
-    });
+    const { accessToken, refreshToken, oauthResponse } =
+      await oauth2Client.exchange({
+        config: auth,
+        code,
+        redirectUri: `${env.VERCEL_URL}/settings/integrations/oauth-callback/${appId}`,
+        oauthRequest: input as Record<string, string>,
+      });
 
-    const secret = {
+    const secret: SecretIntegration = {
+      type: 'oauth',
       oauthRequest: input,
       oauthResponse,
+      accessToken,
+      refreshToken,
     };
     await integrations.create({ orgId: user.orgId, appId, secret });
     return { success: true };
