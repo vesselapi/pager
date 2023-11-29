@@ -1,11 +1,14 @@
 import { NotAuthenticatedError, type Props } from '@exobase/core';
 import { useJsonBody, useServices } from '@exobase/hooks';
 import {
+  Logger,
+  makeLogger,
+} from '@vessel/api/src/middlewares/exobase/services/make-logger';
+import {
   Integrations,
   makeIntegrations,
 } from '@vessel/api/src/services/integrations';
 import * as crypto from 'crypto';
-import z from 'zod';
 
 import { vessel } from '@vessel/api/src/middlewares/exobase/hooks/common-hooks';
 import {
@@ -14,12 +17,14 @@ import {
 } from '@vessel/api/src/services/alert-manager';
 
 import { Json } from '@vessel/types';
+import { z } from 'zod';
 import { Db, db } from '../../../../../packages/db';
 
 interface Services {
   db: Db;
   integrations: Integrations;
   alertManager: AlertManager;
+  logger: Logger;
 }
 
 interface Result {
@@ -137,8 +142,12 @@ const sentryWebhook = async ({
   request,
 }: Props<SentryPayload, Services>): Promise<Result> => {
   const headers = request.headers as unknown as SentryWebhookHeaders;
+  const { db, integrations, alertManager, logger } = services;
 
-  const { db, integrations, alertManager } = services;
+  if (['installation'].includes(headers['sentry-hook-resource'])) {
+    return { success: true };
+  }
+
   const integration = integrations.find('sentry');
 
   const verifySignature = () => {
@@ -191,6 +200,7 @@ export const main = vessel()
       db: () => db,
       integrations: makeIntegrations(),
       alertManager: makeAlertManager(),
+      logger: makeLogger,
     }),
   )
   .hook(useJsonBody<SentryPayload>(z.object({}).passthrough()))
