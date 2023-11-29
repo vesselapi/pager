@@ -462,6 +462,10 @@ importers:
         version: 5.2.2
 
   packages/types:
+    dependencies:
+      zod:
+        specifier: ^3.22.3
+        version: 3.22.3
     devDependencies:
       '@vessel/eslint-config':
         specifier: workspace:^0.2.0
