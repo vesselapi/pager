@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-import React from 'react';
-import Constants from 'expo-constants';
 import { useAuth } from '@clerk/clerk-expo';
-||||||| 31d632e
-import React from 'react';
-import Constants from 'expo-constants';
-=======
->>>>>>> main
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/client';
 import { createTRPCReact } from '@trpc/react-query';
@@ -68,7 +60,10 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
 
             const authToken = await getToken();
             if (authToken) headers.set('Authorization', authToken);
-            else throw new Error(`Expected AuthToken to be present but got ${authToken}`)
+            else
+              throw new Error(
+                `Expected AuthToken to be present but got ${authToken}`,
+              );
 
             return Object.fromEntries(headers);
           },
