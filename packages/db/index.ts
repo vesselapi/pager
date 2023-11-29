@@ -22,6 +22,18 @@ import {
   alertEvent as alertEventSchema,
   selectAlertEventSchema,
 } from './schema/alertEvent';
+import {
+  CreateEscalationPolicy,
+  escalationPolicy as escalationPolicySchema,
+  insertEscalationPolicySchema,
+  selectEscalationPolicySchema,
+} from './schema/escalation-policy';
+import {
+  CreateEscalationPolicyStep,
+  escalationPolicyStep as escalationPolicyStepSchema,
+  insertEscalationPolicyStepSchema,
+  selectEscalationPolicyStepSchema,
+} from './schema/escalation-policy-step';
 import type { CreateIntegration } from './schema/integration';
 import {
   insertIntegrationSchema,
@@ -55,6 +67,8 @@ import { selectUserSchema, user as userSchema } from './schema/user';
 export const schema = {
   alert: alertSchema,
   alertEvent: alertEventSchema,
+  escalationPolicy: escalationPolicySchema,
+  escalationPolicyStep: escalationPolicyStepSchema,
   integration: integrationSchema,
   org: orgSchema,
   user: userSchema,
@@ -113,6 +127,36 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     list: async (...args: Parameters<typeof db.query.alertEvent.findMany>) => {
       const alertEvents = await db.query.alertEvent.findMany(...args);
       return alertEvents.map((a) => selectAlertEventSchema.parse(a));
+    },
+  },
+  escalationPolicy: {
+    create: async (escalationPolicy: CreateEscalationPolicy) => {
+      const insertEscalationPolicy = insertEscalationPolicySchema.parse({
+        id: IdGenerator.escalationPolicy(),
+        ...escalationPolicy,
+      });
+      const dbEscalationPolicy = await db
+        .insert(escalationPolicySchema)
+        .values(insertEscalationPolicy)
+        .returning();
+      return selectEscalationPolicySchema.parse(dbEscalationPolicy[0]);
+    },
+  },
+  escalationPolicyStep: {
+    createMany: async (escalationPolicySteps: CreateEscalationPolicyStep[]) => {
+      const insertEscalationPolicySteps = escalationPolicySteps.map((step) =>
+        insertEscalationPolicyStepSchema.parse({
+          id: IdGenerator.escalationPolicyStep(),
+          ...step,
+        }),
+      );
+      const dbEscalationPolicyStep = await db
+        .insert(escalationPolicyStepSchema)
+        .values(insertEscalationPolicySteps)
+        .returning();
+      return dbEscalationPolicyStep.map((step) =>
+        selectEscalationPolicyStepSchema.parse(step),
+      );
     },
   },
   integrations: {
