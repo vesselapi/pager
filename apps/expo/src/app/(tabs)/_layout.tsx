@@ -1,6 +1,6 @@
-import { Text, View } from 'react-native';
 import FeatherIcons from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Text, View } from 'react-native';
 
 import { useUser } from '../hooks/useUser';
 import AlertListPage from './(alerts)';

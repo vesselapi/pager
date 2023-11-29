@@ -7,9 +7,9 @@ import { TRPCProvider } from '~/utils/api';
 
 import '../styles.css';
 
-import Constants from 'expo-constants';
 import { ClerkProvider } from '@clerk/clerk-expo';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
+import Constants from 'expo-constants';
 
 import SignInWithOAuth from './(auth)/SignInWithOAuth';
 

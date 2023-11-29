@@ -1,7 +1,7 @@
-import { Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
-import { capitalize } from 'radash'
+import { capitalize } from 'radash';
+import { Text, View } from 'react-native';
 
 const StatusToColor = {
   ACKED: 'text-blue-800 bg-blue-200',

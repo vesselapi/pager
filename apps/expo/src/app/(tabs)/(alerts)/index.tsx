@@ -2,10 +2,10 @@ import React from 'react';
 import { ActivityIndicator, FlatList, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Stack } from 'expo-router';
 import { api } from '~/utils/api';
 import { useUser } from '../../hooks/useUser';
 import AlertListItem from './_components/AlertListItem';
-import { Stack } from 'expo-router';
 
 const AlertsList = ({ alerts, user }) => {
   return (
