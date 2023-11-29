@@ -53,7 +53,7 @@ export const useApiTokenAuth = () =>
         }
 
         const auth: ApiTokenAuth = {
-          apiToken: apiToken ,
+          apiToken: apiToken,
           orgId: apiTokenSecret.orgId!,
         };
 

@@ -7,9 +7,7 @@ import type {
   ApiTokenId,
   OrgId,
   SecretId,
-  SecretIntegrationId} from '@vessel/types';
-import {
-  AppId
+  SecretIntegrationId,
 } from '@vessel/types';
 
 import { env } from '../../env.mjs';

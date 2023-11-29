@@ -2,7 +2,7 @@ import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 
-import type { OrgId, ScheduleId} from '@vessel/types';
+import type { OrgId, ScheduleId } from '@vessel/types';
 import { OrgIdRegex, ScheduleIdRegex } from '@vessel/types';
 
 import { org } from './org';

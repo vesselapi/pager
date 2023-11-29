@@ -1,4 +1,4 @@
-import { isFunction, isString } from 'radash';
+import { isString } from 'radash';
 import { AuthorizationCode } from 'simple-oauth2';
 
 import type { OAuth2Config } from './auth';

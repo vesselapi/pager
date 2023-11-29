@@ -1,7 +1,7 @@
 import { db } from '@vessel/db';
 import type { AppId, OrgId, SecretIntegration } from '@vessel/types';
 
-import { Json, makeSecretManager } from '../secret-manager';
+import { makeSecretManager } from '../secret-manager';
 import { sentry } from './app/sentry';
 import type { Platform } from './platform';
 
