@@ -1,5 +1,4 @@
 import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
 
 import type { Db } from '@vessel/db';
 import { db } from '@vessel/db';
@@ -11,15 +10,12 @@ interface Context {
   db: Db;
 }
 
-const input = z.object({ id: z.string() });
-
 export const userMe = procedure
   .use(
     useServicesHook<Context>({
       db: () => db,
     }),
   )
-  .input(input)
   .mutation(async ({ ctx }) => {
     const claims = ctx.auth.claims;
     if (!claims) {

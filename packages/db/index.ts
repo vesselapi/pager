@@ -22,36 +22,33 @@ import {
   alertEvent as alertEventSchema,
   selectAlertEventSchema,
 } from './schema/alertEvent';
+import type { CreateIntegration } from './schema/integration';
 import {
-  CreateIntegration,
   insertIntegrationSchema,
   integration as integrationSchema,
   selectIntegrationSchema,
 } from './schema/integration';
 import { org as orgSchema, selectOrgSchema } from './schema/org';
+import type { CreateRotation } from './schema/rotation';
 import {
-  CreateRotation,
   insertRotationSchema,
   rotation as rotationSchema,
   selectRotationSchema,
 } from './schema/rotation';
+import type { CreateRotationUser } from './schema/rotation-user';
 import {
-  CreateRotationUser,
   insertRotationUserSchema,
   rotationUser as rotationUserSchema,
   selectRotationUserSchema,
 } from './schema/rotation-user';
+import type { CreateSchedule } from './schema/schedule';
 import {
-  CreateSchedule,
   insertScheduleSchema,
   schedule as scheduleSchema,
   selectScheduleSchema,
 } from './schema/schedule';
-import {
-  insertSecretSchema,
-  secret as secretSchema,
-  selectSecretSchema,
-} from './schema/secret';
+import type { insertSecretSchema } from './schema/secret';
+import { secret as secretSchema, selectSecretSchema } from './schema/secret';
 import type { CreateUser } from './schema/user';
 import { selectUserSchema, user as userSchema } from './schema/user';
 

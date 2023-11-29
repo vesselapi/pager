@@ -47,12 +47,12 @@ export const ApiTokenRegex = /^v_apiToken_[a-z0-9]+_[a-z0-9]+$/;
 
 export type SecretIntegrationId = `v_secret_integration_${string}`;
 
-export type SecretIntegrationOAuth = {
+export interface SecretIntegrationOAuth {
   type: 'oauth';
   oauthRequest: Json;
   oauthResponse: Json;
   refreshToken: string;
   accessToken: string;
-};
+}
 
 export type SecretIntegration = SecretIntegrationOAuth;

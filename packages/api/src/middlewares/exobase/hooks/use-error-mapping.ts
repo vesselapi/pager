@@ -1,8 +1,8 @@
 import type { Response } from '@exobase/core';
 import { ExobaseError } from '@exobase/core';
 import { useCatch } from '@exobase/hooks';
-import { isArray } from 'radash';
 import type { AggregateError } from 'radash';
+import { isArray } from 'radash';
 import { serializeError } from 'serialize-error';
 
 /**

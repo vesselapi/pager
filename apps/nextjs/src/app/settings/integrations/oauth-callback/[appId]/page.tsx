@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { AppId } from '@vessel/types';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
+
+import React, { useEffect } from 'react';
 
 import Spinner from '~/app/_components/Spinner';
 import { api } from '~/utils/api';
-import { PageProps } from '.next/types/app/layout';
 
-const OAuthCallbackPage = ({ params }: PageProps) => {
+const OAuthCallbackPage = ({ params }: { appId: AppId }) => {
   const router = useRouter();
   const getOAuthCallback = api.integration.oauthCallback.useMutation({
     onSuccess: () => {
