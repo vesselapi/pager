@@ -1,4 +1,4 @@
-import { pgTable, text } from 'drizzle-orm/pg-core';
+import { numeric, pgTable, text } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
@@ -14,10 +14,11 @@ export const escalationPolicyStep = pgTable('escalation_policy_step', {
   id: text('id').primaryKey(),
   escalationPolicyId: text('escalation_policy_id').references(
     () => escalationPolicy.id,
-  ),
+  ).notNull(),
   orgId: text('org_id')
     .references(() => org.id)
     .notNull(),
+  nextStepInSeconds: numeric('next_step_in_seconds').notNull(),
   scheduleId: text('schedule_id').references(() => schedule.id),
   rotationId: text('rotation_id').references(() => rotation.id),
   userId: text('user_id').references(() => user.id),

@@ -22,6 +22,7 @@ const input = z.object({
         scheduleId: true,
         rotationId: true,
         userId: true,
+        nextStepInSeconds: true,
       }),
     }),
   ),
