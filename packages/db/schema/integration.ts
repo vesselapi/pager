@@ -2,8 +2,8 @@ import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-import { APP_ID, IntegrationIdRegex } from '@vessel/types';
 import type { IntegrationId, OrgId } from '@vessel/types';
+import { APP_ID, IntegrationIdRegex } from '@vessel/types';
 
 import { org } from './org';
 
