@@ -1,7 +1,7 @@
 import { isFunction, isString } from 'radash';
 import { AuthorizationCode } from 'simple-oauth2';
 
-import { OAuth2Config } from './auth';
+import type { OAuth2Config } from './auth';
 
 type SimpleOauth2Config = ConstructorParameters<typeof AuthorizationCode>[0];
 

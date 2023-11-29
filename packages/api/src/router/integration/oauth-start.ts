@@ -1,16 +1,19 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import { Db, db } from '@vessel/db';
+import type { Db} from '@vessel/db';
+import { db } from '@vessel/db';
 import { APP_ID } from '@vessel/types';
 
 import { env } from '../../../env.mjs';
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
-import { Integrations, makeIntegrations } from '../../services/integrations';
+import type { Integrations} from '../../services/integrations';
+import { makeIntegrations } from '../../services/integrations';
+import type {
+  Oauth2Client} from '../../services/integrations/oauth';
 import {
-  makeOauth2Client,
-  Oauth2Client,
+  makeOauth2Client
 } from '../../services/integrations/oauth';
 
 interface Context {

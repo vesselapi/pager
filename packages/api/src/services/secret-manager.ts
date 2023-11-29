@@ -2,13 +2,14 @@ import crypto from 'crypto';
 
 import { db } from '@vessel/db';
 import { IdGenerator, randomString } from '@vessel/db/id-generator';
-import {
+import type {
   ApiToken,
   ApiTokenId,
-  AppId,
   OrgId,
   SecretId,
-  SecretIntegrationId,
+  SecretIntegrationId} from '@vessel/types';
+import {
+  AppId
 } from '@vessel/types';
 
 import { env } from '../../env.mjs';

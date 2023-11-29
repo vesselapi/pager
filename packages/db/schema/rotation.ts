@@ -1,13 +1,14 @@
 import { numeric, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
+import type { z } from 'zod';
 
-import {
+import type {
   OrgId,
-  OrgIdRegex,
   RotationId,
+  ScheduleId} from '@vessel/types';
+import {
+  OrgIdRegex,
   RotationIdRegex,
-  ScheduleId,
   ScheduleIdRegex,
 } from '@vessel/types';
 
