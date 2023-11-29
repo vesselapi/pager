@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@vessel/tsconfig": "workspace:^0.1.0",
+    "prettier-plugin-organize-imports": "^3.2.4",
     "typescript": "^5.2.2"
   },
   "prettier": "@vessel/prettier-config"

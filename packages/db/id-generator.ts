@@ -4,7 +4,6 @@ import type {
   AlertId,
   ApiToken,
   ApiTokenId,
-  AppId,
   EscalationPolicyId,
   EscalationPolicyStepId,
   IntegrationId,

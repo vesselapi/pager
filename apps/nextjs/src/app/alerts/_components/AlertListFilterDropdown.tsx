@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import classNames from 'classnames';
+import React, { useState } from 'react';
 import { MdFilterList, MdOutlineClose } from 'react-icons/md';
 
 import Dropdown from '../../_components/Dropdown';

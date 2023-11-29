@@ -13,7 +13,7 @@ import {
   ScheduleIdRegex,
   UserId,
   UserIdRegex,
-} from './index';
+} from './types';
 
 const regexValidator = (regex: RegExp) =>
   z.string().regex(regex, `Invalid id, expected format ${regex}`);

@@ -1,10 +1,12 @@
 import { objectify } from 'radash';
 
-import { Db, db } from '@vessel/db';
+import type { Db } from '@vessel/db';
+import { db } from '@vessel/db';
 
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
-import { Integrations, makeIntegrations } from '../../services/integrations';
+import type { Integrations } from '../../services/integrations';
+import { makeIntegrations } from '../../services/integrations';
 
 interface Context {
   db: Db;
