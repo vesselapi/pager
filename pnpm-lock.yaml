@@ -4335,7 +4335,7 @@ packages:
   /@expo/config-plugins@7.4.0:
     resolution: {integrity: sha512-/BwYRl6QQ9ZKYpVaIqHE5sSPqNZI9CUtfLfYHhpnShQUA1KHRMi6y9zjb3IXJisk0/fcrtRm2yP3A7F0l304sQ==}
     dependencies:
-      '@expo/config-types': 50.0.0-canary-20231125-d600e44
+      '@expo/config-types': 50.0.0-alpha.2
       '@expo/json-file': 8.2.37
       '@expo/plist': 0.0.20
       '@expo/sdk-runtime-versions': 1.0.0
@@ -4357,7 +4357,7 @@ packages:
   /@expo/config-plugins@7.5.0:
     resolution: {integrity: sha512-qOKjmgbddLh1vj9ytUT6AduhEans2cHgS42nopVgh5Wz8X+QUvPcCr1Yc8MvLM3OlbswBMCJceeosZa463i0uA==}
     dependencies:
-      '@expo/config-types': 50.0.0-canary-20231125-d600e44
+      '@expo/config-types': 50.0.0-alpha.2
       '@expo/fingerprint': 0.2.0
       '@expo/json-file': 8.2.37
       '@expo/plist': 0.0.20
@@ -4380,8 +4380,8 @@ packages:
   /@expo/config-types@49.0.0:
     resolution: {integrity: sha512-8eyREVi+K2acnMBe/rTIu1dOfyR2+AMnTLHlut+YpMV9OZPdeKV0Bs9BxAewGqBA2slslbQ9N39IS2CuTKpXkA==}
 
-  /@expo/config-types@50.0.0-canary-20231125-d600e44:
-    resolution: {integrity: sha512-OjIHA45zyt+gN5gUN1ZswCKJasADKB3zY9VIRnyH77fH84HVesIomUwQBy0vmuudQZ1X5JRd36JyWjNt5JNUIQ==}
+  /@expo/config-types@50.0.0-alpha.2:
+    resolution: {integrity: sha512-eAUMUg4wnw0bYovs+isibq4l9ssMacS/r0NolDxDdIX/N+ZjIEZ5DEl5GO8dnD0dKbN/DPWwUln7SG/nSYHfmw==}
     dev: false
 
   /@expo/config@8.1.2:
@@ -4407,7 +4407,7 @@ packages:
     dependencies:
       '@babel/code-frame': 7.10.4
       '@expo/config-plugins': 7.5.0
-      '@expo/config-types': 50.0.0-canary-20231125-d600e44
+      '@expo/config-types': 50.0.0-alpha.2
       '@expo/json-file': 8.2.37
       getenv: 1.0.0
       glob: 7.1.6
@@ -4603,7 +4603,7 @@ packages:
     dependencies:
       '@expo/config': 8.3.1
       '@expo/config-plugins': 7.4.0
-      '@expo/config-types': 50.0.0-canary-20231125-d600e44
+      '@expo/config-types': 50.0.0-alpha.2
       '@expo/image-utils': 0.3.22
       '@expo/json-file': 8.2.37
       debug: 4.3.4
