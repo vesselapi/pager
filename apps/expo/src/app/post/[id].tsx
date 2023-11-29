@@ -1,5 +1,5 @@
-import { SafeAreaView, Text, View } from 'react-native';
 import { Stack, useGlobalSearchParams } from 'expo-router';
+import { SafeAreaView, Text, View } from 'react-native';
 
 import { api } from '~/utils/api';
 
