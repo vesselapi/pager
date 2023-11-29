@@ -2,9 +2,7 @@ import { pgTable, text } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
-import {
-  customValidators,
-} from '@vessel/types';
+import { customValidators } from '@vessel/types';
 
 import { org } from './org';
 

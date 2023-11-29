@@ -23,6 +23,18 @@ import {
   selectAlertEventSchema,
 } from './schema/alertEvent';
 import {
+  CreateEscalationPolicy,
+  escalationPolicy as escalationPolicySchema,
+  insertEscalationPolicySchema,
+  selectEscalationPolicySchema,
+} from './schema/escalation-policy';
+import {
+  CreateEscalationPolicyStep,
+  escalationPolicyStep as escalationPolicyStepSchema,
+  insertEscalationPolicyStepSchema,
+  selectEscalationPolicyStepSchema,
+} from './schema/escalation-policy-step';
+import {
   CreateIntegration,
   insertIntegrationSchema,
   integration as integrationSchema,
@@ -54,8 +66,6 @@ import {
 } from './schema/secret';
 import type { CreateUser } from './schema/user';
 import { selectUserSchema, user as userSchema } from './schema/user';
-import { CreateEscalationPolicy, escalationPolicy as escalationPolicySchema, insertEscalationPolicySchema, selectEscalationPolicySchema } from './schema/escalation-policy';
-import { CreateEscalationPolicyStep, escalationPolicyStep as escalationPolicyStepSchema, insertEscalationPolicyStepSchema, selectEscalationPolicyStepSchema } from './schema/escalation-policy-step';
 
 export const schema = {
   alert: alertSchema,
@@ -133,20 +143,24 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .values(insertEscalationPolicy)
         .returning();
       return selectEscalationPolicySchema.parse(dbEscalationPolicy[0]);
-    }
+    },
   },
   escalationPolicyStep: {
     createMany: async (escalationPolicyStep: CreateEscalationPolicyStep[]) => {
-      const insertEscalationPolicyStep = insertEscalationPolicyStepSchema.parse({
-        id: IdGenerator.escalationPolicyStep(),
-        ...escalationPolicyStep,
-      });
+      const insertEscalationPolicyStep = insertEscalationPolicyStepSchema.parse(
+        {
+          id: IdGenerator.escalationPolicyStep(),
+          ...escalationPolicyStep,
+        },
+      );
       const dbEscalationPolicyStep = await db
         .insert(escalationPolicyStepSchema)
         .values(insertEscalationPolicyStep)
         .returning();
-      return dbEscalationPolicyStep.map(step => selectEscalationPolicyStepSchema.parse(step));
-    }
+      return dbEscalationPolicyStep.map((step) =>
+        selectEscalationPolicyStepSchema.parse(step),
+      );
+    },
   },
   integrations: {
     listByOrgId: async (orgId: OrgId) => {

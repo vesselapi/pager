@@ -31,8 +31,10 @@ export const IdGenerator = {
   alert: (): AlertId => `v_alert_${randomString()}`,
   apiToken: (apiToken: ApiToken): ApiTokenId =>
     `v_secret_apiToken_${hash(apiToken)}`,
-  escalationPolicy: () : EscalationPolicyId => `v_escalationPolicy_${randomString()}`,
-  escalationPolicyStep: () : EscalationPolicyStepId => `v_escalationPolicyStep_${randomString()}`,
+  escalationPolicy: (): EscalationPolicyId =>
+    `v_escalationPolicy_${randomString()}`,
+  escalationPolicyStep: (): EscalationPolicyStepId =>
+    `v_escalationPolicyStep_${randomString()}`,
   integration: (): IntegrationId => `v_integration_${randomString()}`,
   schedule: (): ScheduleId => `v_schedule_${randomString()}`,
   rotation: (): RotationId => `v_rotation_${randomString()}`,
