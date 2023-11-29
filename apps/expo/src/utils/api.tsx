@@ -57,10 +57,11 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
           async headers() {
             const headers = new Map<string, string>();
             headers.set('x-trpc-source', 'expo-react');
+
             const authToken = await getToken();
-            // TODO(@zkirby): Should we be throwing an error if there's no auth
-            // token? Endpoints would fail but this should never happen in theory.
             if (authToken) headers.set('Authorization', authToken);
+            else throw new Error(`Expected AuthToken to be present but got ${authToken}`)
+
             return Object.fromEntries(headers);
           },
         }),

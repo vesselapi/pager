@@ -1,11 +1,7 @@
 import { Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
-
-const capitalize = (s: string) => {
-  if (typeof s !== 'string') return '';
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
+import { capitalize } from 'radash'
 
 const StatusToColor = {
   ACKED: 'text-blue-800 bg-blue-200',
