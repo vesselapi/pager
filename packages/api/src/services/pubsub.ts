@@ -1,8 +1,6 @@
 import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 
-import type { Alert } from '@vessel/db/schema/alert';
-import { AlertPayload } from '@vessel/types';
-
+import { AlertId } from '@clerk/types';
 import { env } from '../../env.mjs';
 
 export const TOPIC = {
@@ -22,7 +20,7 @@ export const makePubSub = () => {
   };
 
   const makeAlert = () => {
-    const publish = async (payload: AlertPayload) => {
+    const publish = async (payload: { id: AlertId }) => {
       pub({ topic: TOPIC.ALERT, payload });
     };
     return { publish };
