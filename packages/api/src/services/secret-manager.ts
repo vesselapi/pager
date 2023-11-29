@@ -2,10 +2,9 @@ import crypto from 'crypto';
 
 import { db } from '@vessel/db';
 import { IdGenerator, randomString } from '@vessel/db/id-generator';
-import {
+import type {
   ApiToken,
   ApiTokenId,
-  AppId,
   OrgId,
   SecretId,
   SecretIntegrationId,
@@ -64,7 +63,7 @@ export const makeSecretManager = () => {
     orgId: OrgId | null;
   }) => {
     const encrypted = encrypt(value);
-    await db.secret.create({
+    return db.secret.create({
       id: key,
       orgId,
       ...encrypted,
@@ -114,19 +113,16 @@ export const makeSecretManager = () => {
 
     const create = async <T extends Json>({
       orgId,
-      appId,
       secret,
     }: {
       orgId: OrgId;
-      appId: AppId;
       secret: T;
-    }) => {
-      await put({
-        key: IdGenerator.secrets.integration({ orgId, appId }),
+    }) =>
+      put({
+        key: IdGenerator.secrets.integration(),
         value: secret,
         orgId,
       });
-    };
     return { find, create };
   };
 

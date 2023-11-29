@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 import React from 'react';
 import Constants from 'expo-constants';
 import { useAuth } from '@clerk/clerk-expo';
+||||||| 31d632e
+import React from 'react';
+import Constants from 'expo-constants';
+=======
+>>>>>>> main
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { httpBatchLink } from '@trpc/client';
 import { createTRPCReact } from '@trpc/react-query';
+import Constants from 'expo-constants';
+import React from 'react';
 import superjson from 'superjson';
 
 import type { AppRouter } from '@vessel/api';

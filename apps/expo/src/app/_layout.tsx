@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
+import React from 'react';
 
 import { TRPCProvider } from '~/utils/api';
 

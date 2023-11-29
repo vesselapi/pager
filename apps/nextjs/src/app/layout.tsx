@@ -1,11 +1,12 @@
-import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
+import { Inter } from 'next/font/google';
 
 import '~/styles/globals.css';
 
-import { headers } from 'next/headers';
 import classNames from 'classnames';
+import { headers } from 'next/headers';
 
+import React from 'react';
 import SideNav from './_components/SideNav';
 import { TRPCReactProvider } from './providers';
 

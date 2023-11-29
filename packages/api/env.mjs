@@ -6,8 +6,7 @@ export const env = createEnv({
     VERCEL_URL: z
       .string()
       .optional()
-      .transform((v) => (v ? `https://${v}` : undefined)),
-    PORT: z.coerce.number().default(3000),
+      .transform((v) => (v ? `https://${v}` : 'localhost:3000')),
   },
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
@@ -24,6 +23,7 @@ export const env = createEnv({
     RESEND_API_KEY: z.string(),
     INTEGRATION_SENTRY_CLIENT_ID: z.string(),
     INTEGRATION_SENTRY_SECRET: z.string(),
+    INTEGRATION_SENTRY_INSTALL_URL: z.string(),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -51,6 +51,7 @@ export const env = createEnv({
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     INTEGRATION_SENTRY_CLIENT_ID: process.env.INTEGRATION_SENTRY_CLIENT_ID,
     INTEGRATION_SENTRY_SECRET: process.env.INTEGRATION_SENTRY_SECRET,
+    INTEGRATION_SENTRY_INSTALL_URL: process.env.INTEGRATION_SENTRY_INSTALL_URL,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:

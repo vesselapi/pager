@@ -2,7 +2,7 @@ import { experimental_standaloneMiddleware, TRPCError } from '@trpc/server';
 
 import { db } from '@vessel/db';
 
-import { CreateContextOptions, JwtClaims } from '../../trpc';
+import type { CreateContextOptions, JwtClaims } from '../../trpc';
 
 export const useUserAuth = () =>
   experimental_standaloneMiddleware<{ ctx: CreateContextOptions }>().create(

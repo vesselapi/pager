@@ -1,14 +1,19 @@
-type HttpsUrl = `https://${string}`;
+import { z } from 'zod';
 
-type OAuth2Params = {
-  authUrl: HttpsUrl | { override: true; url: HttpsUrl };
-  tokenUrl: HttpsUrl;
+import type { HttpsUrl } from '@vessel/types';
+
+interface OAuth2Params<TOauthRequest extends z.ZodTypeAny = z.ZodTypeAny> {
+  oauthRequestSchema?: TOauthRequest;
+  authUrl: HttpsUrl | (() => HttpsUrl);
+  tokenUrl:
+    | HttpsUrl
+    | ((params: { oauthRequest: z.infer<TOauthRequest> }) => HttpsUrl);
   clientId: string;
   clientSecret: string;
   scopeSeparator?: string;
   oauthBodyFormat?: 'form' | 'json';
   tokenAuth?: 'body' | 'header';
-};
+}
 
 export type OAuth2Config = {
   type: 'oauth2';
@@ -17,12 +22,13 @@ export type OAuth2Config = {
 export type AuthConfig = OAuth2Config;
 
 export const auth: {
-  oauth2: (params: OAuth2Params) => OAuth2Config;
+  oauth2: <T extends z.ZodTypeAny>(params: OAuth2Params<T>) => OAuth2Config;
 } = {
   oauth2: (params) => {
     return {
       ...params,
       type: 'oauth2',
+      oauthRequestSchema: params.oauthRequestSchema ?? z.any(),
       tokenAuth: params.tokenAuth ?? 'body',
       scopeSeparator: params.scopeSeparator ?? ' ',
       oauthBodyFormat: params.oauthBodyFormat ?? 'form',

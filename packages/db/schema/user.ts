@@ -1,9 +1,9 @@
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
+import type { z } from 'zod';
 
-import { OrgIdRegex, UserIdRegex } from '@vessel/types';
 import type { OrgId, UserId } from '@vessel/types';
+import { OrgIdRegex, UserIdRegex } from '@vessel/types';
 
 import { org } from './org';
 
@@ -34,4 +34,4 @@ export const insertUserSchema = createInsertSchema(user, {
       .transform((x) => x as OrgId),
 });
 
-export type CreateUser = z.infer<typeof insertUserSchema>;
+export type CreateUser = Omit<z.infer<typeof insertUserSchema>, 'id'>;
