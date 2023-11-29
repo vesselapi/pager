@@ -12,9 +12,9 @@ import { user } from './user';
 
 export const escalationPolicyStep = pgTable('escalation_policy_step', {
   id: text('id').primaryKey(),
-  escalationPolicyId: text('escalation_policy_id').references(
-    () => escalationPolicy.id,
-  ).notNull(),
+  escalationPolicyId: text('escalation_policy_id')
+    .references(() => escalationPolicy.id)
+    .notNull(),
   orgId: text('org_id')
     .references(() => org.id)
     .notNull(),
