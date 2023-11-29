@@ -63,6 +63,7 @@ export const schema = {
   user: userSchema,
   secret: secretSchema,
   schedule: scheduleSchema,
+  rotation: rotationSchema,
   rotationUser: rotationUserSchema,
 };
 

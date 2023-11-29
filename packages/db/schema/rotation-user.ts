@@ -10,6 +10,7 @@ import {
   RotationUserId,
   RotationUserIdRegex,
   UserId,
+  UserIdRegex,
 } from '@vessel/types';
 
 import { org } from './org';
@@ -53,6 +54,10 @@ export const insertRotationUserSchema = createInsertSchema(rotationUser, {
     schema.id
       .regex(RotationIdRegex, `Invalid id, expected format ${RotationIdRegex}`)
       .transform((x) => x as RotationId),
+  userId: (schema) =>
+    schema.id
+      .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`)
+      .transform((x) => x as UserId),
 });
 
 export type CreateRotationUser = Omit<
