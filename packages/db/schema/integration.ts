@@ -47,4 +47,7 @@ export const insertIntegrationSchema = createInsertSchema(integration, {
       .transform((x) => x as SecretId),
 });
 
-export type CreateIntegration = z.infer<typeof insertIntegrationSchema>;
+export type CreateIntegration = Omit<
+  z.infer<typeof insertIntegrationSchema>,
+  'id'
+>;
