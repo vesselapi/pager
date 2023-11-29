@@ -191,7 +191,6 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       appId: AppId;
       externalId: string;
     }) => {
-      console.log({ appId, externalId });
       const integration = await db.query.integration.findFirst({
         where: and(
           eq(integrationSchema.appId, appId),
