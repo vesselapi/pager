@@ -1,32 +1,38 @@
-import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 
-import type { IntegrationId, OrgId, SecretId } from '@vessel/types';
+import type { IntegrationId, OrgId, SecretIntegrationId } from '@vessel/types';
 import {
   APP_ID,
   IntegrationIdRegex,
   OrgIdRegex,
-  SecretIdRegex,
+  SecretIntegrationIdRegex,
 } from '@vessel/types';
 
 import { org } from './org';
 import { secret } from './secret';
+
+const appIdEnum = pgEnum('app_id', APP_ID);
 
 export const integration = pgTable('integration', {
   id: text('id').primaryKey(),
   orgId: text('org_id')
     .references(() => org.id)
     .notNull(),
-  appId: text('app_id', { enum: APP_ID }).notNull(),
-  secretId: text('secret_id').references(() => secret.id),
+  appId: appIdEnum('app_id').notNull(),
+  secretId: text('secret_id')
+    .references(() => secret.id)
+    .notNull(),
+  externalId: text('external_id'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
 export const selectIntegrationSchema = createSelectSchema(integration, {
   id: (schema) => schema.id.transform((x) => x as IntegrationId),
   orgId: (schema) => schema.orgId.transform((x) => x as OrgId),
-  secretId: (schema) => schema.secretId.transform((x) => x as SecretId),
+  secretId: (schema) =>
+    schema.secretId.transform((x) => x as SecretIntegrationId),
 });
 
 export const insertIntegrationSchema = createInsertSchema(integration, {
@@ -43,8 +49,11 @@ export const insertIntegrationSchema = createInsertSchema(integration, {
       .transform((x) => x as OrgId),
   secretId: (schema) =>
     schema.secretId
-      .regex(SecretIdRegex, `Invalid id, expected format ${SecretIdRegex}`)
-      .transform((x) => x as SecretId),
+      .regex(
+        SecretIntegrationIdRegex,
+        `Invalid id, expected format ${SecretIntegrationIdRegex}`,
+      )
+      .transform((x) => x as SecretIntegrationId),
 });
 
 export type CreateIntegration = Omit<

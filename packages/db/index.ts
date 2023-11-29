@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import type { z } from 'zod';
@@ -6,6 +6,7 @@ import type { z } from 'zod';
 import type {
   AlertEventId,
   AlertId,
+  AppId,
   OrgId,
   SecretId,
   UserId,
@@ -99,7 +100,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .insert(alertSchema)
         .values(newAlert)
         .returning();
-      return dbAlerts[0];
+      return selectAlertSchema.parse(dbAlerts[0]);
     },
   },
   alertEvent: {
@@ -132,6 +133,21 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .values(newIntegration)
         .returning();
       return selectIntegrationSchema.parse(dbIntegration[0]);
+    },
+    findByExternalId: async ({
+      appId,
+      externalId,
+    }: {
+      appId: AppId;
+      externalId: string;
+    }) => {
+      const integration = await db.query.integration.findFirst({
+        where: and(
+          eq(integrationSchema.appId, appId),
+          eq(integrationSchema.externalId, externalId),
+        ),
+      });
+      return selectIntegrationSchema.parse(integration);
     },
   },
   orgs: {

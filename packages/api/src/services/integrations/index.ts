@@ -37,7 +37,8 @@ export const makeIntegrations = () => {
       orgId,
       secret,
     });
-    await db.integrations.create({ orgId, appId, secretId });
+    const externalId = integration.auth.externalId(secret);
+    await db.integrations.create({ orgId, appId, secretId, externalId });
   };
 
   return { find, list, create };

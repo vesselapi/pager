@@ -15,6 +15,7 @@ export const sentry = platform('sentry', {
     }),
     tokenUrl: ({ oauthRequest }) =>
       `https://sentry.io/api/0/sentry-app-installations/${oauthRequest.installationId}/authorizations/`,
+    externalId: ({ oauthResponse }) => oauthResponse.installationId,
     clientId: env.INTEGRATION_SENTRY_CLIENT_ID,
     clientSecret: env.INTEGRATION_SENTRY_SECRET,
     oauthBodyFormat: 'json',
