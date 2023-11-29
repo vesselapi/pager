@@ -16,8 +16,10 @@ import { IdGenerator } from './id-generator';
 import type { CreateAlert, UpsertAlert } from './schema/alert';
 import {
   alert as alertSchema,
+  alertSourceEnum,
   insertAlertSchema,
   selectAlertSchema,
+  statusEnum,
 } from './schema/alert';
 import {
   alertEvent as alertEventSchema,
@@ -25,6 +27,7 @@ import {
 } from './schema/alertEvent';
 import type { CreateIntegration } from './schema/integration';
 import {
+  appIdEnum,
   insertIntegrationSchema,
   integration as integrationSchema,
   selectIntegrationSchema,
@@ -54,6 +57,9 @@ import type { CreateUser } from './schema/user';
 import { selectUserSchema, user as userSchema } from './schema/user';
 
 export const schema = {
+  alertSourceEnum,
+  appIdEnum,
+  statusEnum,
   alert: alertSchema,
   alertEvent: alertEventSchema,
   integration: integrationSchema,

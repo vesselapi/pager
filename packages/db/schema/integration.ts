@@ -13,7 +13,7 @@ import {
 import { org } from './org';
 import { secret } from './secret';
 
-const appIdEnum = pgEnum('app_id', APP_ID);
+export const appIdEnum = pgEnum('app_id', APP_ID);
 
 export const integration = pgTable('integration', {
   id: text('id').primaryKey(),

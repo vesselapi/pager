@@ -8,8 +8,8 @@ import { APP_ID, AlertIdRegex, UserIdRegex } from '@vessel/types';
 import { org } from './org';
 import { user } from './user';
 
-const alertSourceEnum = pgEnum('alert_source', [...APP_ID, 'vessel']);
-const statusEnum = pgEnum('status', ['ACKED', 'OPEN', 'CLOSED']);
+export const alertSourceEnum = pgEnum('alert_source', [...APP_ID, 'vessel']);
+export const statusEnum = pgEnum('status', ['ACKED', 'OPEN', 'CLOSED']);
 
 export const alert = pgTable('alert', {
   id: text('id').primaryKey(), // v_alert_[hash]
@@ -17,7 +17,7 @@ export const alert = pgTable('alert', {
     .references(() => org.id)
     .notNull(),
   title: text('title').notNull(),
-  status: statusEnum('status').default('OPEN').notNull(),
+  status: statusEnum('status').notNull(),
   assignedToId: text('assigned_to_id').references(() => user.id),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   source: alertSourceEnum('source').notNull(),
