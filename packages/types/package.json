@@ -31,5 +31,8 @@
       "@vessel/eslint-config/base"
     ]
   },
-  "prettier": "@vessel/prettier-config"
+  "prettier": "@vessel/prettier-config",
+  "dependencies": {
+    "zod": "^3.22.3"
+  }
 }

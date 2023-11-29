@@ -54,10 +54,14 @@ import {
 } from './schema/secret';
 import type { CreateUser } from './schema/user';
 import { selectUserSchema, user as userSchema } from './schema/user';
+import { CreateEscalationPolicy, escalationPolicy as escalationPolicySchema, insertEscalationPolicySchema, selectEscalationPolicySchema } from './schema/escalation-policy';
+import { CreateEscalationPolicyStep, escalationPolicyStep as escalationPolicyStepSchema, insertEscalationPolicyStepSchema, selectEscalationPolicyStepSchema } from './schema/escalation-policy-step';
 
 export const schema = {
   alert: alertSchema,
   alertEvent: alertEventSchema,
+  escalationPolicy: escalationPolicySchema,
+  escalationPolicyStep: escalationPolicyStepSchema,
   integration: integrationSchema,
   org: orgSchema,
   user: userSchema,
@@ -117,6 +121,32 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       const alertEvents = await db.query.alertEvent.findMany(...args);
       return alertEvents.map((a) => selectAlertEventSchema.parse(a));
     },
+  },
+  escalationPolicy: {
+    create: async (escalationPolicy: CreateEscalationPolicy) => {
+      const insertEscalationPolicy = insertEscalationPolicySchema.parse({
+        id: IdGenerator.escalationPolicy(),
+        ...escalationPolicy,
+      });
+      const dbEscalationPolicy = await db
+        .insert(escalationPolicySchema)
+        .values(insertEscalationPolicy)
+        .returning();
+      return selectEscalationPolicySchema.parse(dbEscalationPolicy[0]);
+    }
+  },
+  escalationPolicyStep: {
+    createMany: async (escalationPolicyStep: CreateEscalationPolicyStep[]) => {
+      const insertEscalationPolicyStep = insertEscalationPolicyStepSchema.parse({
+        id: IdGenerator.escalationPolicyStep(),
+        ...escalationPolicyStep,
+      });
+      const dbEscalationPolicyStep = await db
+        .insert(escalationPolicyStepSchema)
+        .values(insertEscalationPolicyStep)
+        .returning();
+      return dbEscalationPolicyStep.map(step => selectEscalationPolicyStepSchema.parse(step));
+    }
   },
   integrations: {
     listByOrgId: async (orgId: OrgId) => {
