@@ -1,4 +1,5 @@
 'use client';
+
 import { useUser } from '../../hooks/useUser';
 
 const createInitials = (
@@ -10,7 +11,7 @@ const createInitials = (
 };
 
 const UserIcon = () => {
-  const user = useUser()
+  const user = useUser();
 
   if (!user) {
     return (
