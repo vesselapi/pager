@@ -1,7 +1,13 @@
-import { Text } from "react-native"
+import { Stack } from "expo-router";
+import { Text, View } from "react-native"
 
 const SchedulePage = () => {
-    return <Text>Coming soon...</Text>
+    return (
+        <View>
+            <Stack.Screen options={{ title: 'Schedules' }} />
+            <Text>Coming soon...</Text>
+        </View>
+    )
 }
 
 export default SchedulePage;
