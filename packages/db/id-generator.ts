@@ -7,8 +7,9 @@ import type {
   AppId,
   IntegrationId,
   OrgId,
+  RotationId,
+  RotationUserId,
   ScheduleId,
-  ScheduleUserId,
   SecretIntegrationId,
   UserId,
 } from '@vessel/types';
@@ -36,7 +37,8 @@ export const IdGenerator = {
     appId: AppId;
   }): IntegrationId => `v_integration_${orgId}_${appId}`,
   schedule: (): ScheduleId => `v_schedule_${randomString()}`,
-  scheduleUser: (): ScheduleUserId => `v_schedule_user_${randomString()}`,
+  rotation: (): RotationId => `v_rotation_${randomString()}`,
+  rotationUser: (): RotationUserId => `v_rotation_user_${randomString()}`,
   secrets: {
     integration: ({
       orgId,

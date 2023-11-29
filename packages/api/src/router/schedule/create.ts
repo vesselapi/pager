@@ -1,9 +1,11 @@
-import { unique } from 'radash';
+import { objectify, unique } from 'radash';
 import { z } from 'zod';
 
 import { Db, db } from '@vessel/db';
+import { IdGenerator } from '@vessel/db/id-generator';
+import { insertRotationSchema } from '@vessel/db/schema/rotation';
+import { insertRotationUserSchema } from '@vessel/db/schema/rotation-user';
 import { insertScheduleSchema } from '@vessel/db/schema/schedule';
-import { UserIdRegex } from '@vessel/types';
 
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
@@ -13,18 +15,26 @@ interface Context {
 }
 
 const args = z.object({
-  schedule: insertScheduleSchema,
-  users: z
-    .array(
-      z.object({
-        id: z.string().regex(UserIdRegex, 'Users must be valid user ids'),
-        order: z.number(),
+  schedule: insertScheduleSchema.pick({ name: true }),
+  rotations: z.array(
+    z.object({
+      rotation: insertRotationSchema.pick({
+        startTime: true,
+        lengthInSeconds: true,
+        name: true,
       }),
-    )
-    .refine((users) => {
-      const uniqueUsers = unique(users, (user) => user.order);
-      return uniqueUsers.length === users.length;
-    }, 'Order must be unique'),
+      users: z
+        .array(insertRotationUserSchema.pick({ order: true, userId: true }))
+        .refine((users) => {
+          const uniqueUsers = unique(users, (user) => user.order);
+          return uniqueUsers.length === users.length;
+        }, 'Order must be unique')
+        .refine((users) => {
+          const uniqueUsers = unique(users, (user) => user.userId);
+          return uniqueUsers.length === users.length;
+        }, 'Users must be unique'),
+    }),
+  ),
 });
 
 export const scheduleCreate = trpc
@@ -35,14 +45,32 @@ export const scheduleCreate = trpc
   )
   .input(args)
   .mutation(async ({ ctx, input }) => {
-    const schedule = await ctx.db.schedules.create(input.schedule);
-    await ctx.db.scheduleUsers.createMany(
-      input.users.map((user) => ({
-        userId: user.id,
-        order: user.order,
-        orgId: ctx.auth.user.orgId,
+    const { orgId } = ctx.auth.user;
+    const schedule = await ctx.db.schedules.create({
+      orgId,
+      ...input.schedule,
+    });
+
+    const rotations = input.rotations.map((rotation) => ({
+      id: IdGenerator.rotation(),
+      ...rotation,
+    }));
+    const dbRotations = await ctx.db.rotations.createMany(
+      rotations.map((rotation) => ({
+        orgId,
         scheduleId: schedule.id,
+        ...rotation.rotation,
       })),
     );
-    return { schedule };
+
+    const rotationUsers = rotations.flatMap((rotation) => {
+      return rotation.users.map((user) => ({
+        orgId,
+        rotationId: rotation.id,
+        ...user,
+      }));
+    });
+    const dbRotationUsers =
+      await ctx.db.rotationUsers.createMany(rotationUsers);
+    return { schedule, rotations: dbRotations, rotationUsers: dbRotationUsers };
   });

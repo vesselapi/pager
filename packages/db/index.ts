@@ -30,17 +30,23 @@ import {
 } from './schema/integration';
 import { org as orgSchema, selectOrgSchema } from './schema/org';
 import {
+  CreateRotation,
+  insertRotationSchema,
+  rotation as rotationSchema,
+  selectRotationSchema,
+} from './schema/rotation';
+import {
+  CreateRotationUser,
+  insertRotationUserSchema,
+  rotationUser as rotationUserSchema,
+  selectRotationUserSchema,
+} from './schema/rotation-user';
+import {
   CreateSchedule,
   insertScheduleSchema,
   schedule as scheduleSchema,
   selectScheduleSchema,
 } from './schema/schedule';
-import {
-  CreateScheduleUser,
-  insertScheduleUserSchema,
-  scheduleUser as scheduleUserSchema,
-  selectScheduleUser,
-} from './schema/schedule-user';
 import {
   insertSecretSchema,
   secret as secretSchema,
@@ -57,7 +63,7 @@ export const schema = {
   user: userSchema,
   secret: secretSchema,
   schedule: scheduleSchema,
-  scheduleUser: scheduleUserSchema,
+  rotationUser: rotationUserSchema,
 };
 
 export * from 'drizzle-orm';
@@ -208,6 +214,42 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       await db.insert(secretSchema).values(secret);
     },
   },
+  rotations: {
+    createMany: async (rotations: CreateRotation[]) => {
+      const insertRotations = rotations.map((rotation) => {
+        const insertRotation = {
+          id: IdGenerator.rotation(),
+          ...rotation,
+        };
+        return insertRotationSchema.parse(insertRotation);
+      });
+      const dbRotations = await db
+        .insert(rotationSchema)
+        .values(insertRotations)
+        .returning();
+      return dbRotations.map((rotation) =>
+        selectRotationSchema.parse(rotation),
+      );
+    },
+  },
+  rotationUsers: {
+    createMany: async (rotationUsers: CreateRotationUser[]) => {
+      const insertRotationUsers = rotationUsers.map((rotationUser) => {
+        const insertRotationUser = {
+          id: IdGenerator.rotationUser(),
+          ...rotationUser,
+        };
+        return insertRotationUserSchema.parse(insertRotationUser);
+      });
+      const dbRotationUsers = await db
+        .insert(rotationUserSchema)
+        .values(insertRotationUsers)
+        .returning();
+      return dbRotationUsers.map((rotationUser) =>
+        selectRotationUserSchema.parse(rotationUser),
+      );
+    },
+  },
   schedules: {
     listByOrgId: async (orgId: OrgId) => {
       const schedules = await db.query.schedule.findMany({
@@ -226,24 +268,6 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         throw new Error('Failed to create schedule');
       }
       return selectScheduleSchema.parse(newSchedule);
-    },
-  },
-  scheduleUsers: {
-    createMany: async (scheduleUsers: CreateScheduleUser[]) => {
-      const insertScheduleUsers = scheduleUsers.map((scheduleUser) => {
-        const insertScheduleUser = {
-          id: IdGenerator.scheduleUser(),
-          ...scheduleUser,
-        };
-        return insertScheduleUserSchema.parse(insertScheduleUser);
-      });
-      const dbScheduleUsers = await db
-        .insert(scheduleUserSchema)
-        .values(insertScheduleUsers)
-        .returning();
-      return dbScheduleUsers.map((scheduleUser) =>
-        selectScheduleUser.parse(scheduleUser),
-      );
     },
   },
 });

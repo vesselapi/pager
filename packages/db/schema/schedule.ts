@@ -1,5 +1,4 @@
-import cron from 'cron-validate';
-import { boolean, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
@@ -12,18 +11,13 @@ export const schedule = pgTable('schedule', {
   orgId: text('org_id')
     .references(() => org.id)
     .notNull(),
-  rotationCron: text('rotation_cron').notNull(),
-  enableSecondary: boolean('enable_secondary').notNull(),
+  name: text('name').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
 export const selectScheduleSchema = createSelectSchema(schedule, {
   id: (schema) => schema.id.transform((x) => x as ScheduleId),
   orgId: (schema) => schema.orgId.transform((x) => x as OrgId),
-  rotationCron: (schema) =>
-    schema.rotationCron.refine((x) => cron(x).isValid(), {
-      message: 'rotationCron is not valid cron',
-    }),
 });
 
 export const insertScheduleSchema = createInsertSchema(schedule, {
@@ -32,9 +26,5 @@ export const insertScheduleSchema = createInsertSchema(schedule, {
       .regex(ScheduleIdRegex, `Invalid id, expected format ${ScheduleIdRegex}`)
       .transform((x) => x as ScheduleId),
   orgId: (schema) => schema.orgId.transform((x) => x as OrgId),
-  rotationCron: (schema) =>
-    schema.rotationCron.refine((x: string) => cron(x).isValid(), {
-      message: 'rotationCron is not valid cron',
-    }),
 });
 export type CreateSchedule = Omit<z.infer<typeof insertScheduleSchema>, 'id'>;
