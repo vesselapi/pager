@@ -2,8 +2,9 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { Db, db } from '@vessel/db';
-import { APP_ID, AppId } from '@vessel/types';
+import { APP_ID, Json, SecretIntegration } from '@vessel/types';
 
+import { env } from '../../../env.mjs';
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 import { Integrations, makeIntegrations } from '../../services/integrations';
@@ -17,10 +18,18 @@ interface Context {
   integrations: Integrations;
   oauth2Client: Oauth2Client;
 }
-const input = z.object({
-  appId: z.enum(APP_ID),
-  code: z.string(),
-});
+
+// NOTE: Ideally I would use zod's passthrough() but it doesn't return the correct typing
+const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
+const jsonSchema: z.ZodType<Json> = z.lazy(() =>
+  z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)]),
+);
+const args = z
+  .object({
+    appId: z.enum(APP_ID),
+    code: z.string(),
+  })
+  .and(jsonSchema);
 
 export const integrationOAuthCallback = trpc
   .use(
@@ -30,7 +39,7 @@ export const integrationOAuthCallback = trpc
       oauth2Client: makeOauth2Client,
     }),
   )
-  .input(input)
+  .input(args)
   .mutation(async ({ ctx, input }) => {
     const {
       integrations,
@@ -48,12 +57,21 @@ export const integrationOAuthCallback = trpc
       });
     }
 
-    const secret = await oauth2Client.exchange({
-      config: auth,
-      code,
-      // TODO: set redirect URI accordingly
-      redirectUri: `https://app.vessel.dev/settings/integrations/${appId}`,
-    });
+    const { accessToken, refreshToken, oauthResponse } =
+      await oauth2Client.exchange({
+        config: auth,
+        code,
+        redirectUri: `${env.VERCEL_URL}/settings/integrations/oauth-callback/${appId}`,
+        oauthRequest: input as Record<string, string>,
+      });
+
+    const secret: SecretIntegration = {
+      type: 'oauth',
+      oauthRequest: input,
+      oauthResponse,
+      accessToken,
+      refreshToken,
+    };
     await integrations.create({ orgId: user.orgId, appId, secret });
     return { success: true };
   });

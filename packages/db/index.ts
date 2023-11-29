@@ -127,17 +127,14 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     },
     create: async (integration: CreateIntegration) => {
       const newIntegration = insertIntegrationSchema.parse({
-        id: IdGenerator.integration({
-          orgId: integration.orgId,
-          appId: integration.appId,
-        }),
-        ...alert,
+        id: IdGenerator.integration(),
+        ...integration,
       });
-      const dbAlert = await db
+      const dbIntegration = await db
         .insert(integrationSchema)
         .values(newIntegration)
         .returning();
-      return selectAlertSchema.parse(dbAlert);
+      return selectIntegrationSchema.parse(dbIntegration[0]);
     },
   },
   orgs: {
@@ -212,7 +209,8 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return selectSecretSchema.parse(secret);
     },
     create: async (secret: z.infer<typeof insertSecretSchema>) => {
-      await db.insert(secretSchema).values(secret);
+      const dbSecret = await db.insert(secretSchema).values(secret).returning();
+      return selectSecretSchema.parse(dbSecret[0]);
     },
   },
   rotations: {
