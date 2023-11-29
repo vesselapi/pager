@@ -1,11 +1,11 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { SignOutButton } from '@clerk/nextjs';
+import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { SignOutButton } from '@clerk/nextjs';
-import classNames from 'classnames';
+import type { ReactNode } from 'react';
 import { FaGithub, FaSlack } from 'react-icons/fa';
 import { HiOutlineMail } from 'react-icons/hi';
 import { TbBell, TbBook2, TbCalendarFilled } from 'react-icons/tb';

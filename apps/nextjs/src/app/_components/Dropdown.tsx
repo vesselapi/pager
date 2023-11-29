@@ -1,9 +1,9 @@
 'use client';
 
-import type { ReactElement, ReactNode } from 'react';
-import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
+import type { ReactElement, ReactNode } from 'react';
+import React, { Fragment } from 'react';
 
 const Dropdown = ({
   children,

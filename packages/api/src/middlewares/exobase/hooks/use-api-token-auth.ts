@@ -1,21 +1,22 @@
-import { hook, Props } from '@exobase/core';
+import type { Props } from '@exobase/core';
+import { hook } from '@exobase/core';
 import { isArray } from 'radash';
 
-import { ApiToken, OrgId } from '@vessel/types';
+import type { ApiToken, OrgId } from '@vessel/types';
 
-import { SecretManager } from '../../../services/secret-manager';
+import type { SecretManager } from '../../../services/secret-manager';
 import * as errors from '../errors';
 
 const API_TOKEN_HEADER_KEY = 'x-vessel-api-token';
 
-export type ApiTokenAuth = {
+export interface ApiTokenAuth {
   apiToken: ApiToken;
   orgId: OrgId;
-};
+}
 
-type Services = {
+interface Services {
   secretManager: SecretManager;
-};
+}
 
 export const useApiTokenAuth = () =>
   hook<Props<{}, Services>, Props<{}, {}, ApiTokenAuth>>(
@@ -52,8 +53,8 @@ export const useApiTokenAuth = () =>
         }
 
         const auth: ApiTokenAuth = {
-          apiToken: apiToken as ApiToken,
-          orgId: apiTokenSecret.orgId as OrgId,
+          apiToken: apiToken,
+          orgId: apiTokenSecret.orgId!,
         };
 
         return await func({

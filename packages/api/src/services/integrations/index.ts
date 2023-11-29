@@ -1,9 +1,9 @@
 import { db } from '@vessel/db';
-import { AppId, OrgId, SecretIntegration } from '@vessel/types';
+import type { AppId, OrgId, SecretIntegration } from '@vessel/types';
 
-import { Json, makeSecretManager } from '../secret-manager';
+import { makeSecretManager } from '../secret-manager';
 import { sentry } from './app/sentry';
-import { Platform } from './platform';
+import type { Platform } from './platform';
 
 const integrations: Record<AppId, Platform> = {
   sentry,

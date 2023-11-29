@@ -1,7 +1,8 @@
-import { objectify, unique } from 'radash';
+import { unique } from 'radash';
 import { z } from 'zod';
 
-import { Db, db } from '@vessel/db';
+import type { Db } from '@vessel/db';
+import { db } from '@vessel/db';
 import { IdGenerator } from '@vessel/db/id-generator';
 import { insertRotationSchema } from '@vessel/db/schema/rotation';
 import { insertRotationUserSchema } from '@vessel/db/schema/rotation-user';

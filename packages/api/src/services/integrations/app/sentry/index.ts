@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { HttpsUrl } from '@vessel/types';
+import type { HttpsUrl } from '@vessel/types';
 
 import { env } from '../../../../../env.mjs';
 import { auth } from '../../auth';

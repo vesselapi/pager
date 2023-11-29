@@ -1,15 +1,12 @@
 import { integer, pgTable, text } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
+import type { z } from 'zod';
 
+import type { OrgId, RotationId, RotationUserId, UserId } from '@vessel/types';
 import {
-  OrgId,
   OrgIdRegex,
-  RotationId,
   RotationIdRegex,
-  RotationUserId,
   RotationUserIdRegex,
-  UserId,
   UserIdRegex,
 } from '@vessel/types';
 

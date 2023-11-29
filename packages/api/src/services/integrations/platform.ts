@@ -1,16 +1,16 @@
-import { AppId } from '@vessel/types';
+import type { AppId } from '@vessel/types';
 
-import { AuthConfig } from './auth';
+import type { AuthConfig } from './auth';
 
-type Display = {
+interface Display {
   name: string;
   logoURI: string;
-};
+}
 
-type PlatformParams = {
+interface PlatformParams {
   auth: AuthConfig;
   display: Display;
-};
+}
 
 export type Platform = {
   appId: AppId;

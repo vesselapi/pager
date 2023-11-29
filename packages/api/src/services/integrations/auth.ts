@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import { HttpsUrl } from '@vessel/types';
+import type { HttpsUrl } from '@vessel/types';
 
-type OAuth2Params<TOauthRequest extends z.ZodTypeAny = z.ZodTypeAny> = {
+interface OAuth2Params<TOauthRequest extends z.ZodTypeAny = z.ZodTypeAny> {
   oauthRequestSchema?: TOauthRequest;
   authUrl: HttpsUrl | (() => HttpsUrl);
   tokenUrl:
@@ -13,7 +13,7 @@ type OAuth2Params<TOauthRequest extends z.ZodTypeAny = z.ZodTypeAny> = {
   scopeSeparator?: string;
   oauthBodyFormat?: 'form' | 'json';
   tokenAuth?: 'body' | 'header';
-};
+}
 
 export type OAuth2Config = {
   type: 'oauth2';

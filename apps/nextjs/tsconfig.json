@@ -11,6 +11,7 @@
         "name": "next"
       }
     ],
+    "jsx": "react",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": [".", ".next/types/**/*.ts", "../../packages/api/env.mjs"],
