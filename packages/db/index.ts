@@ -22,7 +22,6 @@ import {
   alertEvent as alertEventSchema,
   selectAlertEventSchema,
 } from './schema/alertEvent';
-import type { CreateIntegration } from './schema/integration';
 import {
   CreateEscalationPolicy,
   escalationPolicy as escalationPolicySchema,
@@ -35,6 +34,7 @@ import {
   insertEscalationPolicyStepSchema,
   selectEscalationPolicyStepSchema,
 } from './schema/escalation-policy-step';
+import type { CreateIntegration } from './schema/integration';
 import {
   insertIntegrationSchema,
   integration as integrationSchema,

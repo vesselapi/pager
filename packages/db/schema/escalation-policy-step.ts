@@ -1,15 +1,8 @@
 import { pgTable, text } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { custom, z } from 'zod';
+import { z } from 'zod';
 
-import {
-  customValidators,
-  EscalationPolicyId,
-  OrgId,
-  RotationId,
-  ScheduleId,
-  UserId,
-} from '@vessel/types';
+import { customValidators } from '@vessel/types';
 
 import { escalationPolicy } from './escalation-policy';
 import { org } from './org';
