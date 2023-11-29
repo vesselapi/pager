@@ -163,9 +163,6 @@ const sentryWebhook = async ({
     });
   }
 
-  // Get secret for integration
-  // Run verify webhook
-  // create and send out to SNS
   const dbIntegration = await db.integrations.findByExternalId({
     appId: 'sentry',
     externalId: args.installation.uuid,
