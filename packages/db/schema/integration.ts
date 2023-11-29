@@ -10,6 +10,7 @@ import {
   SecretIntegrationIdRegex,
 } from '@vessel/types';
 
+import { escalationPolicy } from './escalation-policy';
 import { org } from './org';
 import { secret } from './secret';
 
@@ -25,6 +26,9 @@ export const integration = pgTable('integration', {
     .references(() => secret.id)
     .notNull(),
   externalId: text('external_id'),
+  escalationPolicyId: text('escalation_policy_id').references(
+    () => escalationPolicy.id,
+  ),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 

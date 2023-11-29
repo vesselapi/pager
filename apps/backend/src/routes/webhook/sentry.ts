@@ -184,6 +184,7 @@ const sentryWebhook = async ({
       orgId: dbIntegration.orgId,
       status: 'OPEN',
       source: 'sentry',
+      escalationPolicyId: dbIntegration.escalationPolicyId,
       metadata: {
         headers,
         body,

@@ -5,6 +5,7 @@ import type { z } from 'zod';
 import type { AlertId, UserId } from '@vessel/types';
 import { APP_ID, AlertIdRegex, UserIdRegex } from '@vessel/types';
 
+import { escalationPolicy } from './escalation-policy';
 import { org } from './org';
 import { user } from './user';
 
@@ -19,6 +20,9 @@ export const alert = pgTable('alert', {
   title: text('title').notNull(),
   status: statusEnum('status').notNull(),
   assignedToId: text('assigned_to_id').references(() => user.id),
+  escalationPolicyId: text('escalation_policy_id').references(
+    () => escalationPolicy.id,
+  ),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   source: alertSourceEnum('source').notNull(),
   metadata: json('metadata'),
