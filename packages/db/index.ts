@@ -143,16 +143,15 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     },
   },
   escalationPolicyStep: {
-    createMany: async (escalationPolicyStep: CreateEscalationPolicyStep[]) => {
-      const insertEscalationPolicyStep = insertEscalationPolicyStepSchema.parse(
-        {
+    createMany: async (escalationPolicySteps: CreateEscalationPolicyStep[]) => {
+      const insertEscalationPolicySteps = escalationPolicySteps.map(step => insertEscalationPolicyStepSchema.parse({
           id: IdGenerator.escalationPolicyStep(),
-          ...escalationPolicyStep,
+          ...step,
         },
-      );
+      ));
       const dbEscalationPolicyStep = await db
         .insert(escalationPolicyStepSchema)
-        .values(insertEscalationPolicyStep)
+        .values(insertEscalationPolicySteps)
         .returning();
       return dbEscalationPolicyStep.map((step) =>
         selectEscalationPolicyStepSchema.parse(step),
