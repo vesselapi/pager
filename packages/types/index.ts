@@ -24,7 +24,7 @@ export const UserIdRegex = /^v_user_[a-z0-9]+$/;
 export type SecretId = `v_secret_${string}_${string}`; // v_secret_{entity}_{suffix}
 export const SecretIdRegex = /^v_secret_[a-z0-9]+_[a-z0-9]+$/;
 
-export type IntegrationId = `v_integration_${string}`; // v_integration_{orgId}_{appId}
+export type IntegrationId = `v_integration_${string}`; // v_integration_{hash}
 export const IntegrationIdRegex = /^v_integration_[a-z0-9]+$/;
 
 export const APP_ID = ['sentry'] as const;

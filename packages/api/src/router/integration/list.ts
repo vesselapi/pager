@@ -1,5 +1,4 @@
 import { objectify } from 'radash';
-import { z } from 'zod';
 
 import { Db, db } from '@vessel/db';
 

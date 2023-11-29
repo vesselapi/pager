@@ -18,21 +18,16 @@ const Sentry = () => {
     router.push(authUrl);
   };
 
-  const ConnectButton = () =>
-    integration?.isConnected ? (
-      <Button disabled>Connected</Button>
-    ) : (
-      <Button onClick={connectIntegration}>Connect</Button>
-    );
-
   return (
     <div className="mx-10 my-10">
       <h1>Sentry</h1>
 
       {integrations.isFetching ? (
         <Spinner className="mt-5 px-10" />
+      ) : integration?.isConnected ? (
+        <Button disabled>Connected</Button>
       ) : (
-        <ConnectButton />
+        <Button onClick={connectIntegration}>Connect</Button>
       )}
     </div>
   );

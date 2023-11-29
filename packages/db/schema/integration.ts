@@ -10,7 +10,6 @@ import {
 } from '@vessel/types';
 import type { IntegrationId, OrgId, SecretId } from '@vessel/types';
 
-import { schema } from '..';
 import { org } from './org';
 import { secret } from './secret';
 
