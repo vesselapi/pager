@@ -1,8 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
-import { api } from '~/utils/api';
+import { useUser } from '../../hooks/useUser';
 
 const createInitials = (
   firstName: string | null,
@@ -13,15 +11,7 @@ const createInitials = (
 };
 
 const UserIcon = () => {
-  const [user, setUser] = useState();
-
-  const createOrGetUser = api.user.me.useMutation({
-    onSuccess: (result) => setUser(result?.user),
-  });
-
-  useEffect(() => {
-    createOrGetUser.mutate({ id: 'hey ' });
-  }, []);
+  const user = useUser();
 
   if (!user) {
     return (

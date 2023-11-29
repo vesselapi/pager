@@ -1,17 +1,17 @@
 import type { ExpoConfig } from '@expo/config';
 
 const defineConfig = (): ExpoConfig => ({
-  name: 'expo',
-  slug: 'expo',
+  name: 'Pager',
+  slug: 'pager',
   scheme: 'expo',
   version: '0.1.0',
   orientation: 'portrait',
-  icon: './assets/icon.png',
+  icon: './assets/icon.jpg',
   userInterfaceStyle: 'light',
   splash: {
-    image: './assets/icon.png',
+    image: './assets/icon.jpg',
     resizeMode: 'contain',
-    backgroundColor: '#1F104A',
+    backgroundColor: '#171717',
   },
   updates: {
     fallbackToCacheTimeout: 0,
@@ -22,17 +22,19 @@ const defineConfig = (): ExpoConfig => ({
     supportsTablet: true,
   },
   android: {
-    package: 'your.bundle.identifier',
+    package: 'com.vessel.pager',
     adaptiveIcon: {
-      foregroundImage: './assets/icon.png',
+      foregroundImage: './assets/icon.jpg',
       backgroundColor: '#1F104A',
     },
   },
-  // extra: {
-  //   eas: {
-  //     projectId: "your-eas-project-id",
-  //   },
-  // },
+  extra: {
+    /**
+     * NOTE(@zkirby): There must be a .env file with this variable in the same
+     * directory as the app.config file for expo to pick this up.
+     */
+    clerkPublishableKey: process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY,
+  },
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
