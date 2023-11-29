@@ -15,6 +15,13 @@
       "when": 1701125644878,
       "tag": "0001_orange_inertia",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1701222000579,
+      "tag": "0002_tough_vindicator",
+      "breakpoints": true
     }
   ]
 }
