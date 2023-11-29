@@ -1,6 +1,6 @@
 import { PublishCommand, SNSClient } from '@aws-sdk/client-sns';
 
-import { AlertId } from '@clerk/types';
+import { AlertId } from '@vessel/types';
 import { env } from '../../env.mjs';
 
 export const TOPIC = {
