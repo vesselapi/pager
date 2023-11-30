@@ -17,6 +17,10 @@ import {
   RotationIdRegex,
   ScheduleId,
   ScheduleIdRegex,
+  SecretExpoPushTokenId,
+  SecretExpoPushTokenIdRegex,
+  SecretId,
+  SecretIdRegex,
   SecretIntegrationId,
   SecretIntegrationIdRegex,
   UserId,
@@ -42,8 +46,12 @@ export const customValidators = {
   orgId: regexValidator<OrgId>(OrgIdRegex),
   rotationId: regexValidator<RotationId>(RotationIdRegex),
   scheduleId: regexValidator<ScheduleId>(ScheduleIdRegex),
-  userId: regexValidator<UserId>(UserIdRegex),
+  secretId: regexValidator(SecretIdRegex).transform((x) => x as SecretId),
   secretIntegrationId: regexValidator<SecretIntegrationId>(
     SecretIntegrationIdRegex,
   ),
+  secretExpoPushTokenId: regexValidator(SecretExpoPushTokenIdRegex).transform(
+    (x) => x as SecretExpoPushTokenId,
+  ),
+  userId: regexValidator<UserId>(UserIdRegex),
 };

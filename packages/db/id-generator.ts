@@ -12,6 +12,7 @@ import type {
   RotationId,
   RotationUserId,
   ScheduleId,
+  SecretExpoPushTokenId,
   SecretIntegrationId,
   UserId,
 } from '@vessel/types';
@@ -43,6 +44,8 @@ export const IdGenerator = {
   secrets: {
     integration: (): SecretIntegrationId =>
       `v_secret_integration_${randomString()}`,
+    expoPushToken: (): SecretExpoPushTokenId =>
+      `v_secret_expoPushToken_${randomString()}`,
   },
   org: (): OrgId => `v_org_${randomString()}`,
   user: (): UserId => `v_user_${randomString()}`,

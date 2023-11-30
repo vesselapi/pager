@@ -69,10 +69,17 @@ import {
   schedule as scheduleSchema,
   selectScheduleSchema,
 } from './schema/schedule';
-import type { insertSecretSchema } from './schema/secret';
-import { secret as secretSchema, selectSecretSchema } from './schema/secret';
+import {
+  insertSecretSchema,
+  secret as secretSchema,
+  selectSecretSchema,
+} from './schema/secret';
 import type { CreateUser } from './schema/user';
-import { selectUserSchema, user as userSchema } from './schema/user';
+import {
+  insertUserSchema,
+  selectUserSchema,
+  user as userSchema,
+} from './schema/user';
 
 export const schema = {
   alertSourceEnum,
@@ -312,6 +319,14 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         throw new Error(
           `Expected exactly one user to be created, got ${dbUser.length}`,
         );
+      return selectUserSchema.parse(dbUser[0]);
+    },
+    update: async (id: UserId, user: Partial<CreateUser>) => {
+      const dbUser = await db
+        .update(userSchema)
+        .set(insertUserSchema.parse(user))
+        .where(eq(userSchema.id, id))
+        .returning();
       return selectUserSchema.parse(dbUser[0]);
     },
   },
