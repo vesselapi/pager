@@ -15,8 +15,15 @@ export const createAlertView = (dbAlert: Alert | null) => {
       summary: metadata,
     };
   }
+
+  const summary =
+    typeof metadata === 'object' &&
+    metadata !== null &&
+    !Array.isArray(metadata)
+      ? metadata.summary
+      : undefined;
   return {
     ...rest,
-    summary: `Alert '${rest.title}' triggered by ${rest.source}`,
+    summary: summary ?? `Alert '${rest.title}' triggered by ${rest.source}`,
   };
 };
