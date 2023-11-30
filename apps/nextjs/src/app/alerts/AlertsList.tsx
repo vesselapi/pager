@@ -2,7 +2,7 @@
 
 import { useAuth } from '@clerk/nextjs';
 import classNames from 'classnames';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { GrStatusGood } from 'react-icons/gr';
 import { MdOutlineClose } from 'react-icons/md';
 import { RxAvatar } from 'react-icons/rx';
@@ -119,12 +119,13 @@ const AlertsList = () => {
   const users = api.user.all.useQuery();
   const currentUser = useAuth();
 
-  const update = useCallback(async (
-    alert: Partial<RouterOutputs['alert']['all']['0']>,
-  ) => {
-    await updateAlert.mutateAsync({ id: alert.id, alert });
-    await alerts.refetch();
-  }, []);
+  const update = useCallback(
+    async (alert: Partial<RouterOutputs['alert']['all']['0']>) => {
+      await updateAlert.mutateAsync({ id: alert.id, alert });
+      await alerts.refetch();
+    },
+    [],
+  );
 
   return (
     <div className="flex flex-col">
@@ -175,9 +176,9 @@ const AlertsList = () => {
                       [...srts].map((sort) =>
                         sort === s
                           ? {
-                            ...sort,
-                            order: sort.order === 'desc' ? 'asc' : 'desc',
-                          }
+                              ...sort,
+                              order: sort.order === 'desc' ? 'asc' : 'desc',
+                            }
                           : sort,
                       ),
                     )

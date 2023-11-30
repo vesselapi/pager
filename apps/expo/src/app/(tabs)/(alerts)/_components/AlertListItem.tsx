@@ -1,8 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import { capitalize } from 'radash';
-import { Animated, TouchableOpacity } from 'react-native';
-import { Text, View } from 'react-native';
+import { Animated, Text, TouchableOpacity, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 
 const StatusToColor = {
@@ -15,46 +14,88 @@ const Swipe = (color) => (progress, dragX) => {
   const scale = dragX.interpolate({
     inputRange: [-200, 0],
     outputRange: [1, 0.5],
-  })
+  });
   return (
-    <Animated.View style={{ backgroundColor: color, width: "100%", justifyContent: 'center' }}>
-      <Animated.Text style={{ marginLeft: 'auto', marginRight: 50, fontSize: 15, fontWeight: 'bold', transform: [{ scale }] }}>Delete Item</Animated.Text>
+    <Animated.View
+      style={{
+        backgroundColor: color,
+        width: '100%',
+        justifyContent: 'center',
+      }}
+    >
+      <Animated.Text
+        style={{
+          marginLeft: 'auto',
+          marginRight: 50,
+          fontSize: 15,
+          fontWeight: 'bold',
+          transform: [{ scale }],
+        }}
+      >
+        Delete Item
+      </Animated.Text>
     </Animated.View>
-  )
-}
+  );
+};
 
-const SwipeRight = (progress, dragX) => {
-
-}
+const SwipeRight = (progress, dragX) => {};
 
 const SwipeLeft = (progress, dragX) => {
   const scale = dragX.interpolate({
     inputRange: [-200, 0],
     outputRange: [1, 0.5],
-  })
+  });
   return (
-    <Animated.View style={{ backgroundColor: 'blue', width: "100%", justifyContent: 'center' }}>
-      <Animated.Text style={{ marginLeft: 'auto', marginRight: 50, fontSize: 15, fontWeight: 'bold', transform: [{ scale }] }}>Delete Item</Animated.Text>
+    <Animated.View
+      style={{
+        backgroundColor: 'blue',
+        width: '100%',
+        justifyContent: 'center',
+      }}
+    >
+      <Animated.Text
+        style={{
+          marginLeft: 'auto',
+          marginRight: 50,
+          fontSize: 15,
+          fontWeight: 'bold',
+          transform: [{ scale }],
+        }}
+      >
+        Delete Item
+      </Animated.Text>
     </Animated.View>
-  )
-}
+  );
+};
 
-const AlertListItem = ({ alert, user, onAck, onClose, onReopen, onSelfAssign }) => {
+const AlertListItem = ({
+  alert,
+  user,
+  onAck,
+  onClose,
+  onReopen,
+  onSelfAssign,
+}) => {
   const { status, title, createdAt } = alert;
   const { firstName, lastName } = user;
 
-  const height = new Animated.Value(70)
+  const height = new Animated.Value(70);
 
   const animatedAct = () => {
     Animated.timing(height, {
       toValue: 0,
       duration: 350,
-      useNativeDriver: false
-    }).start(() => console.log('hey'))
-  }
+      useNativeDriver: false,
+    }).start(() => console.log('hey'));
+  };
 
   return (
-    <Swipeable renderRightActions={Swipe('red')} renderLeftActions={Swipe('blue')} rightThreshold={-200} onSwipeableOpen={animatedAct}>
+    <Swipeable
+      renderRightActions={Swipe('red')}
+      renderLeftActions={Swipe('blue')}
+      rightThreshold={-200}
+      onSwipeableOpen={animatedAct}
+    >
       <Animated.View className="pb-8 px-4 pt-2 bg-white">
         <View className={'flex-row justify-between'}>
           <View className={'flex-row items-center'}>
@@ -85,7 +126,9 @@ const AlertListItem = ({ alert, user, onAck, onClose, onReopen, onSelfAssign }) 
           <Text className={'mr-1 text-sm font-bold text-gray-600'}>
             {(firstName?.slice(0, 1) ?? '') + (lastName?.slice(0, 1) ?? '')}
           </Text>
-          <TouchableOpacity onPress={onSelfAssign}><Ionicons name="md-hand-right-outline" size={22} color="black" /></TouchableOpacity>
+          <TouchableOpacity onPress={onSelfAssign}>
+            <Ionicons name="md-hand-right-outline" size={22} color="black" />
+          </TouchableOpacity>
         </View>
       </Animated.View>
     </Swipeable>
