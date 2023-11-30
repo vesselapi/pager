@@ -15,7 +15,8 @@ const stackEnv = shake(
 export function CoreStack({ stack }: StackContext) {
   const api = new Api(stack, 'WebhookApi', {
     routes: {
-      'POST    /webhook': 'src/routes/alert.main',
+      'POST /alert': 'src/routes/alert.main',
+      'POST /webhook/sentry': 'src/routes/webhook/sentry.main',
     },
     defaults: {
       function: {
@@ -36,9 +37,14 @@ export function CoreStack({ stack }: StackContext) {
     consumer: alertOncallFn,
   });
 
-  new Topic(stack, 'AlertsTopic', {
+  const topic = new Topic(stack, 'AlertsTopic', {
     subscribers: {
       subscriber1: alertOncallQueue,
     },
+  });
+
+  stack.addOutputs({
+    ApiUrl: api.url,
+    AlertsTopicArn: topic.topicArn,
   });
 }

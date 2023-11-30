@@ -34,6 +34,12 @@ const config = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unsafe-call': 'off',
     '@typescript-eslint/no-unsafe-assignment': 'off',
+    /**
+     * Prefer to allow the developer more control over deps array
+     * since there might be cases where a dep is known to not update
+     * during a component lifecycle.
+     */
+    'react-hooks/exhaustive-deps': 'off',
   },
   ignorePatterns: [
     '**/.eslintrc.cjs',

@@ -2,12 +2,19 @@ import { z } from 'zod';
 
 import type { HttpsUrl } from '@vessel/types';
 
-interface OAuth2Params<TOauthRequest extends z.ZodTypeAny = z.ZodTypeAny> {
+interface OAuth2Params<
+  TOauthRequest extends z.ZodTypeAny = z.ZodTypeAny,
+  TOauthResponse extends z.ZodTypeAny = z.ZodTypeAny,
+  TSecret = {
+    oauthRequest: z.infer<TOauthRequest>;
+    oauthResponse: z.infer<TOauthResponse>;
+  },
+> {
   oauthRequestSchema?: TOauthRequest;
+  oauthResponseSchema?: TOauthResponse;
   authUrl: HttpsUrl | (() => HttpsUrl);
-  tokenUrl:
-    | HttpsUrl
-    | ((params: { oauthRequest: z.infer<TOauthRequest> }) => HttpsUrl);
+  tokenUrl: HttpsUrl | ((params: { oauthRequest: TSecret }) => HttpsUrl);
+  externalId?: (secret: TSecret) => string | null;
   clientId: string;
   clientSecret: string;
   scopeSeparator?: string;
@@ -29,7 +36,9 @@ export const auth: {
       ...params,
       type: 'oauth2',
       oauthRequestSchema: params.oauthRequestSchema ?? z.any(),
+      oauthResponseSchema: params.oauthResponseSchema ?? z.any(),
       tokenAuth: params.tokenAuth ?? 'body',
+      externalId: params.externalId ?? (() => null),
       scopeSeparator: params.scopeSeparator ?? ' ',
       oauthBodyFormat: params.oauthBodyFormat ?? 'form',
     };
