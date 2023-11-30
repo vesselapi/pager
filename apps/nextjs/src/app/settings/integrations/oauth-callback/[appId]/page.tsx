@@ -1,6 +1,6 @@
 'use client';
 
-import { AppId } from '@vessel/types';
+import type { AppId } from '@vessel/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import React, { useEffect } from 'react';
