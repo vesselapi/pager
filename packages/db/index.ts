@@ -107,7 +107,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     update: async (id: AlertId, alert: UpsertAlert) => {
       return db
         .update(alertSchema)
-        .set(insertAlertSchema.parse({ id, ...alert }))
+        .set(insertAlertSchema.partial().parse({ id, ...alert }))
         .where(eq(alertSchema.id, id as string))
         .returning();
     },
@@ -260,7 +260,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         throw new Error(
           `Expected exactly one user to be created, got ${dbUser.length}`,
         );
-      return dbUser[0];
+      return selectUserSchema.parse(dbUser[0]);
     },
   },
   secret: {

@@ -21,7 +21,8 @@ const input = z.object({
       assignedToId: z
         .string()
         .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`)
-        .transform((x) => x as UserId),
+        .transform((x) => x as UserId)
+        .nullish(),
       status: z.enum(['ACKED', 'OPEN', 'CLOSED']),
     })
     .partial(),

@@ -2,7 +2,7 @@
 
 import { useAuth } from '@clerk/nextjs';
 import classNames from 'classnames';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { GrStatusGood } from 'react-icons/gr';
 import { MdOutlineClose } from 'react-icons/md';
 import { RxAvatar } from 'react-icons/rx';
@@ -118,6 +118,14 @@ const AlertsList = () => {
   const updateAlert = api.alert.update.useMutation();
   const users = api.user.all.useQuery();
   const currentUser = useAuth();
+
+  const update = useCallback(
+    async (alert: Partial<RouterOutputs['alert']['all']['0']>) => {
+      await updateAlert.mutateAsync({ id: alert.id, alert });
+      await alerts.refetch();
+    },
+    [],
+  );
 
   return (
     <div className="flex flex-col">
@@ -243,12 +251,6 @@ const AlertsList = () => {
               const user = users.data?.find((u) => u.id === a.assignedToId) ?? {
                 firstName: '',
                 lastName: '',
-              };
-              const update = async (
-                alert: Partial<RouterOutputs['alert']['all']['0']>,
-              ) => {
-                await updateAlert.mutateAsync({ id: a.id, alert });
-                await alerts.refetch();
               };
 
               return (
