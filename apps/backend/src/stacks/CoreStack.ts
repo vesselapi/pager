@@ -34,20 +34,20 @@ export function CoreStack({ stack }: StackContext) {
     },
   });
 
-  const alertOncallFn = new Function(stack, 'AlertOncall', {
+  const alertPageFn = new Function(stack, 'AlertOncall', {
     runtime: 'nodejs18.x',
-    handler: 'src/functions/alert-oncall.main',
+    handler: 'src/functions/alert-page.main',
     deadLetterQueueEnabled: true,
     environment: stackEnv,
   });
 
-  const alertOncallQueue = new Queue(stack, 'AlertOncallQueue', {
-    consumer: alertOncallFn,
+  const alertPageQueue = new Queue(stack, 'AlertPageQueue', {
+    consumer: alertPageFn,
   });
 
   const topic = new Topic(stack, 'AlertsTopic', {
     subscribers: {
-      subscriber1: alertOncallQueue,
+      subscriber1: alertPageQueue,
     },
   });
 
@@ -59,8 +59,8 @@ export function CoreStack({ stack }: StackContext) {
     stack,
     'AlertOncallQueueTask',
     {
-      queue: alertOncallQueue.cdk.queue,
-      messageBody: TaskInput.fromJsonPathAt('$.message'),
+      queue: alertPageQueue.cdk.queue,
+      messageBody: TaskInput.fromJsonPathAt('$.payload'),
     },
   );
   const stateDefinition =

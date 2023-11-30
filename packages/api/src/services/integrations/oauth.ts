@@ -5,16 +5,18 @@ import type { OAuth2Config } from './auth';
 
 type SimpleOauth2Config = ConstructorParameters<typeof AuthorizationCode>[0];
 
-const toSimpleOauth2Config = ({
+const toSimpleOauth2Config = <TOAuthRequest = {}, TOAuthResponse = {}>({
   config,
   oauthRequest,
+  oauthResponse,
 }: {
   config: OAuth2Config;
-  oauthRequest: Record<string, string>;
+  oauthRequest: TOAuthRequest;
+  oauthResponse: TOAuthResponse;
 }): SimpleOauth2Config => {
   const tokenUrl = isString(config.tokenUrl)
     ? new URL(config.tokenUrl)
-    : new URL(config.tokenUrl({ oauthRequest }));
+    : new URL(config.tokenUrl({ oauthRequest, oauthResponse }));
   const authUrl = isString(config.authUrl)
     ? new URL(config.authUrl)
     : new URL(config.authUrl());
@@ -57,7 +59,7 @@ export const makeOauth2Client = () => ({
       return config.authUrl;
     }
     const client = new AuthorizationCode(
-      toSimpleOauth2Config({ config, oauthRequest: {} }),
+      toSimpleOauth2Config({ config, oauthRequest: {}, oauthResponse: {} }),
     );
     return client.authorizeURL({
       redirect_uri: redirectUri,
@@ -82,7 +84,7 @@ export const makeOauth2Client = () => ({
     oauthResponse: Record<string, string | number>;
   }> => {
     const client = new AuthorizationCode(
-      toSimpleOauth2Config({ config, oauthRequest }),
+      toSimpleOauth2Config({ config, oauthRequest, oauthResponse: {} }),
     );
     const accessToken = await client.getToken({
       code,
@@ -109,7 +111,7 @@ export const makeOauth2Client = () => ({
     oauthResponse?: Record<string, unknown>;
   }> => {
     const client = new AuthorizationCode(
-      toSimpleOauth2Config({ config, oauthRequest }),
+      toSimpleOauth2Config({ config, oauthRequest, oauthResponse: {} }),
     );
     const token = client.createToken({
       refresh_token: refreshToken,

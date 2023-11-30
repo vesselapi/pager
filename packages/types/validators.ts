@@ -1,32 +1,49 @@
 import { z } from 'zod';
 
 import {
+  AlertEventId,
+  AlertEventIdRegex,
+  AlertId,
+  AlertIdRegex,
   EscalationPolicyId,
   EscalationPolicyIdRegex,
   EscalationPolicyStepId,
   EscalationPolicyStepIdRegex,
+  IntegrationId,
+  IntegrationIdRegex,
   OrgId,
   OrgIdRegex,
   RotationId,
   RotationIdRegex,
   ScheduleId,
   ScheduleIdRegex,
+  SecretIntegrationId,
+  SecretIntegrationIdRegex,
   UserId,
   UserIdRegex,
 } from './types';
 
-const regexValidator = (regex: RegExp) =>
-  z.string().regex(regex, `Invalid id, expected format ${regex}`);
+const regexValidator = <T>(regex: RegExp) =>
+  z
+    .string()
+    .regex(regex, `Invalid id, expected format ${regex}`)
+    .transform((x) => x as T);
 
 export const customValidators = {
-  escalationPolicyId: regexValidator(EscalationPolicyIdRegex).transform(
-    (x) => x as EscalationPolicyId,
+  alertId: regexValidator<AlertId>(AlertIdRegex),
+  alertEventId: regexValidator<AlertEventId>(AlertEventIdRegex),
+  escalationPolicyId: regexValidator<EscalationPolicyId>(
+    EscalationPolicyIdRegex,
   ),
-  escalationPolicyStepId: regexValidator(EscalationPolicyStepIdRegex).transform(
-    (x) => x as EscalationPolicyStepId,
+  escalationPolicyStepId: regexValidator<EscalationPolicyStepId>(
+    EscalationPolicyStepIdRegex,
   ),
-  orgId: regexValidator(OrgIdRegex).transform((x) => x as OrgId),
-  rotationId: regexValidator(RotationIdRegex).transform((x) => x as RotationId),
-  scheduleId: regexValidator(ScheduleIdRegex).transform((x) => x as ScheduleId),
-  userId: regexValidator(UserIdRegex).transform((x) => x as UserId),
+  integrationId: regexValidator<IntegrationId>(IntegrationIdRegex),
+  orgId: regexValidator<OrgId>(OrgIdRegex),
+  rotationId: regexValidator<RotationId>(RotationIdRegex),
+  scheduleId: regexValidator<ScheduleId>(ScheduleIdRegex),
+  userId: regexValidator<UserId>(UserIdRegex),
+  secretIntegrationId: regexValidator<SecretIntegrationId>(
+    SecretIntegrationIdRegex,
+  ),
 };

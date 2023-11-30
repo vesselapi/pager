@@ -2,13 +2,7 @@ import { pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 
-import type { IntegrationId, OrgId, SecretIntegrationId } from '@vessel/types';
-import {
-  APP_ID,
-  IntegrationIdRegex,
-  OrgIdRegex,
-  SecretIntegrationIdRegex,
-} from '@vessel/types';
+import { APP_ID, customValidators } from '@vessel/types';
 
 import { escalationPolicy } from './escalation-policy';
 import { org } from './org';
@@ -33,31 +27,15 @@ export const integration = pgTable('integration', {
 });
 
 export const selectIntegrationSchema = createSelectSchema(integration, {
-  id: (schema) => schema.id.transform((x) => x as IntegrationId),
-  orgId: (schema) => schema.orgId.transform((x) => x as OrgId),
-  secretId: (schema) =>
-    schema.secretId.transform((x) => x as SecretIntegrationId),
+  id: customValidators.integrationId,
+  orgId: customValidators.orgId,
+  secretId: customValidators.secretIntegrationId,
 });
 
 export const insertIntegrationSchema = createInsertSchema(integration, {
-  id: (schema) =>
-    schema.id
-      .regex(
-        IntegrationIdRegex,
-        `Invalid id, expected format ${IntegrationIdRegex}`,
-      )
-      .transform((x) => x as IntegrationId),
-  orgId: (schema) =>
-    schema.orgId
-      .regex(OrgIdRegex, `Invalid id, expected format ${OrgIdRegex}`)
-      .transform((x) => x as OrgId),
-  secretId: (schema) =>
-    schema.secretId
-      .regex(
-        SecretIntegrationIdRegex,
-        `Invalid id, expected format ${SecretIntegrationIdRegex}`,
-      )
-      .transform((x) => x as SecretIntegrationId),
+  id: customValidators.integrationId,
+  orgId: customValidators.orgId,
+  secretId: customValidators.secretIntegrationId,
 });
 
 export type CreateIntegration = Omit<

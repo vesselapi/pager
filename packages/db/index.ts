@@ -7,7 +7,9 @@ import type {
   AlertEventId,
   AlertId,
   AppId,
+  EscalationPolicyId,
   OrgId,
+  ScheduleId,
   SecretId,
   UserId,
 } from '@vessel/types';
@@ -22,18 +24,24 @@ import {
   statusEnum,
 } from './schema/alert';
 import {
+  CreateAlertEvent,
   alertEvent as alertEventSchema,
+  insertAlertEventSchema,
   selectAlertEventSchema,
-} from './schema/alertEvent';
+} from './schema/alert-event';
+import type { EscalationPolicy } from './schema/escalation-policy';
 import {
   CreateEscalationPolicy,
   escalationPolicy as escalationPolicySchema,
+  escalationPolicyStepRelation,
   insertEscalationPolicySchema,
   selectEscalationPolicySchema,
 } from './schema/escalation-policy';
 import {
   CreateEscalationPolicyStep,
+  EscalationPolicyStep,
   escalationPolicyStep as escalationPolicyStepSchema,
+  escalationPolicyStepType,
   insertEscalationPolicyStepSchema,
   selectEscalationPolicyStepSchema,
 } from './schema/escalation-policy-step';
@@ -76,6 +84,8 @@ export const schema = {
   alertEvent: alertEventSchema,
   escalationPolicy: escalationPolicySchema,
   escalationPolicyStep: escalationPolicyStepSchema,
+  escalationPolicyStepRelation,
+  escalationPolicyStepType,
   integration: integrationSchema,
   org: orgSchema,
   user: userSchema,
@@ -135,6 +145,13 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       const alertEvents = await db.query.alertEvent.findMany(...args);
       return alertEvents.map((a) => selectAlertEventSchema.parse(a));
     },
+    create: async (alertEvent: CreateAlertEvent) => {
+      const insertAlertEvent = insertAlertEventSchema.parse(alertEvent);
+      const alertEvents = await db
+        .insert(alertEventSchema)
+        .values(insertAlertEvent);
+      return selectAlertEventSchema.parse(alertEvents[0]);
+    },
   },
   escalationPolicy: {
     create: async (escalationPolicy: CreateEscalationPolicy) => {
@@ -147,6 +164,25 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .values(insertEscalationPolicy)
         .returning();
       return selectEscalationPolicySchema.parse(dbEscalationPolicy[0]);
+    },
+    findWithSteps: async (
+      id: EscalationPolicyId,
+    ): Promise<EscalationPolicy & { steps: EscalationPolicyStep[] }> => {
+      const escalationPolicy = await db.query.escalationPolicy.findFirst({
+        where: eq(escalationPolicySchema.id, id),
+        with: {
+          steps: true,
+        },
+      });
+      if (!escalationPolicy) {
+        throw new Error(`Escalation policy not found: ${id}`);
+      }
+      return {
+        ...selectEscalationPolicySchema.parse(escalationPolicy),
+        steps: escalationPolicy.steps.map((step) =>
+          selectEscalationPolicyStepSchema.parse(step),
+        ),
+      };
     },
   },
   escalationPolicyStep: {
@@ -318,6 +354,12 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         where: eq(scheduleSchema.orgId, orgId),
       });
       return schedules.map((schedule) => selectScheduleSchema.parse(schedule));
+    },
+    find: async (id: ScheduleId) => {
+      const schedules = await db.query.schedule.findFirst({
+        where: eq(scheduleSchema.id, id),
+      });
+      return selectScheduleSchema.parse(schedules);
     },
     create: async (schedule: CreateSchedule) => {
       const parsedSchedule = insertScheduleSchema.parse(schedule);
