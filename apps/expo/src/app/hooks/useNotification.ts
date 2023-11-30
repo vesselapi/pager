@@ -34,15 +34,19 @@ export function useNotification() {
     } else {
       const { status: existingStatus } =
         await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
+
+      if (existingStatus === 'granted') {
         return;
       }
+
+      const { status: requestStatus } =
+        await Notifications.requestPermissionsAsync();
+
+      if (requestStatus !== 'granted') {
+        alert('You will not receive any notifications for any alerts!');
+        return;
+      }
+
       const token = await Notifications.getExpoPushTokenAsync({
         projectId: Constants.expoConfig!.extra!.eas.projectId,
       });
