@@ -2,6 +2,7 @@ import FeatherIcons from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View } from 'react-native';
 
+import { useNotification } from '../hooks/useNotification';
 import { useUser } from '../hooks/useUser';
 import AlertListPage from './(alerts)';
 import ProfilePage from './(profile)';
@@ -10,6 +11,7 @@ import SchedulePage from './(schedule)';
 const Tab = createBottomTabNavigator();
 
 const TabsLayout = () => {
+  useNotification();
   const user = useUser();
 
   return (
