@@ -10,8 +10,8 @@ import {
 } from '@vessel/api/src/services/integrations';
 import type {
   SentryWebhookBody,
-  SentryWebhookEventAlertBody,
   SentryWebhookHeaders,
+  SentryWebhookIssueCreateBody,
 } from '@vessel/api/src/services/integrations/app/sentry/types';
 import * as crypto from 'crypto';
 
@@ -41,8 +41,9 @@ const sentryWebhook = async ({
   request,
 }: Props<SentryWebhookBody, Services>): Promise<Result> => {
   const headers = request.headers as unknown as SentryWebhookHeaders;
-  const { db, integrations, alertManager } = services;
+  const { db, integrations, alertManager, logger } = services;
 
+  logger.info({ args });
   if (['installation'].includes(headers['sentry-hook-resource'])) {
     return { success: true };
   }
@@ -73,10 +74,10 @@ const sentryWebhook = async ({
     );
   }
 
-  if (headers['sentry-hook-resource'] === 'event_alert') {
-    const body = args as SentryWebhookEventAlertBody;
+  if (headers['sentry-hook-resource'] === 'issue') {
+    const body = args as SentryWebhookIssueCreateBody;
     await alertManager.create({
-      title: body.issue_alert.title,
+      title: body.data.issue.title,
       orgId: dbIntegration.orgId,
       status: 'OPEN',
       source: 'sentry',

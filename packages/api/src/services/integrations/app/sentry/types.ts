@@ -103,4 +103,58 @@ export type SentryWebhookEventAlertBody = BaseSentryPayload & {
   };
 };
 
-export type SentryWebhookBody = SentryWebhookEventAlertBody;
+// NOTE: sentry-hook-resource = issue
+// Example: https://docs.sentry.io/product/integrations/integration-platform/webhooks/issues/#dataissue
+export type SentryWebhookIssueCreateBody = BaseSentryPayload & {
+  action: 'created';
+  data: {
+    issue: {
+      id: string;
+      shortId: string;
+      title: string;
+      culprit: string;
+      level: string;
+      status: string;
+      statusDetails: object;
+      substatus: string;
+      isPublic: boolean;
+      platform: string;
+      project: {
+        id: string;
+        name: string;
+        slug: string;
+        platform: string;
+      };
+      type: string;
+      metadata: {
+        value: string;
+        type: string;
+        filename: string;
+        function: string;
+        display_title_with_tree_label: boolean;
+        in_app_frame_mix: string;
+        sdk: {
+          name: string;
+          name_normalized: string;
+        };
+      };
+      numComments: number;
+      assignedTo?: string;
+      isBookmarked: boolean;
+      isSubscribed: boolean;
+      hasSeen: boolean;
+      annotations: string[];
+      issueType: string;
+      issueCategory: string;
+      isUnhandled: boolean;
+      count: number;
+      userCount: number;
+      firstSeen: string;
+      lastSeen: string;
+    };
+  };
+};
+
+export type SentryWebhookBody =
+  | SentryWebhookEventAlertBody
+  | SentryWebhookIssueCreateBody;
