@@ -6,6 +6,7 @@ import { UserIdRegex } from '@vessel/types';
 
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
+import { createAlertView } from './createAlertView';
 
 interface Context {
   db: Db;
@@ -124,14 +125,15 @@ export const alertList = trpc
     }),
   )
   .input(input)
-  .query(({ ctx, input }) => {
+  .query(async ({ ctx, input }) => {
     const sortClause = buildSortClause(input.sorts);
     const filterClause = buildFilterClause(input.filters);
 
-    return ctx.db.alerts.list({
+    const dbAlerts = await ctx.db.alerts.list({
       limit: input.limit,
       offset: input.offset,
       orderBy: sortClause,
       where: filterClause,
     });
+    return dbAlerts.map(createAlertView);
   });
