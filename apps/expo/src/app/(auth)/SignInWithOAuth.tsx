@@ -1,7 +1,7 @@
 import { useOAuth } from '@clerk/clerk-expo';
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
-import { Button, Image, SafeAreaView, Text, View } from 'react-native';
+import { Image, SafeAreaView, Text, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { useWarmUpBrowser } from './hooks/warmUpBrowser';
@@ -58,7 +58,7 @@ const SignInWithOAuth = () => {
           </TouchableOpacity>
         </View>
         <View className="rounded-lg border-2 bg-white p-4 mb-4">
-          <TouchableOpacity onPress={useCreateOnPress(startOAuthFlowGoogle)} >
+          <TouchableOpacity onPress={useCreateOnPress(startOAuthFlowGitHub)} >
             <View className='w-full flex-row items-center justify-center'>
               <FontAwesome name="github" size={24} color="black" className='mr-3' />
               <Text className='text-xl'>Sign in with Github</Text>

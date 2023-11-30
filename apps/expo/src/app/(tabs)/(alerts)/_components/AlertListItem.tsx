@@ -3,11 +3,12 @@ import { format } from 'date-fns';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
+import type { Alert, User } from '../alerts.types';
 
 const StatusToColor = {
-  ACKED: 'text-blue-800 bg-blue-200',
-  OPEN: 'text-red-800 bg-red-200',
-  CLOSED: 'text-green-800 bg-green-200',
+  ACKED: { view: 'bg-blue-200', text: 'text-blue-800' },
+  OPEN: { view: 'bg-red-200', text: 'text-red-800' },
+  CLOSED: { view: 'bg-green-200', text: 'text-green-800' },
 };
 
 const Swipe = (color, text) => (progress, dragX) => {
@@ -101,12 +102,21 @@ const AlertListItem = ({
   onClose,
   onReopen,
   onSelfAssign,
+}: {
+  alert: Alert,
+  user: User,
+  onAck: () => void,
+  onClose: () => void,
+  onReopen: () => void,
+  onSelfAssign: () => void,
 }) => {
   const { status, title, createdAt } = alert;
   const { firstName, lastName } = user;
 
 
+  const StatusColors = StatusToColor[status as keyof typeof StatusToColor]
   const { left, right, action } = createSwipeAnimations(status, { onAck, onClose, onReopen })
+
 
   return (
     <Swipeable
@@ -118,10 +128,10 @@ const AlertListItem = ({
         <View className={'flex-row justify-between'}>
           <View className={'flex-row items-center'}>
             <View
-              className={`mr-4 w-[60px] rounded bg-opacity-80 py-0.5 ${StatusToColor[status]}`}
+              className={`mr-4 w-[60px] rounded bg-opacity-80 py-0.5 ${StatusColors.view}`}
             >
               <Text
-                className={`text-center text-sm font-medium capitalize ${StatusToColor[status]}`}
+                className={`text-center text-sm font-medium capitalize ${StatusColors.text}`}
               >
                 {status}
               </Text>

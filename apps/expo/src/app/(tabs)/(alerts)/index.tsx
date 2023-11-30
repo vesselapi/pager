@@ -10,11 +10,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Stack } from 'expo-router';
-import type { RouterOutputs } from '~/utils/api';
 import { api } from '~/utils/api';
 import { useUser } from '../../hooks/useUser';
 import AlertListItem from './_components/AlertListItem';
 import { useSearch } from './hooks/useSearch';
+import type { Alert } from './alerts.types';
 
 const AlertListPage = () => {
   const [search, setSearch] = useSearch();
@@ -37,8 +37,8 @@ const AlertListPage = () => {
   const updateAlert = api.alert.update.useMutation();
 
   const update = useCallback(
-    async (alert: Partial<RouterOutputs['alert']['all']['0']>) => {
-      await updateAlert.mutateAsync({ id: alert.id, alert });
+    async (id: string, alert: Partial<Alert>) => {
+      await updateAlert.mutateAsync({ id, alert });
       await alerts.refetch();
     },
     [],
@@ -51,9 +51,6 @@ const AlertListPage = () => {
         <View className='w-full flex-row items-center p-4'>
           <TextInput
             className='bg-white h-[40px] w-full px-4 rounded-md shadow'
-            // NOTE(@zkirby): No idea why the tailwind shadow property doesn't work.
-            // I'm fairly confident I'm not using the property correctly, but the 
-            // style property is much easier to fine tune.
             style={{
               shadowColor: '#171717',
               shadowOffset: { width: -2, height: 4 },
@@ -76,10 +73,10 @@ const AlertListPage = () => {
                 <AlertListItem
                   alert={item}
                   user={user}
-                  onAck={() => update({ status: 'ACKED' })}
-                  onReopen={() => update({ status: 'OPEN' })}
-                  onClose={() => update({ status: 'CLOSED' })}
-                  onSelfAssign={() => update({ assignedToId: user.id })}
+                  onAck={() => update(item.id, { status: 'ACKED' })}
+                  onReopen={() => update(item.id, { status: 'OPEN' })}
+                  onClose={() => update(item.id, { status: 'CLOSED' })}
+                  onSelfAssign={() => update(item.id, { assignedToId: user.id })}
                 />
               )}
               keyExtractor={(item) => `${item.id}`}

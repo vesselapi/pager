@@ -194,7 +194,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         throw new Error(
           `Expected exactly one user to be created, got ${dbUser.length}`,
         );
-      return dbUser[0];
+      return selectUserSchema.parse(dbUser[0]);
     },
   },
   secret: {
