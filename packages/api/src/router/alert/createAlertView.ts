@@ -25,6 +25,8 @@ export const createAlertView = (dbAlert: Alert | null) => {
       : undefined;
   return {
     ...rest,
-    summary: summary ?? `Alert '${rest.title}' triggered by ${rest.source}`,
+    summary:
+      (summary as string) ??
+      `Alert '${rest.title}' triggered by ${rest.source}`,
   };
 };

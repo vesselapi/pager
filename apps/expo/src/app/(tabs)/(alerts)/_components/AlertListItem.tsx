@@ -27,7 +27,7 @@ const AlertListItem = ({
   onSelfAssign: () => void;
 }) => {
   const { status, title, createdAt, summary } = alert;
-  const { firstName, lastName } = user;
+  const initials = (user.firstName?.slice(0, 1) ?? '') + (user.lastName?.slice(0, 1) ?? '')
 
   const StatusColors = StatusToColor[status as keyof typeof StatusToColor];
   const { LeftSwipe, RightSwipe, action } = createSwipeAnimations(status, {
@@ -70,7 +70,7 @@ const AlertListItem = ({
                   'w-[65%] text-sm text-gray-500'
                 }
               >
-                {JSON.stringify(summary)}
+                {summary}
               </Text>
             </View>
           </View>
@@ -82,7 +82,7 @@ const AlertListItem = ({
 
             <View className={'flex-row items-center '}>
               <Text className={'mr-1 text-sm font-bold text-gray-600'}>
-                {(firstName?.slice(0, 1) ?? '') + (lastName?.slice(0, 1) ?? '')}
+                {initials}
               </Text>
               <TouchableOpacity onPress={onSelfAssign}>
                 <Ionicons name="md-hand-right-outline" size={22} color="black" />

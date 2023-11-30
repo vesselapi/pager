@@ -170,7 +170,7 @@ const AlertsListItem = ({
         <div className="flex items-center whitespace-nowrap">
           <h2 className="mr-1.5 text-base">{title}</h2>
           <div className="text-zinc-500">
-            {JSON.stringify(summary)}
+            {(summary)}
           </div>
         </div>
 
