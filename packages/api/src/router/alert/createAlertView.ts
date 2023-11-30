@@ -12,7 +12,8 @@ export const createAlertView = (dbAlert: Alert | null) => {
   if (rest.source === 'sentry') {
     return {
       ...rest,
-      summary: metadata,
+      // TODO: Figure out what summary to generate for sentry alerts.
+      summary: `Alert '${rest.title}' triggered by ${rest.source}`,
     };
   }
 

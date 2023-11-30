@@ -4,7 +4,7 @@ import { MdFilterList, MdOutlineClose } from 'react-icons/md';
 
 import Dropdown from '../../_components/Dropdown';
 import Pill from '../../_components/Pill';
-import type { ConfigOption, FilterSetting } from '../AlertListTypes';
+import type { ConfigOption, FilterSetting } from '../alerts.types';
 
 const AlertListFilterPill = ({
   label,
@@ -121,40 +121,40 @@ const AlertListFilterDropdown = ({
     >
       {selectedFilter
         ? selectedFilter.valueOptions.map((o) => (
-            <button
-              key={o.label}
-              className="w-full text-left"
-              onClick={() => {
-                onFilter({
-                  ...selectedFilter,
-                  value: [o],
-                  // NOTE(@zkirby): We'll always apply the first condition
-                  condition: selectedFilter.conditionOptions[0]!,
-                });
-                setSelected(null);
-              }}
-            >
-              <div className="flex items-center justify-between">
-                {o.label}
-                {o.Icon}
-              </div>
-            </button>
-          ))
+          <button
+            key={o.label}
+            className="w-full text-left"
+            onClick={() => {
+              onFilter({
+                ...selectedFilter,
+                value: [o],
+                // NOTE(@zkirby): We'll always apply the first condition
+                condition: selectedFilter.conditionOptions[0]!,
+              });
+              setSelected(null);
+            }}
+          >
+            <div className="flex items-center justify-between">
+              {o.label}
+              {o.Icon}
+            </div>
+          </button>
+        ))
         : filterOptions.map((o) => (
-            <button
-              key={o.label}
-              className="w-full text-left"
-              onClick={(e) => {
-                setSelected(o);
-                e.preventDefault();
-              }}
-            >
-              <div className="flex items-center justify-between">
-                {o.label}
-                {o.Icon}
-              </div>
-            </button>
-          ))}
+          <button
+            key={o.label}
+            className="w-full text-left"
+            onClick={(e) => {
+              setSelected(o);
+              e.preventDefault();
+            }}
+          >
+            <div className="flex items-center justify-between">
+              {o.label}
+              {o.Icon}
+            </div>
+          </button>
+        ))}
     </Dropdown>
   );
 };

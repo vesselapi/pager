@@ -8,15 +8,16 @@ import { MdOutlineClose } from 'react-icons/md';
 import { RxAvatar } from 'react-icons/rx';
 import { TbClock, TbLetterCase, TbMinus, TbPlus } from 'react-icons/tb';
 
-import type { RouterOutputs } from '~/utils/api';
+import { sift } from 'radash';
 import { api } from '~/utils/api';
 import Spinner from '../_components/Spinner';
 import AlertsListItem from './AlertListItem';
 import type {
+  Alert,
   DisplaySettings,
   FilterSetting,
   SortSetting,
-} from './AlertListTypes';
+} from './alerts.types';
 import AlertListDisplayDropdown from './_components/AlertListDisplayDropdown';
 import AlertListFilterDropdown, {
   AlertListFilterPill,
@@ -75,7 +76,7 @@ const AssignedToFilterConfig = <T extends { email: string | null; id: string }>(
 
 const AlertsList = () => {
   const [display, setDisplay] = useState<DisplaySettings>({
-    style: 'condensed',
+    cardType: 'condensed',
   });
   const [sorts, setSorts] = useState<SortSetting[]>([]);
   const [search, setSearch] = useSearch();
@@ -120,7 +121,7 @@ const AlertsList = () => {
   const currentUser = useAuth();
 
   const update = useCallback(
-    async (alert: Partial<RouterOutputs['alert']['all']['0']>) => {
+    async (alert: Partial<Alert> & { id: Alert["id"] }) => {
       await updateAlert.mutateAsync({ id: alert.id, alert });
       await alerts.refetch();
     },
@@ -176,9 +177,9 @@ const AlertsList = () => {
                       [...srts].map((sort) =>
                         sort === s
                           ? {
-                              ...sort,
-                              order: sort.order === 'desc' ? 'asc' : 'desc',
-                            }
+                            ...sort,
+                            order: sort.order === 'desc' ? 'asc' : 'desc',
+                          }
                           : sort,
                       ),
                     )
@@ -238,36 +239,30 @@ const AlertsList = () => {
       <div className="h-screen overflow-y-auto">
         <div
           className={classNames({
-            'px-10': display.style === 'expanded',
+            'px-10': display.cardType === 'expanded',
             'mt-4': !configsAreApplied,
             'border-t-[1px]':
-              !configsAreApplied && display.style === 'condensed',
+              !configsAreApplied && display.cardType === 'condensed',
           })}
         >
           {alerts.isFetching ? (
             <Spinner className="mt-5 px-10" />
           ) : (
-            alerts.data?.map((a: RouterOutputs['alert']['all']['0']) => {
-              const user = users.data?.find((u) => u.id === a.assignedToId) ?? {
-                firstName: '',
-                lastName: '',
-              };
+            sift(alerts.data).map((a) => {
+              const user = users.data?.find((u) => u.id === a.assignedToId);
 
               return (
                 <AlertsListItem
                   key={a.id}
-                  style={display.style}
-                  createdAt={a.createdAt}
-                  title={a.title}
-                  status={a.status}
-                  firstName={user.firstName}
-                  lastName={user.lastName}
-                  onAck={() => update({ status: 'ACKED' })}
-                  onClose={() => update({ status: 'CLOSED' })}
+                  cardType={display.cardType}
+                  alert={a}
+                  user={user}
+                  onAck={() => update({ id: a.id, status: 'ACKED' })}
+                  onClose={() => update({ id: a.id, status: 'CLOSED' })}
                   onSelfAssign={() =>
-                    update({ assignedToId: currentUser.userId })
+                    update({ id: a.id, assignedToId: currentUser.userId })
                   }
-                  onReopen={() => update({ status: 'OPEN' })}
+                  onReopen={() => update({ id: a.id, status: 'OPEN' })}
                 />
               );
             })
