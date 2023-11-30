@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1701285980601,
-      "tag": "0000_chunky_lady_bullseye",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1701295594417,
-      "tag": "0001_brief_domino",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1701306561746,
-      "tag": "0002_soft_susan_delgado",
+      "when": 1701385328168,
+      "tag": "0000_natural_scourge",
       "breakpoints": true
     }
   ]
