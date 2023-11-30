@@ -4,16 +4,24 @@
     "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": [
+        "./src/*"
+      ]
     },
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "jsx": "react",
+    "jsx": "preserve",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "include": [".", ".next/types/**/*.ts", "../../packages/api/env.mjs"],
-  "exclude": ["node_modules"]
+  "include": [
+    ".",
+    ".next/types/**/*.ts",
+    "../../packages/api/env.mjs"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
