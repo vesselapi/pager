@@ -41,7 +41,10 @@ const AlertListPage = () => {
     await alerts.refetch();
   }, []);
 
-  const isLoading = useMemo(() => updateAlert.isPending || alerts.isFetching, [alerts.isFetching, updateAlert.isPending])
+  const isLoading = useMemo(
+    () => updateAlert.isPending || alerts.isFetching,
+    [alerts.isFetching, updateAlert.isPending],
+  );
 
   return (
     <SafeAreaView className="">
