@@ -1,9 +1,12 @@
 import { useOAuth } from '@clerk/clerk-expo';
+import { FontAwesome } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
-import { Button, SafeAreaView, View } from 'react-native';
+import { Image, SafeAreaView, Text, View } from 'react-native';
 
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useWarmUpBrowser } from './hooks/warmUpBrowser';
+import logoUri from './logo';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -40,17 +43,39 @@ const SignInWithOAuth = () => {
     }, [startFlow]);
 
   return (
-    <SafeAreaView className="bg-[#2e026d] bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-      <View className="h-full w-full p-4">
-        <View className="rounded-lg border-2 border-gray-500 p-4">
-          <Button
-            title="Sign in with Google"
-            onPress={useCreateOnPress(startOAuthFlowGoogle)}
+    <SafeAreaView>
+      <View className="h-full w-full p-4 bg-[#181818] flex-col justify-center">
+        <View className="w-full flex items-center">
+          <Image
+            className="h-[100px] w-[100px] mb-10"
+            source={{ uri: logoUri }}
           />
-          <Button
-            title="Sign in with Github"
-            onPress={useCreateOnPress(startOAuthFlowGitHub)}
-          />
+        </View>
+        <View className="rounded-lg border-2 bg-white p-4 mb-4">
+          <TouchableOpacity onPress={useCreateOnPress(startOAuthFlowGoogle)}>
+            <View className="w-full flex-row items-center justify-center ">
+              <FontAwesome
+                name="google"
+                size={24}
+                color="black"
+                className="mr-3"
+              />
+              <Text className="text-xl">Sign in with Google</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View className="rounded-lg border-2 bg-white p-4 mb-4">
+          <TouchableOpacity onPress={useCreateOnPress(startOAuthFlowGitHub)}>
+            <View className="w-full flex-row items-center justify-center">
+              <FontAwesome
+                name="github"
+                size={24}
+                color="black"
+                className="mr-3"
+              />
+              <Text className="text-xl">Sign in with Github</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>

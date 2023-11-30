@@ -30,12 +30,14 @@ export const selectIntegrationSchema = createSelectSchema(integration, {
   id: customValidators.integrationId,
   orgId: customValidators.orgId,
   secretId: customValidators.secretIntegrationId,
+  escalationPolicyId: customValidators.escalationPolicyId,
 });
 
 export const insertIntegrationSchema = createInsertSchema(integration, {
   id: customValidators.integrationId,
   orgId: customValidators.orgId,
   secretId: customValidators.secretIntegrationId,
+  escalationPolicyId: customValidators.escalationPolicyId,
 });
 
 export type CreateIntegration = Omit<
