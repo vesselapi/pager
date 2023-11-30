@@ -2,98 +2,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
-import { Feather } from '@expo/vector-icons';
 import type { Alert, User } from '../alerts.types';
+import { createSwipeAnimations } from './AlertListItemActionButtons';
 
 const StatusToColor = {
   ACKED: { view: 'bg-blue-200', text: 'text-blue-800' },
   OPEN: { view: 'bg-red-200', text: 'text-red-800' },
   CLOSED: { view: 'bg-green-200', text: 'text-green-800' },
 };
-
-const Swipe = (color, text) => (progress, dragX) => {
-  const scale = dragX.interpolate({
-    inputRange: [-200, 0],
-    outputRange: [1, 0.5],
-  });
-  return (
-    <Animated.View
-      style={{
-        backgroundColor: color,
-        width: '100%',
-        justifyContent: 'center',
-      }}
-    >
-      <Animated.Text
-        style={{
-          marginLeft: 'auto',
-          marginRight: 50,
-          fontSize: 15,
-          fontWeight: 'bold',
-          transform: [{ scale }],
-        }}
-      >
-        {text}
-      </Animated.Text>
-    </Animated.View>
-  );
-};
-
-
-const SwipeRight = (progress, dragX) => {
-  const scale = dragX.interpolate({
-    inputRange: [-200, 0],
-    outputRange: [0.5, 1],
-  });
-  return (
-    <Animated.View
-      style={{
-        backgroundColor: 'red',
-        width: '100%',
-        justifyContent: 'center',
-      }}
-    >
-      <Animated.Text
-        style={{
-          marginRight: 'auto',
-          marginLeft: 50,
-          fontSize: 15,
-          fontWeight: 'bold',
-          transform: [{ scale }],
-        }}
-      >
-        <Feather name="check" size={24} color="black" />
-        <Text>
-          Open
-        </Text>
-      </Animated.Text>
-    </Animated.View>
-  );
-};
-
-
-const createSwipeAnimations = (status: 'OPEN' | 'ACKED' | 'CLOSED', { onAck, onClose, onReopen }) => {
-  if (status === 'OPEN') {
-    return {
-      left: SwipeRight,
-      right: Swipe('#ADD8E6', 'Ack'),
-      action: (direction: 'left' | 'right') => void (direction === 'left' ? onClose() : onAck())
-    }
-  } else if (status === 'ACKED') {
-    return {
-      left: Swipe('#008000', 'Close'),
-      right: Swipe('#FFCCCC', 'Re-Open'),
-      action: (direction: 'left' | 'right') => void (direction === 'left' ? onClose() : onReopen())
-
-    }
-  } else if (status === 'CLOSED') {
-    return {
-      left: null,
-      right: Swipe('#FFCCCC', 'Re-Open'),
-      action: (direction: 'left' | 'right') => void (direction === 'left' ? null : onReopen())
-    }
-  }
-}
 
 const AlertListItem = ({
   alert,
@@ -103,25 +19,27 @@ const AlertListItem = ({
   onReopen,
   onSelfAssign,
 }: {
-  alert: Alert,
-  user: User,
-  onAck: () => void,
-  onClose: () => void,
-  onReopen: () => void,
-  onSelfAssign: () => void,
+  alert: Alert;
+  user: User;
+  onAck: () => void;
+  onClose: () => void;
+  onReopen: () => void;
+  onSelfAssign: () => void;
 }) => {
   const { status, title, createdAt } = alert;
   const { firstName, lastName } = user;
 
-
-  const StatusColors = StatusToColor[status as keyof typeof StatusToColor]
-  const { left, right, action } = createSwipeAnimations(status, { onAck, onClose, onReopen })
-
+  const StatusColors = StatusToColor[status as keyof typeof StatusToColor];
+  const { LeftSwipe, RightSwipe, action } = createSwipeAnimations(status, {
+    onAck,
+    onClose,
+    onReopen,
+  });
 
   return (
     <Swipeable
-      renderRightActions={right}
-      renderLeftActions={left}
+      renderRightActions={RightSwipe}
+      renderLeftActions={LeftSwipe}
       onSwipeableOpen={action}
     >
       <Animated.View className="pb-8 px-4 pt-2 bg-white">
@@ -139,8 +57,8 @@ const AlertListItem = ({
           </View>
 
           <View>
-            <Text className={'mb-1.5 mr-2 text-lg font-medium'}>{title}</Text>
-            <Text className={'w-3/4 text-sm text-gray-500'}>
+            <Text className={'mb-1.5 mr-2 text-lg font-medium w-[220px]'} numberOfLines={1}>{title}</Text>
+            <Text className={'w-[65%] text-sm text-gray-500 overflow-ellipsis overflow-hidden'}>
               Occaeacat sint aute nulla proident nulla proident nulla proident
               nulla proident....
             </Text>

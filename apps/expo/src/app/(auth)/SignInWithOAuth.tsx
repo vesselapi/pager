@@ -1,15 +1,14 @@
 import { useOAuth } from '@clerk/clerk-expo';
+import { FontAwesome } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import { Image, SafeAreaView, Text, View } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
 
-import { useWarmUpBrowser } from './hooks/warmUpBrowser';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import logoUri from './logo'
+import { useWarmUpBrowser } from './hooks/warmUpBrowser';
+import logoUri from './logo';
 
 WebBrowser.maybeCompleteAuthSession();
-
 
 const SignInWithOAuth = () => {
   // Warm up the android browser to improve UX
@@ -46,22 +45,35 @@ const SignInWithOAuth = () => {
   return (
     <SafeAreaView>
       <View className="h-full w-full p-4 bg-[#181818] flex-col justify-center">
-        <View className='w-full flex items-center'>
-          <Image className='h-[100px] w-[100px] mb-10' source={{ uri: logoUri }} />
+        <View className="w-full flex items-center">
+          <Image
+            className="h-[100px] w-[100px] mb-10"
+            source={{ uri: logoUri }}
+          />
         </View>
         <View className="rounded-lg border-2 bg-white p-4 mb-4">
-          <TouchableOpacity onPress={useCreateOnPress(startOAuthFlowGoogle)} >
-            <View className='w-full flex-row items-center justify-center '>
-              <FontAwesome name="google" size={24} color="black" className='mr-3' />
-              <Text className='text-xl'>Sign in with Google</Text>
+          <TouchableOpacity onPress={useCreateOnPress(startOAuthFlowGoogle)}>
+            <View className="w-full flex-row items-center justify-center ">
+              <FontAwesome
+                name="google"
+                size={24}
+                color="black"
+                className="mr-3"
+              />
+              <Text className="text-xl">Sign in with Google</Text>
             </View>
           </TouchableOpacity>
         </View>
         <View className="rounded-lg border-2 bg-white p-4 mb-4">
-          <TouchableOpacity onPress={useCreateOnPress(startOAuthFlowGitHub)} >
-            <View className='w-full flex-row items-center justify-center'>
-              <FontAwesome name="github" size={24} color="black" className='mr-3' />
-              <Text className='text-xl'>Sign in with Github</Text>
+          <TouchableOpacity onPress={useCreateOnPress(startOAuthFlowGitHub)}>
+            <View className="w-full flex-row items-center justify-center">
+              <FontAwesome
+                name="github"
+                size={24}
+                color="black"
+                className="mr-3"
+              />
+              <Text className="text-xl">Sign in with Github</Text>
             </View>
           </TouchableOpacity>
         </View>
