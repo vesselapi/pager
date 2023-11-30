@@ -30,21 +30,19 @@ interface Services {
 
 const alertPage = async ({ args, services }: Props<Args, Services>) => {
   const { logger, db, alertManager } = services;
-  const alert = await db.alerts.find(args.id);
-  if (!alert) {
+  const dbAlert = await db.alerts.findWithEscalationPolicy(args.id);
+  if (!dbAlert) {
     logger.info({ alertId: args.id }, 'Alert not found');
     throw new Error(`Alert not found for ${args.id}`);
   }
+
+  const { alert, escalationPolicy, escalationPolicySteps } = dbAlert;
 
   if (alert.status !== 'OPEN' || !alert.escalationPolicyId) {
     return;
   }
 
-  const escalationPolicy = await db.escalationPolicy.findWithSteps(
-    alert.escalationPolicyId,
-  );
-
-  const currentStep = escalationPolicy.steps.find(
+  const currentStep = escalationPolicySteps.find(
     (step) => step.order === alert.escalationStepState,
   );
   if (!currentStep) {
@@ -75,7 +73,7 @@ const alertPage = async ({ args, services }: Props<Args, Services>) => {
   });
 
   // NOTE: Exit if we've exhausted all of the steps for escalation policy
-  if (newEscalationStepState === escalationPolicy.steps.length) {
+  if (newEscalationStepState === escalationPolicySteps.length) {
     return;
   }
 

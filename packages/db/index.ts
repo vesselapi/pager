@@ -7,7 +7,6 @@ import type {
   AlertEventId,
   AlertId,
   AppId,
-  EscalationPolicyId,
   OrgId,
   ScheduleId,
   SecretId,
@@ -17,6 +16,7 @@ import type {
 import { IdGenerator } from './id-generator';
 import type { CreateAlert, UpsertAlert } from './schema/alert';
 import {
+  alertEscalationPolicyRelation,
   alert as alertSchema,
   alertSourceEnum,
   insertAlertSchema,
@@ -29,7 +29,6 @@ import {
   insertAlertEventSchema,
   selectAlertEventSchema,
 } from './schema/alert-event';
-import type { EscalationPolicy } from './schema/escalation-policy';
 import {
   CreateEscalationPolicy,
   escalationPolicy as escalationPolicySchema,
@@ -39,7 +38,6 @@ import {
 } from './schema/escalation-policy';
 import {
   CreateEscalationPolicyStep,
-  EscalationPolicyStep,
   escalationPolicyStep as escalationPolicyStepSchema,
   escalationPolicyStepType,
   insertEscalationPolicyStepSchema,
@@ -81,6 +79,7 @@ export const schema = {
   appIdEnum,
   statusEnum,
   alert: alertSchema,
+  alertEscalationPolicyRelation,
   alertEvent: alertEventSchema,
   escalationPolicy: escalationPolicySchema,
   escalationPolicyStep: escalationPolicyStepSchema,
@@ -132,6 +131,35 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .returning();
       return selectAlertSchema.parse(dbAlerts[0]);
     },
+    findWithEscalationPolicy: async (id: AlertId) => {
+      const dbAlert = await db.query.alert.findFirst({
+        where: eq(alertSchema.id, id as string),
+        with: {
+          escalationPolicy: {
+            with: {
+              steps: true,
+            },
+          },
+        },
+      });
+      if (!dbAlert) {
+        return null;
+      }
+      const alert = selectAlertSchema.parse(dbAlert);
+      if (!dbAlert.escalationPolicy) {
+        throw new Error('Escalation policy not found');
+      }
+      const escalationPolicy = selectEscalationPolicySchema.parse(
+        dbAlert.escalationPolicy,
+      );
+      if (dbAlert.escalationPolicy.steps.length === 0) {
+        throw new Error('No steps found for escalation policy');
+      }
+      const escalationPolicySteps = dbAlert.escalationPolicy.steps.map((step) =>
+        selectEscalationPolicyStepSchema.parse(step),
+      );
+      return { alert, escalationPolicy, escalationPolicySteps };
+    },
   },
   alertEvent: {
     find: async (id: AlertEventId) => {
@@ -168,25 +196,6 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .values(insertEscalationPolicy)
         .returning();
       return selectEscalationPolicySchema.parse(dbEscalationPolicy[0]);
-    },
-    findWithSteps: async (
-      id: EscalationPolicyId,
-    ): Promise<EscalationPolicy & { steps: EscalationPolicyStep[] }> => {
-      const escalationPolicy = await db.query.escalationPolicy.findFirst({
-        where: eq(escalationPolicySchema.id, id),
-        with: {
-          steps: true,
-        },
-      });
-      if (!escalationPolicy) {
-        throw new Error(`Escalation policy not found: ${id}`);
-      }
-      return {
-        ...selectEscalationPolicySchema.parse(escalationPolicy),
-        steps: escalationPolicy.steps.map((step) =>
-          selectEscalationPolicyStepSchema.parse(step),
-        ),
-      };
     },
   },
   escalationPolicyStep: {

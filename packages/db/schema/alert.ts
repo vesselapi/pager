@@ -11,6 +11,7 @@ import type { z } from 'zod';
 
 import { APP_ID, customValidators } from '@vessel/types';
 
+import { relations } from 'drizzle-orm';
 import { escalationPolicy } from './escalation-policy';
 import { org } from './org';
 import { user } from './user';
@@ -34,6 +35,10 @@ export const alert = pgTable('alert', {
   source: alertSourceEnum('source').notNull(),
   metadata: json('metadata'),
 });
+
+export const alertEscalationPolicyRelation = relations(alert, ({ one }) => ({
+  escalationPolicy: one(escalationPolicy),
+}));
 
 export const selectAlertSchema = createSelectSchema(alert, {
   id: customValidators.alertId,
