@@ -22,7 +22,7 @@ export const escalationPolicyStepType = pgEnum('escalation_policy_step_type', [
 
 export const escalationPolicyStep = pgTable('escalation_policy_step', {
   id: text('id').primaryKey(),
-  type: escalationPolicyStepType('type'),
+  type: escalationPolicyStepType('type').notNull(),
   escalationPolicyId: text('escalation_policy_id')
     .references(() => escalationPolicy.id)
     .notNull(),

@@ -28,13 +28,14 @@ interface Services {
   alertManager: AlertManager;
 }
 
-const alertOncall = async ({ args, services }: Props<Args, Services>) => {
+const alertPage = async ({ args, services }: Props<Args, Services>) => {
   const { logger, db, alertManager } = services;
   const alert = await db.alerts.find(args.id);
   if (!alert) {
     logger.info({ alertId: args.id }, 'Alert not found');
     throw new Error(`Alert not found for ${args.id}`);
   }
+
   if (alert.status === 'CLOSED' || !alert.escalationPolicyId) {
     return;
   }
@@ -54,9 +55,16 @@ const alertOncall = async ({ args, services }: Props<Args, Services>) => {
 
   // Alert according to step
   if (currentStep.type === 'USER') {
-    // alert user
+    // TODO: insert logic for
+    logger.info(
+      { alertId: alert.id, userId: currentStep.userId },
+      'Alert user',
+    );
   } else if (currentStep.type === 'ROTATION') {
-    // alert rotation
+    logger.info(
+      { alertId: alert.id, rotationId: currentStep.rotationId },
+      'Alert rotation',
+    );
   }
 
   // Increment step state of alert
@@ -76,12 +84,6 @@ const alertOncall = async ({ args, services }: Props<Args, Services>) => {
   });
 };
 
-// TODO: Add alerting oncall logic
-// - identify the schedule associated with alert
-// - identify what step we are in the escalation policy for the shcedule
-// - find person to alert for the escalation policy
-// - queue to state machine
-
 export const main = vessel()
   .hook(
     useServices({
@@ -91,4 +93,4 @@ export const main = vessel()
     }),
   )
   .hook(useSqsArgs<Args>(schema))
-  .endpoint(alertOncall);
+  .endpoint(alertPage);

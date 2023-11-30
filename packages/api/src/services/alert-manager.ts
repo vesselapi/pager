@@ -7,10 +7,10 @@ import { makeStateMachine } from './state-machine';
 
 export const makeAlertManager = () => {
   const stateMachine = makeStateMachine();
+  const pubsub = makePubSub();
 
   const create = async (alert: CreateAlert) => {
     const dbAlert = await db.alerts.create(alert);
-    const pubsub = makePubSub();
     await pubsub.alert.publish({ id: dbAlert.id });
     return dbAlert;
   };

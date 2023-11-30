@@ -15,6 +15,13 @@
       "when": 1701295594417,
       "tag": "0001_brief_domino",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1701306561746,
+      "tag": "0002_soft_susan_delgado",
+      "breakpoints": true
     }
   ]
 }
