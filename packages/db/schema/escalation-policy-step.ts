@@ -59,14 +59,7 @@ export const insertEscalationPolicyStepSchema = createInsertSchema(
     rotationId: customValidators.rotationId,
     userId: customValidators.userId,
   },
-)
-  .refine((escalationPolicyStep) => {
-    return (
-      !(escalationPolicyStep.scheduleId && escalationPolicyStep.rotationId) &&
-      !escalationPolicyStep.userId
-    );
-  }, 'Escalation policy step can only have either 1. scheduleId and rotationId or 2. userId')
-  .transform((x) => x as EscalationPolicyStep);
+).transform((x) => x as EscalationPolicyStep);
 
 export type BaseEscalationPolicyStep = z.infer<typeof selectSchema>;
 

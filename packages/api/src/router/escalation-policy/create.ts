@@ -16,7 +16,7 @@ const input = z.object({
     name: true,
   }),
   escalationPolicySteps: z.array(
-    insertEscalationPolicyStepSchema.sourceType().sourceType().pick({
+    insertEscalationPolicyStepSchema.sourceType().pick({
       type: true,
       order: true,
       scheduleId: true,
