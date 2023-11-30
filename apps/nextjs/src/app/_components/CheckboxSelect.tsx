@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface Option {
   value: any;
   label: string;
