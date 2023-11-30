@@ -148,13 +148,16 @@ export const makeSecretManager = () => {
       orgId: OrgId;
       userId: UserId;
       expoPushToken: string;
-    }) =>
-      put({
+    }) => {
+      const { id } = await put({
         key: IdGenerator.secrets.expoPushToken(),
         value: expoPushToken,
         userId,
         orgId,
       });
+      return { id: id as SecretExpoPushTokenId };
+    };
+
     return { find, create };
   };
 
