@@ -143,8 +143,8 @@ const AlertsListItem = ({
 }: {
   className?: string;
   cardType: 'condensed' | 'expanded';
-  alert: Alert,
-  user?: User,
+  alert: Alert;
+  user?: User;
 } & TActionButtons) => {
   const { status, title, createdAt, summary } = alert;
 
@@ -169,14 +169,13 @@ const AlertsListItem = ({
 
         <div className="flex items-center whitespace-nowrap">
           <h2 className="mr-1.5 text-base">{title}</h2>
-          <div className="text-zinc-500">
-            {(summary)}
-          </div>
+          <div className="text-zinc-500">{summary}</div>
         </div>
 
         <div className="flex items-center justify-end">
           <div className="mr-2 font-bold text-zinc-600">
-            {(user?.firstName?.slice(0, 1) ?? '') + (user?.lastName?.slice(0, 1) ?? '')}
+            {(user?.firstName?.slice(0, 1) ?? '') +
+              (user?.lastName?.slice(0, 1) ?? '')}
           </div>
           <div className="mr-4 whitespace-nowrap">
             {format(createdAt, 'dd/MM p')}

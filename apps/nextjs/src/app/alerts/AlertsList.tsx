@@ -12,12 +12,6 @@ import { sift } from 'radash';
 import { api } from '~/utils/api';
 import Spinner from '../_components/Spinner';
 import AlertsListItem from './AlertListItem';
-import type {
-  Alert,
-  DisplaySettings,
-  FilterSetting,
-  SortSetting,
-} from './alerts.types';
 import AlertListDisplayDropdown from './_components/AlertListDisplayDropdown';
 import AlertListFilterDropdown, {
   AlertListFilterPill,
@@ -27,6 +21,12 @@ import AlertListSortDropdown, {
   AlertListSortPill,
 } from './_components/AlertListSortDropdown';
 import { useSearch } from './_hooks/useSearch';
+import type {
+  Alert,
+  DisplaySettings,
+  FilterSetting,
+  SortSetting,
+} from './alerts.types';
 
 // -------------------------------
 // Filter Configs
@@ -121,7 +121,7 @@ const AlertsList = () => {
   const currentUser = useAuth();
 
   const update = useCallback(
-    async (alert: Partial<Alert> & { id: Alert["id"] }) => {
+    async (alert: Partial<Alert> & { id: Alert['id'] }) => {
       await updateAlert.mutateAsync({ id: alert.id, alert });
       await alerts.refetch();
     },
@@ -177,9 +177,9 @@ const AlertsList = () => {
                       [...srts].map((sort) =>
                         sort === s
                           ? {
-                            ...sort,
-                            order: sort.order === 'desc' ? 'asc' : 'desc',
-                          }
+                              ...sort,
+                              order: sort.order === 'desc' ? 'asc' : 'desc',
+                            }
                           : sort,
                       ),
                     )

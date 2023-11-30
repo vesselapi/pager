@@ -27,7 +27,8 @@ const AlertListItem = ({
   onSelfAssign: () => void;
 }) => {
   const { status, title, createdAt, summary } = alert;
-  const initials = (user.firstName?.slice(0, 1) ?? '') + (user.lastName?.slice(0, 1) ?? '')
+  const initials =
+    (user.firstName?.slice(0, 1) ?? '') + (user.lastName?.slice(0, 1) ?? '');
 
   const StatusColors = StatusToColor[status as keyof typeof StatusToColor];
   const { LeftSwipe, RightSwipe, action } = createSwipeAnimations(status, {
@@ -44,7 +45,7 @@ const AlertListItem = ({
     >
       <Animated.View className="pb-8 px-4 pt-2 bg-white">
         <View className={'flex-row justify-between'}>
-          <View className='flex-row'>
+          <View className="flex-row">
             <View className={'flex-row items-center'}>
               <View
                 className={`mr-4 w-[60px] rounded bg-opacity-80 py-0.5 ${StatusColors.view}`}
@@ -66,16 +67,14 @@ const AlertListItem = ({
               </Text>
               <Text
                 numberOfLines={2}
-                className={
-                  'w-[65%] text-sm text-gray-500'
-                }
+                className={'w-[65%] text-sm text-gray-500'}
               >
                 {summary}
               </Text>
             </View>
           </View>
 
-          <View className='flex justify-between items-end mr-2'>
+          <View className="flex justify-between items-end mr-2">
             <View className={'flex-row items-center'}>
               <Text className={'text-sm'}>{format(createdAt, 'dd/MM p')}</Text>
             </View>
@@ -85,7 +84,11 @@ const AlertListItem = ({
                 {initials}
               </Text>
               <TouchableOpacity onPress={onSelfAssign}>
-                <Ionicons name="md-hand-right-outline" size={22} color="black" />
+                <Ionicons
+                  name="md-hand-right-outline"
+                  size={22}
+                  color="black"
+                />
               </TouchableOpacity>
             </View>
           </View>
