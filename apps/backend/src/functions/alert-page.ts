@@ -53,27 +53,28 @@ const alertPage = async ({ args, services }: Props<Args, Services>) => {
     );
   }
 
-  // Alert according to step
+  // NOTE: Alert according to step type
   if (currentStep.type === 'USER') {
-    // TODO: insert logic for
+    // TODO: Add logic to look up user and page
     logger.info(
       { alertId: alert.id, userId: currentStep.userId },
       'Alert user',
     );
   } else if (currentStep.type === 'ROTATION') {
+    // TODO: Add logic to look up the user associated with the rotation and page
     logger.info(
       { alertId: alert.id, rotationId: currentStep.rotationId },
       'Alert rotation',
     );
   }
 
-  // Increment step state of alert
+  // NOTE: Increment step state of alert
   const newEscalationStepState = alert.escalationStepState + 1;
   await db.alerts.update(alert.id, {
     escalationStepState: newEscalationStepState,
   });
 
-  // Exit if we've exhausted all of the steps for escalation policy
+  // NOTE: Exit if we've exhausted all of the steps for escalation policy
   if (newEscalationStepState === escalationPolicy.steps.length) {
     return;
   }
