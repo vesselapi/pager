@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import type { z } from 'zod';
@@ -6,6 +6,7 @@ import type { z } from 'zod';
 import type {
   AlertEventId,
   AlertId,
+  AppId,
   OrgId,
   SecretId,
   UserId,
@@ -15,8 +16,10 @@ import { IdGenerator } from './id-generator';
 import type { CreateAlert, UpsertAlert } from './schema/alert';
 import {
   alert as alertSchema,
+  alertSourceEnum,
   insertAlertSchema,
   selectAlertSchema,
+  statusEnum,
 } from './schema/alert';
 import {
   alertEvent as alertEventSchema,
@@ -36,6 +39,7 @@ import {
 } from './schema/escalation-policy-step';
 import type { CreateIntegration } from './schema/integration';
 import {
+  appIdEnum,
   insertIntegrationSchema,
   integration as integrationSchema,
   selectIntegrationSchema,
@@ -65,6 +69,9 @@ import type { CreateUser } from './schema/user';
 import { selectUserSchema, user as userSchema } from './schema/user';
 
 export const schema = {
+  alertSourceEnum,
+  appIdEnum,
+  statusEnum,
   alert: alertSchema,
   alertEvent: alertEventSchema,
   escalationPolicy: escalationPolicySchema,
@@ -113,7 +120,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .insert(alertSchema)
         .values(newAlert)
         .returning();
-      return dbAlerts[0];
+      return selectAlertSchema.parse(dbAlerts[0]);
     },
   },
   alertEvent: {
@@ -176,6 +183,21 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .values(newIntegration)
         .returning();
       return selectIntegrationSchema.parse(dbIntegration[0]);
+    },
+    findByExternalId: async ({
+      appId,
+      externalId,
+    }: {
+      appId: AppId;
+      externalId: string;
+    }) => {
+      const integration = await db.query.integration.findFirst({
+        where: and(
+          eq(integrationSchema.appId, appId),
+          eq(integrationSchema.externalId, externalId),
+        ),
+      });
+      return selectIntegrationSchema.parse(integration);
     },
   },
   orgs: {

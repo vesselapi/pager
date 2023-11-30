@@ -2,7 +2,7 @@
 
 import { useAuth } from '@clerk/nextjs';
 import classNames from 'classnames';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { GrStatusGood } from 'react-icons/gr';
 import { MdOutlineClose } from 'react-icons/md';
 import { RxAvatar } from 'react-icons/rx';
