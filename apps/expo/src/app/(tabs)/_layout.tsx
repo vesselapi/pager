@@ -5,7 +5,6 @@ import { Text, View } from 'react-native';
 import { useUser } from '../hooks/useUser';
 import AlertListPage from './(alerts)';
 import ProfilePage from './(profile)';
-import SchedulePage from './(schedule)';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +27,8 @@ const TabsLayout = () => {
         name="(alerts)"
         component={AlertListPage}
       />
-      <Tab.Screen
+      {/* [@zkirby]TODO: turn this back on when we have an actual schedule part of the product */}
+      {/* <Tab.Screen
         options={{
           tabBarIcon: ({ color, size }) => (
             <FeatherIcons name="calendar" color={color} size={size} />
@@ -36,7 +36,7 @@ const TabsLayout = () => {
         }}
         name="(schedule)"
         component={SchedulePage}
-      />
+      /> */}
       <Tab.Screen
         options={{
           tabBarIcon: ({ size }) => {
