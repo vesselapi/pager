@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
-import { capitalize } from 'radash';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
 import { Swipeable } from 'react-native-gesture-handler';
+import { Feather } from '@expo/vector-icons';
 
 const StatusToColor = {
   ACKED: 'text-blue-800 bg-blue-200',
@@ -10,7 +10,7 @@ const StatusToColor = {
   CLOSED: 'text-green-800 bg-green-200',
 };
 
-const Swipe = (color) => (progress, dragX) => {
+const Swipe = (color, text) => (progress, dragX) => {
   const scale = dragX.interpolate({
     inputRange: [-200, 0],
     outputRange: [1, 0.5],
@@ -32,41 +32,67 @@ const Swipe = (color) => (progress, dragX) => {
           transform: [{ scale }],
         }}
       >
-        Delete Item
+        {text}
       </Animated.Text>
     </Animated.View>
   );
 };
 
-const SwipeRight = (progress, dragX) => {};
 
-const SwipeLeft = (progress, dragX) => {
+const SwipeRight = (progress, dragX) => {
   const scale = dragX.interpolate({
     inputRange: [-200, 0],
-    outputRange: [1, 0.5],
+    outputRange: [0.5, 1],
   });
   return (
     <Animated.View
       style={{
-        backgroundColor: 'blue',
+        backgroundColor: 'red',
         width: '100%',
         justifyContent: 'center',
       }}
     >
       <Animated.Text
         style={{
-          marginLeft: 'auto',
-          marginRight: 50,
+          marginRight: 'auto',
+          marginLeft: 50,
           fontSize: 15,
           fontWeight: 'bold',
           transform: [{ scale }],
         }}
       >
-        Delete Item
+        <Feather name="check" size={24} color="black" />
+        <Text>
+          Open
+        </Text>
       </Animated.Text>
     </Animated.View>
   );
 };
+
+
+const createSwipeAnimations = (status: 'OPEN' | 'ACKED' | 'CLOSED', { onAck, onClose, onReopen }) => {
+  if (status === 'OPEN') {
+    return {
+      left: SwipeRight,
+      right: Swipe('#ADD8E6', 'Ack'),
+      action: (direction: 'left' | 'right') => void (direction === 'left' ? onClose() : onAck())
+    }
+  } else if (status === 'ACKED') {
+    return {
+      left: Swipe('#008000', 'Close'),
+      right: Swipe('#FFCCCC', 'Re-Open'),
+      action: (direction: 'left' | 'right') => void (direction === 'left' ? onClose() : onReopen())
+
+    }
+  } else if (status === 'CLOSED') {
+    return {
+      left: null,
+      right: Swipe('#FFCCCC', 'Re-Open'),
+      action: (direction: 'left' | 'right') => void (direction === 'left' ? null : onReopen())
+    }
+  }
+}
 
 const AlertListItem = ({
   alert,
@@ -79,40 +105,32 @@ const AlertListItem = ({
   const { status, title, createdAt } = alert;
   const { firstName, lastName } = user;
 
-  const height = new Animated.Value(70);
 
-  const animatedAct = () => {
-    Animated.timing(height, {
-      toValue: 0,
-      duration: 350,
-      useNativeDriver: false,
-    }).start(() => console.log('hey'));
-  };
+  const { left, right, action } = createSwipeAnimations(status, { onAck, onClose, onReopen })
 
   return (
     <Swipeable
-      renderRightActions={Swipe('red')}
-      renderLeftActions={Swipe('blue')}
-      rightThreshold={-200}
-      onSwipeableOpen={animatedAct}
+      renderRightActions={right}
+      renderLeftActions={left}
+      onSwipeableOpen={action}
     >
       <Animated.View className="pb-8 px-4 pt-2 bg-white">
         <View className={'flex-row justify-between'}>
           <View className={'flex-row items-center'}>
             <View
-              className={`mr-4 w-[65px] rounded bg-opacity-80 py-0.5 ${StatusToColor[status]}`}
+              className={`mr-4 w-[60px] rounded bg-opacity-80 py-0.5 ${StatusToColor[status]}`}
             >
               <Text
-                className={`text-center text-sm font-medium ${StatusToColor[status]}`}
+                className={`text-center text-sm font-medium capitalize ${StatusToColor[status]}`}
               >
-                {capitalize(status)}
+                {status}
               </Text>
             </View>
           </View>
 
           <View>
             <Text className={'mb-1.5 mr-2 text-lg font-medium'}>{title}</Text>
-            <Text className={'w-[350px] text-sm text-gray-500'}>
+            <Text className={'w-3/4 text-sm text-gray-500'}>
               Occaeacat sint aute nulla proident nulla proident nulla proident
               nulla proident....
             </Text>

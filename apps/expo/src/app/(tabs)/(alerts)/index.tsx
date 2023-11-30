@@ -48,12 +48,24 @@ const AlertListPage = () => {
     <SafeAreaView className="">
       <Stack.Screen options={{ headerShown: false }} />
       <View className="h-screen bg-white">
-        <TextInput
-          placeholder="Search alerts..."
-          value={search}
-          onChangeText={setSearch}
-        />
-        <Text>Alerts</Text>
+        <View className='w-full flex-row items-center p-4'>
+          <TextInput
+            className='bg-white h-[40px] w-full px-4 rounded-md shadow'
+            // NOTE(@zkirby): No idea why the tailwind shadow property doesn't work.
+            // I'm fairly confident I'm not using the property correctly, but the 
+            // style property is much easier to fine tune.
+            style={{
+              shadowColor: '#171717',
+              shadowOffset: { width: -2, height: 4 },
+              shadowOpacity: 0.4,
+              shadowRadius: 3,
+            }}
+            placeholder="Search alerts..."
+            value={search}
+            onChangeText={setSearch}
+          />
+        </View>
+        <Text className='ml-1 px-4 mt-4 mb-1 font-bold text-slate-600 text-sm opacity-70'>ALERTS</Text>
         <View className="bg-white h-screen">
           {alerts.isFetching || !user ? (
             <ActivityIndicator />
