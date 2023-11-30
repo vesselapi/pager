@@ -53,6 +53,9 @@ export const ApiTokenRegex = /^v_apiToken_[a-z0-9]+_[a-z0-9]+$/;
 
 export type SecretIntegrationId = `v_secret_integration_${string}`;
 
+export type SecretExpoPushTokenId = `v_secret_expoPushToken_${string}`;
+export const SecretExpoPushTokenIdRegex = /^v_secret_expoPushToken_[a-z0-9]+$/;
+
 export type SecretIntegrationOAuth = {
   type: 'oauth';
   oauthRequest: Json;

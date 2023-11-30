@@ -15,7 +15,8 @@
     "index.tsx",
     "*.js",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "../../packages/api/env.mjs"
   ],
   "exclude": ["node_modules"]
 }

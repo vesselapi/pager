@@ -6,8 +6,10 @@ import type {
   ApiToken,
   ApiTokenId,
   OrgId,
+  SecretExpoPushTokenId,
   SecretId,
   SecretIntegrationId,
+  UserId,
 } from '@vessel/types';
 
 import { env } from '../../env.mjs';
@@ -53,19 +55,22 @@ export const makeSecretManager = () => {
     return JSON.parse(decrypted.toString());
   };
 
-  const put = async ({
+  const put = async <T extends SecretId>({
     key,
     value,
     orgId,
+    userId,
   }: {
-    key: string;
+    key: T;
     value: Json;
     orgId: OrgId | null;
+    userId?: UserId;
   }) => {
     const encrypted = encrypt(value);
     return db.secret.create({
       id: key,
       orgId,
+      userId,
       ...encrypted,
     });
   };
@@ -126,9 +131,37 @@ export const makeSecretManager = () => {
     return { find, create };
   };
 
+  const makeExpoPushToken = () => {
+    const find = async (id: SecretExpoPushTokenId) => {
+      const secret = await get<string>(id);
+      if (!secret) {
+        return null;
+      }
+      return secret.value;
+    };
+
+    const create = async ({
+      orgId,
+      userId,
+      expoPushToken,
+    }: {
+      orgId: OrgId;
+      userId: UserId;
+      expoPushToken: string;
+    }) =>
+      put({
+        key: IdGenerator.secrets.expoPushToken(),
+        value: expoPushToken,
+        userId,
+        orgId,
+      });
+    return { find, create };
+  };
+
   return {
     apiToken: makeApiToken(),
     integration: makeIntegration(),
+    expoPushToken: makeExpoPushToken(),
   };
 };
 
