@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import type { z } from 'zod';
@@ -6,6 +6,7 @@ import type { z } from 'zod';
 import type {
   AlertEventId,
   AlertId,
+  AppId,
   OrgId,
   SecretId,
   UserId,
@@ -15,15 +16,30 @@ import { IdGenerator } from './id-generator';
 import type { CreateAlert, UpsertAlert } from './schema/alert';
 import {
   alert as alertSchema,
+  alertSourceEnum,
   insertAlertSchema,
   selectAlertSchema,
+  statusEnum,
 } from './schema/alert';
 import {
   alertEvent as alertEventSchema,
   selectAlertEventSchema,
 } from './schema/alertEvent';
+import {
+  CreateEscalationPolicy,
+  escalationPolicy as escalationPolicySchema,
+  insertEscalationPolicySchema,
+  selectEscalationPolicySchema,
+} from './schema/escalation-policy';
+import {
+  CreateEscalationPolicyStep,
+  escalationPolicyStep as escalationPolicyStepSchema,
+  insertEscalationPolicyStepSchema,
+  selectEscalationPolicyStepSchema,
+} from './schema/escalation-policy-step';
 import type { CreateIntegration } from './schema/integration';
 import {
+  appIdEnum,
   insertIntegrationSchema,
   integration as integrationSchema,
   selectIntegrationSchema,
@@ -53,8 +69,13 @@ import type { CreateUser } from './schema/user';
 import { selectUserSchema, user as userSchema } from './schema/user';
 
 export const schema = {
+  alertSourceEnum,
+  appIdEnum,
+  statusEnum,
   alert: alertSchema,
   alertEvent: alertEventSchema,
+  escalationPolicy: escalationPolicySchema,
+  escalationPolicyStep: escalationPolicyStepSchema,
   integration: integrationSchema,
   org: orgSchema,
   user: userSchema,
@@ -99,7 +120,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .insert(alertSchema)
         .values(newAlert)
         .returning();
-      return dbAlerts[0];
+      return selectAlertSchema.parse(dbAlerts[0]);
     },
   },
   alertEvent: {
@@ -113,6 +134,36 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     list: async (...args: Parameters<typeof db.query.alertEvent.findMany>) => {
       const alertEvents = await db.query.alertEvent.findMany(...args);
       return alertEvents.map((a) => selectAlertEventSchema.parse(a));
+    },
+  },
+  escalationPolicy: {
+    create: async (escalationPolicy: CreateEscalationPolicy) => {
+      const insertEscalationPolicy = insertEscalationPolicySchema.parse({
+        id: IdGenerator.escalationPolicy(),
+        ...escalationPolicy,
+      });
+      const dbEscalationPolicy = await db
+        .insert(escalationPolicySchema)
+        .values(insertEscalationPolicy)
+        .returning();
+      return selectEscalationPolicySchema.parse(dbEscalationPolicy[0]);
+    },
+  },
+  escalationPolicyStep: {
+    createMany: async (escalationPolicySteps: CreateEscalationPolicyStep[]) => {
+      const insertEscalationPolicySteps = escalationPolicySteps.map((step) =>
+        insertEscalationPolicyStepSchema.parse({
+          id: IdGenerator.escalationPolicyStep(),
+          ...step,
+        }),
+      );
+      const dbEscalationPolicyStep = await db
+        .insert(escalationPolicyStepSchema)
+        .values(insertEscalationPolicySteps)
+        .returning();
+      return dbEscalationPolicyStep.map((step) =>
+        selectEscalationPolicyStepSchema.parse(step),
+      );
     },
   },
   integrations: {
@@ -132,6 +183,21 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .values(newIntegration)
         .returning();
       return selectIntegrationSchema.parse(dbIntegration[0]);
+    },
+    findByExternalId: async ({
+      appId,
+      externalId,
+    }: {
+      appId: AppId;
+      externalId: string;
+    }) => {
+      const integration = await db.query.integration.findFirst({
+        where: and(
+          eq(integrationSchema.appId, appId),
+          eq(integrationSchema.externalId, externalId),
+        ),
+      });
+      return selectIntegrationSchema.parse(integration);
     },
   },
   orgs: {

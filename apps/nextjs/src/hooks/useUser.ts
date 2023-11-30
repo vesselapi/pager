@@ -15,7 +15,7 @@ export function useUser() {
 
   useEffect(() => {
     createOrGetUser.mutate();
-  }, [createOrGetUser]);
+  }, []);
 
   return user;
 }

@@ -7,6 +7,7 @@ import type {
   ApiTokenId,
   OrgId,
   SecretId,
+  SecretIntegration,
   SecretIntegrationId,
 } from '@vessel/types';
 
@@ -111,18 +112,20 @@ export const makeSecretManager = () => {
       return secret.value;
     };
 
-    const create = async <T extends Json>({
+    const create = async ({
       orgId,
       secret,
     }: {
       orgId: OrgId;
-      secret: T;
-    }) =>
-      put({
+      secret: SecretIntegration;
+    }) => {
+      const { id } = await put({
         key: IdGenerator.secrets.integration(),
-        value: secret,
+        value: secret as unknown as Json,
         orgId,
       });
+      return { id: id as SecretIntegrationId };
+    };
     return { find, create };
   };
 

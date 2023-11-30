@@ -1,10 +1,29 @@
+DO $$ BEGIN
+ CREATE TYPE "alert_source" AS ENUM('sentry', 'vessel');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "status" AS ENUM('ACKED', 'OPEN', 'CLOSED');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "app_id" AS ENUM('sentry');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "alert" (
 	"id" text PRIMARY KEY NOT NULL,
 	"org_id" text NOT NULL,
 	"title" text NOT NULL,
-	"status" text DEFAULT 'OPEN' NOT NULL,
+	"status" "status" NOT NULL,
 	"assigned_to_id" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
+	"source" "alert_source" NOT NULL,
 	"metadata" json
 );
 --> statement-breakpoint
@@ -17,8 +36,9 @@ CREATE TABLE IF NOT EXISTS "alert_event" (
 CREATE TABLE IF NOT EXISTS "integration" (
 	"id" text PRIMARY KEY NOT NULL,
 	"org_id" text NOT NULL,
-	"app_id" text NOT NULL,
-	"secret_id" text,
+	"app_id" "app_id" NOT NULL,
+	"secret_id" text NOT NULL,
+	"external_id" text,
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
