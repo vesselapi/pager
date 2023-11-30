@@ -3,11 +3,19 @@ import { useJsonBody, useServices } from '@exobase/hooks';
 import z from 'zod';
 
 import { vessel } from '@vessel/api/src/middlewares/exobase/hooks/common-hooks';
+import {
+  ApiTokenAuth,
+  useApiTokenAuth,
+} from '@vessel/api/src/middlewares/exobase/hooks/use-api-token-auth';
 
 import {
   AlertManager,
   makeAlertManager,
 } from '@vessel/api/src/services/alert-manager';
+import {
+  SecretManager,
+  makeSecretManager,
+} from '@vessel/api/src/services/secret-manager';
 import { insertAlertSchema } from '../../../../packages/db/schema/alert';
 
 const schema = z.object({
@@ -23,6 +31,7 @@ type Args = z.infer<typeof schema>;
 
 interface Services {
   alertManager: AlertManager;
+  secretManager: SecretManager;
 }
 
 interface Result {
@@ -33,14 +42,12 @@ const alert = async ({
   args,
   services,
   auth,
-}: Props<Args, Services>): Promise<Result> => {
-  // ApiTokenAuth
+}: Props<Args, Services, ApiTokenAuth>): Promise<Result> => {
   const { alert } = args;
   const { alertManager } = services;
 
   await alertManager.create({
-    orgId:
-      'v_org_52da59af2929d33c0d591d28381b9a4fd80a2b13acdaabd9108c7771a5314913', //auth.orgId,
+    orgId: auth.orgId,
     escalationStepState: 0,
     source: 'vessel',
     ...alert,
@@ -52,8 +59,9 @@ export const main = vessel()
   .hook(
     useServices<Services>({
       alertManager: makeAlertManager(),
+      secretManager: makeSecretManager(),
     }),
   )
-  // .hook(useApiTokenAuth())
+  .hook(useApiTokenAuth())
   .hook(useJsonBody<Args>(schema))
   .endpoint(alert);
