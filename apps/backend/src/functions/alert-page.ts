@@ -36,7 +36,7 @@ const alertPage = async ({ args, services }: Props<Args, Services>) => {
     throw new Error(`Alert not found for ${args.id}`);
   }
 
-  if (alert.status === 'CLOSED' || !alert.escalationPolicyId) {
+  if (alert.status !== 'OPEN' || !alert.escalationPolicyId) {
     return;
   }
 

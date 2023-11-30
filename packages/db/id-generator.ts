@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 
 import type {
+  AlertEventId,
   AlertId,
   ApiToken,
   ApiTokenId,
@@ -28,6 +29,7 @@ export const randomString = () => {
 
 export const IdGenerator = {
   alert: (): AlertId => `v_alert_${randomString()}`,
+  alertEvent: (): AlertEventId => `v_alertEvent_${randomString()}`,
   apiToken: (apiToken: ApiToken): ApiTokenId =>
     `v_secret_apiToken_${hash(apiToken)}`,
   escalationPolicy: (): EscalationPolicyId =>
@@ -37,7 +39,7 @@ export const IdGenerator = {
   integration: (): IntegrationId => `v_integration_${randomString()}`,
   schedule: (): ScheduleId => `v_schedule_${randomString()}`,
   rotation: (): RotationId => `v_rotation_${randomString()}`,
-  rotationUser: (): RotationUserId => `v_rotation_user_${randomString()}`,
+  rotationUser: (): RotationUserId => `v_rotationUser_${randomString()}`,
   secrets: {
     integration: (): SecretIntegrationId =>
       `v_secret_integration_${randomString()}`,

@@ -32,7 +32,7 @@ export type IntegrationId = `v_integration_${string}`; // v_integration_{hash}
 export type RotationId = `v_rotation_${string}`;
 export const RotationIdRegex = /^v_rotation_[a-z0-9]+/;
 
-export type RotationUserId = `v_rotation_user_${string}`;
+export type RotationUserId = `v_rotationUser_${string}`;
 export const RotationUserIdRegex = /^v_rotation_user_[a-z0-9]+/;
 
 export type ScheduleId = `v_schedule_${string}`;

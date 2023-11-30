@@ -146,11 +146,15 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return alertEvents.map((a) => selectAlertEventSchema.parse(a));
     },
     create: async (alertEvent: CreateAlertEvent) => {
-      const insertAlertEvent = insertAlertEventSchema.parse(alertEvent);
-      const alertEvents = await db
+      const insertAlertEvent = insertAlertEventSchema.parse({
+        id: IdGenerator.alertEvent,
+        ...alertEvent,
+      });
+      const dbAlertEvents = await db
         .insert(alertEventSchema)
-        .values(insertAlertEvent);
-      return selectAlertEventSchema.parse(alertEvents[0]);
+        .values(insertAlertEvent)
+        .returning();
+      return selectAlertEventSchema.parse(dbAlertEvents[0]);
     },
   },
   escalationPolicy: {
