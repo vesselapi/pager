@@ -23,7 +23,7 @@ export const makeAlertManager = () => {
     id: AlertId;
   }) => {
     await stateMachine.run({
-      stateMachineArn: env.AWS_SFN_ALERT_ARN,
+      stateMachineArn: env.AWS_SFN_ALERT_PAGE_ARN,
       input: { waitSeconds, payload: { id } },
     });
   };

@@ -52,25 +52,26 @@ export function CoreStack({ stack }: StackContext) {
   });
 
   // Step function for alerting oncall
-  const alertOncallWaitTask = new Wait(stack, 'AlertOncallWaitTask', {
+  const alertPageWaitTask = new Wait(stack, 'AlertPageWaitTask', {
     time: WaitTime.secondsPath('$.waitSeconds'),
   });
-  const alertOncallQueueTask = new SqsSendMessage(
+  const alertPageQueueTask = new SqsSendMessage(stack, 'AlertPageQueueTask', {
+    queue: alertPageQueue.cdk.queue,
+    messageBody: TaskInput.fromJsonPathAt('$.payload'),
+  });
+  const stateDefinition =
+    Chain.start(alertPageWaitTask).next(alertPageQueueTask);
+  const alertPageStateMachine = new StateMachine(
     stack,
-    'AlertOncallQueueTask',
+    'AlertPageStateMachine',
     {
-      queue: alertPageQueue.cdk.queue,
-      messageBody: TaskInput.fromJsonPathAt('$.payload'),
+      definition: stateDefinition,
     },
   );
-  const stateDefinition =
-    Chain.start(alertOncallWaitTask).next(alertOncallQueueTask);
-  new StateMachine(stack, 'AlertOncallStepFn', {
-    definition: stateDefinition,
-  });
 
   stack.addOutputs({
     ApiUrl: api.url,
     AlertsTopicArn: topic.topicArn,
+    AlertPageSFNArn: alertPageStateMachine.stateMachineArn,
   });
 }
