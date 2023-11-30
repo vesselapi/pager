@@ -49,7 +49,7 @@ const alert = async ({
   await alertManager.create({
     orgId: auth.orgId,
     escalationStepState: 0,
-    source: 'vessel',
+    source: 'API',
     ...alert,
   });
   return { success: true };

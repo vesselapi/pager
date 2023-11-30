@@ -17,7 +17,7 @@ import { escalationPolicy } from './escalation-policy';
 import { org } from './org';
 import { user } from './user';
 
-export const alertSourceEnum = pgEnum('alert_source', [...APP_ID, 'vessel']);
+export const alertSourceEnum = pgEnum('alert_source', [...APP_ID, 'API']);
 export const statusEnum = pgEnum('status', ['ACKED', 'OPEN', 'CLOSED']);
 
 export const alert = pgTable('alert', {
