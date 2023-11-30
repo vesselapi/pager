@@ -70,12 +70,8 @@
           "name": "alert_org_id_org_id_fk",
           "tableFrom": "alert",
           "tableTo": "org",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -83,12 +79,8 @@
           "name": "alert_assigned_to_id_user_id_fk",
           "tableFrom": "alert",
           "tableTo": "user",
-          "columnsFrom": [
-            "assigned_to_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["assigned_to_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -96,12 +88,8 @@
           "name": "alert_escalation_policy_id_escalation_policy_id_fk",
           "tableFrom": "alert",
           "tableTo": "escalation_policy",
-          "columnsFrom": [
-            "escalation_policy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["escalation_policy_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -139,12 +127,8 @@
           "name": "alert_event_id_alert_id_fk",
           "tableFrom": "alert_event",
           "tableTo": "alert",
-          "columnsFrom": [
-            "id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -205,12 +189,8 @@
           "name": "escalation_policy_step_escalation_policy_id_escalation_policy_id_fk",
           "tableFrom": "escalation_policy_step",
           "tableTo": "escalation_policy",
-          "columnsFrom": [
-            "escalation_policy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["escalation_policy_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -218,12 +198,8 @@
           "name": "escalation_policy_step_org_id_org_id_fk",
           "tableFrom": "escalation_policy_step",
           "tableTo": "org",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -231,12 +207,8 @@
           "name": "escalation_policy_step_schedule_id_schedule_id_fk",
           "tableFrom": "escalation_policy_step",
           "tableTo": "schedule",
-          "columnsFrom": [
-            "schedule_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["schedule_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -244,12 +216,8 @@
           "name": "escalation_policy_step_rotation_id_rotation_id_fk",
           "tableFrom": "escalation_policy_step",
           "tableTo": "rotation",
-          "columnsFrom": [
-            "rotation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rotation_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -257,12 +225,8 @@
           "name": "escalation_policy_step_user_id_user_id_fk",
           "tableFrom": "escalation_policy_step",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -299,12 +263,8 @@
           "name": "escalation_policy_org_id_org_id_fk",
           "tableFrom": "escalation_policy",
           "tableTo": "org",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -366,12 +326,8 @@
           "name": "integration_org_id_org_id_fk",
           "tableFrom": "integration",
           "tableTo": "org",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -379,12 +335,8 @@
           "name": "integration_secret_id_secret_id_fk",
           "tableFrom": "integration",
           "tableTo": "secret",
-          "columnsFrom": [
-            "secret_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["secret_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -392,12 +344,8 @@
           "name": "integration_escalation_policy_id_escalation_policy_id_fk",
           "tableFrom": "integration",
           "tableTo": "escalation_policy",
-          "columnsFrom": [
-            "escalation_policy_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["escalation_policy_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -475,12 +423,8 @@
           "name": "rotation_user_org_id_org_id_fk",
           "tableFrom": "rotation_user",
           "tableTo": "org",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -488,12 +432,8 @@
           "name": "rotation_user_rotation_id_schedule_id_fk",
           "tableFrom": "rotation_user",
           "tableTo": "schedule",
-          "columnsFrom": [
-            "rotation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["rotation_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -501,12 +441,8 @@
           "name": "rotation_user_user_id_user_id_fk",
           "tableFrom": "rotation_user",
           "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -568,12 +504,8 @@
           "name": "rotation_org_id_org_id_fk",
           "tableFrom": "rotation",
           "tableTo": "org",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -581,12 +513,8 @@
           "name": "rotation_schedule_id_schedule_id_fk",
           "tableFrom": "rotation",
           "tableTo": "schedule",
-          "columnsFrom": [
-            "schedule_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["schedule_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -630,12 +558,8 @@
           "name": "schedule_org_id_org_id_fk",
           "tableFrom": "schedule",
           "tableTo": "org",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -685,12 +609,8 @@
           "name": "secret_org_id_org_id_fk",
           "tableFrom": "secret",
           "tableTo": "org",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -746,12 +666,8 @@
           "name": "user_org_id_org_id_fk",
           "tableFrom": "user",
           "tableTo": "org",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["org_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -761,9 +677,7 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       }
     }
