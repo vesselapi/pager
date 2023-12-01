@@ -359,6 +359,17 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .returning();
       return selectScheduleSchema.parse(dbSchedule[0]);
     },
+    listByOrgId: async (orgId: OrgId) => {
+      const dbSchedules = await db.query.schedule.findMany({
+        where: eq(scheduleSchema.orgId, orgId),
+        with: {
+          users: true,
+        },
+      });
+      return dbSchedules.map((schedule) =>
+        selectScheduleSchema.parse(schedule),
+      );
+    },
   },
   scheduleUsers: {
     createMany: async (scheduleUsers: CreateScheduleUser[]) => {
