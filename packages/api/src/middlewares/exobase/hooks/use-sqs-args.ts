@@ -20,7 +20,19 @@ export const withSqsArgs = async (
   const framework = props.framework as SqsLambdaFramework;
   const recordsArgs = [];
   for (const record of framework.event.Records) {
-    const [zerr, args] = await tryit(model.parseAsync)(record);
+    const [jsonerr, json] = await tryit((body) => {
+      const json = JSON.parse(body);
+      // NOTE: SNS Notifications nest the body under record.event.message
+      return json.Type === 'Notification' ? JSON.parse(json.Message) : json;
+    })(record.body);
+    if (jsonerr) {
+      throw new BadRequestError('Non json arg provided', {
+        key: 'err.json-body.parsing',
+        cause: jsonerr,
+      });
+    }
+
+    const [zerr, args] = await tryit(model.parseAsync)(json);
     if (zerr) {
       if (!isZodError(zerr)) {
         throw new BadRequestError(

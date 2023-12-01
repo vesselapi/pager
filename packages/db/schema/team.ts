@@ -5,7 +5,9 @@ import type { z } from 'zod';
 import type { OrgId, TeamId } from '@vessel/types';
 import { OrgIdRegex, TeamIdRegex } from '@vessel/types';
 
+import { relations } from 'drizzle-orm';
 import { org } from './org';
+import { schedule } from './schedule';
 
 export const team = pgTable('team', {
   id: text('id').primaryKey(),
@@ -14,6 +16,12 @@ export const team = pgTable('team', {
     .notNull(),
   name: text('name').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const teamScheduleRelation = relations(team, ({ many }) => {
+  return {
+    schedules: many(schedule),
+  };
 });
 
 export const selectTeamSchema = createSelectSchema(team, {

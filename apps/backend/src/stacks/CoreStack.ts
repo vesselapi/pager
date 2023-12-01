@@ -1,3 +1,11 @@
+import {
+  Chain,
+  StateMachine,
+  TaskInput,
+  Wait,
+  WaitTime,
+} from 'aws-cdk-lib/aws-stepfunctions';
+import { SqsSendMessage } from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { isString, mapValues, shake } from 'radash';
 import type { StackContext } from 'sst/constructs';
 import { Api, Function, Queue, Topic } from 'sst/constructs';
@@ -26,25 +34,44 @@ export function CoreStack({ stack }: StackContext) {
     },
   });
 
-  const alertOncallFn = new Function(stack, 'AlertOncall', {
+  const alertPageFn = new Function(stack, 'AlertOncall', {
     runtime: 'nodejs18.x',
-    handler: 'src/functions/alert-oncall.main',
+    handler: 'src/functions/alert-page.main',
     deadLetterQueueEnabled: true,
     environment: stackEnv,
   });
 
-  const alertOncallQueue = new Queue(stack, 'AlertOncallQueue', {
-    consumer: alertOncallFn,
+  const alertPageQueue = new Queue(stack, 'AlertPageQueue', {
+    consumer: alertPageFn,
   });
 
   const topic = new Topic(stack, 'AlertsTopic', {
     subscribers: {
-      subscriber1: alertOncallQueue,
+      subscriber1: alertPageQueue,
     },
   });
+
+  // Step function for alerting oncall
+  const alertPageWaitTask = new Wait(stack, 'AlertPageWaitTask', {
+    time: WaitTime.secondsPath('$.waitSeconds'),
+  });
+  const alertPageQueueTask = new SqsSendMessage(stack, 'AlertPageQueueTask', {
+    queue: alertPageQueue.cdk.queue,
+    messageBody: TaskInput.fromJsonPathAt('$.payload'),
+  });
+  const stateDefinition =
+    Chain.start(alertPageWaitTask).next(alertPageQueueTask);
+  const alertPageStateMachine = new StateMachine(
+    stack,
+    'AlertPageStateMachine',
+    {
+      definition: stateDefinition,
+    },
+  );
 
   stack.addOutputs({
     ApiUrl: api.url,
     AlertsTopicArn: topic.topicArn,
+    AlertPageSFNArn: alertPageStateMachine.stateMachineArn,
   });
 }

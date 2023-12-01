@@ -3,14 +3,19 @@ import { useJsonBody, useServices } from '@exobase/hooks';
 import z from 'zod';
 
 import { vessel } from '@vessel/api/src/middlewares/exobase/hooks/common-hooks';
-import type { ApiTokenAuth } from '@vessel/api/src/middlewares/exobase/hooks/use-api-token-auth';
-import { useApiTokenAuth } from '@vessel/api/src/middlewares/exobase/hooks/use-api-token-auth';
-import type { PubSub } from '@vessel/api/src/services/pubsub';
-import { makePubSub } from '@vessel/api/src/services/pubsub';
-import type { SecretManager } from '@vessel/api/src/services/secret-manager';
-import { makeSecretManager } from '@vessel/api/src/services/secret-manager';
+import {
+  ApiTokenAuth,
+  useApiTokenAuth,
+} from '@vessel/api/src/middlewares/exobase/hooks/use-api-token-auth';
 
-import { db } from '../../../../packages/db';
+import {
+  AlertManager,
+  makeAlertManager,
+} from '@vessel/api/src/services/alert-manager';
+import {
+  SecretManager,
+  makeSecretManager,
+} from '@vessel/api/src/services/secret-manager';
 import { insertAlertSchema } from '../../../../packages/db/schema/alert';
 
 const schema = z.object({
@@ -18,13 +23,14 @@ const schema = z.object({
     title: true,
     status: true,
     metadata: true,
+    escalationPolicyId: true,
   }),
 });
 
 type Args = z.infer<typeof schema>;
 
 interface Services {
-  pubsub: PubSub;
+  alertManager: AlertManager;
   secretManager: SecretManager;
 }
 
@@ -38,20 +44,21 @@ const alert = async ({
   auth,
 }: Props<Args, Services, ApiTokenAuth>): Promise<Result> => {
   const { alert } = args;
-  const { pubsub } = services;
+  const { alertManager } = services;
 
-  const dbAlert = await db.alerts.create({
+  await alertManager.create({
     orgId: auth.orgId,
+    escalationStepState: 0,
+    source: 'API',
     ...alert,
   });
-  await pubsub.alert.publish(dbAlert);
   return { success: true };
 };
 
 export const main = vessel()
   .hook(
     useServices<Services>({
-      pubsub: makePubSub(),
+      alertManager: makeAlertManager(),
       secretManager: makeSecretManager(),
     }),
   )

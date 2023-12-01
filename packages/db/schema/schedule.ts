@@ -4,8 +4,10 @@ import type { z } from 'zod';
 
 import { customValidators } from '@vessel/types';
 
+import { relations } from 'drizzle-orm';
 import { org } from './org';
 import { team } from './team';
+import { user } from './user';
 
 export const schedule = pgTable('schedule', {
   id: text('id').primaryKey(),
@@ -19,6 +21,12 @@ export const schedule = pgTable('schedule', {
   lengthInSeconds: numeric('length_in_seconds').notNull(),
   name: text('name').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const scheduleUserRelations = relations(schedule, ({ many }) => {
+  return {
+    users: many(user),
+  };
 });
 
 export const selectScheduleSchema = createSelectSchema(schedule, {

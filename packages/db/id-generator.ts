@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 
 import type {
+  AlertEventId,
   AlertId,
   ApiToken,
   ApiTokenId,
@@ -29,6 +30,7 @@ export const randomString = () => {
 
 export const IdGenerator = {
   alert: (): AlertId => `v_alert_${randomString()}`,
+  alertEvent: (): AlertEventId => `v_alertEvent_${randomString()}`,
   apiToken: (apiToken: ApiToken): ApiTokenId =>
     `v_secret_apiToken_${hash(apiToken)}`,
   escalationPolicy: (): EscalationPolicyId =>

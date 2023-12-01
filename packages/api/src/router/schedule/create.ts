@@ -1,13 +1,13 @@
-import { unique } from 'radash';
 import { z } from 'zod';
 
 import type { Db } from '@vessel/db';
 import { db } from '@vessel/db';
 import { IdGenerator } from '@vessel/db/id-generator';
-import { insertRotationSchema } from '@vessel/db/schema/rotation';
-import { insertRotationUserSchema } from '@vessel/db/schema/rotation-user';
 import { insertScheduleSchema } from '@vessel/db/schema/schedule';
 
+import { insertScheduleUserSchema } from '@vessel/db/schema/schedule-user';
+import { customValidators } from '@vessel/types';
+import { unique } from 'radash';
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 
@@ -16,26 +16,25 @@ interface Context {
 }
 
 const args = z.object({
-  schedule: insertScheduleSchema.pick({ name: true }),
-  rotations: z.array(
-    z.object({
-      rotation: insertRotationSchema.pick({
-        startTime: true,
-        lengthInSeconds: true,
-        name: true,
-      }),
-      users: z
-        .array(insertRotationUserSchema.pick({ order: true, userId: true }))
-        .refine((users) => {
-          const uniqueUsers = unique(users, (user) => user.order);
-          return uniqueUsers.length === users.length;
-        }, 'Order must be unique')
-        .refine((users) => {
-          const uniqueUsers = unique(users, (user) => user.userId);
-          return uniqueUsers.length === users.length;
-        }, 'Users must be unique'),
-    }),
-  ),
+  teamId: customValidators.teamId,
+  schedule: insertScheduleSchema.pick({
+    name: true,
+    startTime: true,
+    lengthInSeconds: true,
+  }),
+  scheduleUsers: z
+    .array(insertScheduleUserSchema.pick({ order: true, userId: true }))
+    .refine((scheduleUsers) => {
+      const uniqueUsers = unique(
+        scheduleUsers,
+        (scheduleUser) => scheduleUser.order,
+      );
+      return uniqueUsers.length === scheduleUsers.length;
+    }, 'Order must be unique')
+    .refine((scheduleUsers) => {
+      const uniqueUsers = unique(scheduleUsers, (user) => user.userId);
+      return uniqueUsers.length === scheduleUsers.length;
+    }, 'Users must be unique'),
 });
 
 export const scheduleCreate = trpc
@@ -49,29 +48,22 @@ export const scheduleCreate = trpc
     const { orgId } = ctx.auth.user;
     const schedule = await ctx.db.schedules.create({
       orgId,
+      teamId: input.teamId,
       ...input.schedule,
     });
 
-    const rotations = input.rotations.map((rotation) => ({
-      id: IdGenerator.schedule(),
-      ...rotation,
+    const insertScheduleUsers = input.scheduleUsers.map((scheduleUser) => ({
+      id: IdGenerator.scheduleUser(),
+      orgId,
+      scheduleId: schedule.id,
+      ...scheduleUser,
     }));
-    const dbRotations = await ctx.db.rotations.createMany(
-      rotations.map((rotation) => ({
-        orgId,
-        scheduleId: schedule.id,
-        ...rotation.rotation,
-      })),
-    );
 
-    const rotationUsers = rotations.flatMap((rotation) => {
-      return rotation.users.map((user) => ({
-        orgId,
-        rotationId: rotation.id,
-        ...user,
-      }));
-    });
-    const dbRotationUsers =
-      await ctx.db.rotationUsers.createMany(rotationUsers);
-    return { schedule, rotations: dbRotations, rotationUsers: dbRotationUsers };
+    const users = await ctx.db.scheduleUsers.createMany(insertScheduleUsers);
+    return {
+      schedule: {
+        ...schedule,
+        users,
+      },
+    };
   });

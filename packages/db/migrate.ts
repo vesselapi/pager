@@ -5,7 +5,7 @@ import postgres from 'postgres';
 import { schema } from '.';
 
 async function run() {
-  const queryClient = postgres(process.env.DATABASE_URL, { max: 1 });
+  const queryClient = postgres(process.env.DATABASE_URL!, { max: 1 });
 
   const db = drizzle(queryClient, { schema });
 

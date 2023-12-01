@@ -1,9 +1,9 @@
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
-import type { AlertEventId, AlertId } from '@vessel/types';
-import { AlertEventIdRegex, AlertIdRegex } from '@vessel/types';
+import { customValidators } from '@vessel/types';
 
+import { z } from 'zod';
 import { alert } from './alert';
 
 export const alertEvent = pgTable('alert_event', {
@@ -14,19 +14,16 @@ export const alertEvent = pgTable('alert_event', {
 });
 
 export const selectAlertEventSchema = createSelectSchema(alertEvent, {
-  id: (schema) => schema.id.transform((x) => x as AlertEventId),
-  alertId: (schema) => schema.id.transform((x) => x as AlertId),
+  id: customValidators.alertEventId,
+  alertId: customValidators.alertId,
 });
 
 export const insertAlertEventSchema = createInsertSchema(alertEvent, {
-  id: (schema) =>
-    schema.id.regex(
-      AlertEventIdRegex,
-      `Invalid id, expected format ${AlertEventIdRegex}`,
-    ),
-  alertId: (schema) =>
-    schema.id.regex(
-      AlertIdRegex,
-      `Invalid id, expected format ${AlertIdRegex}`,
-    ),
+  id: customValidators.alertEventId,
+  alertId: customValidators.alertId,
 });
+
+export type CreateAlertEvent = Omit<
+  z.infer<typeof insertAlertEventSchema>,
+  'id'
+>;

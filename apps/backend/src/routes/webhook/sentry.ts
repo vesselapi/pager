@@ -75,18 +75,21 @@ const sentryWebhook = async ({
   }
 
   if (headers['sentry-hook-resource'] === 'issue') {
-    const body = args as SentryWebhookIssueCreateBody;
-    await alertManager.create({
-      title: body.data.issue.title,
-      orgId: dbIntegration.orgId,
-      status: 'OPEN',
-      source: 'sentry',
-      escalationPolicyId: dbIntegration.escalationPolicyId,
-      metadata: {
-        headers,
-        body,
-      } as any,
-    });
+    if (args.action === 'created') {
+      const body = args as SentryWebhookIssueCreateBody;
+      await alertManager.create({
+        title: body.data.issue.title,
+        orgId: dbIntegration.orgId,
+        status: 'OPEN',
+        source: 'sentry',
+        escalationPolicyId: dbIntegration.escalationPolicyId,
+        escalationStepState: 0,
+        metadata: {
+          headers,
+          body,
+        } as any,
+      });
+    }
   }
 
   return { success: true };
