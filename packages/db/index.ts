@@ -34,6 +34,7 @@ import {
 import {
   CreateEscalationPolicyStep,
   escalationPolicyStep as escalationPolicyStepSchema,
+  escalationPolicyStepTypeEnum,
   insertEscalationPolicyStepSchema,
   selectEscalationPolicyStepSchema,
 } from './schema/escalation-policy-step';
@@ -45,29 +46,29 @@ import {
   selectIntegrationSchema,
 } from './schema/integration';
 import { org as orgSchema, selectOrgSchema } from './schema/org';
-import type { CreateRotation } from './schema/rotation';
-import {
-  insertRotationSchema,
-  rotation as rotationSchema,
-  selectRotationSchema,
-} from './schema/rotation';
-import type { CreateRotationUser } from './schema/rotation-user';
-import {
-  insertRotationUserSchema,
-  rotationUser as rotationUserSchema,
-  selectRotationUserSchema,
-} from './schema/rotation-user';
 import type { CreateSchedule } from './schema/schedule';
 import {
   insertScheduleSchema,
-  schedule as scheduleSchema,
+  schedule as rotationSchema,
   selectScheduleSchema,
 } from './schema/schedule';
+import type { CreateScheduleUser } from './schema/schedule-user';
+import {
+  insertScheduleUserSchema,
+  scheduleUser as rotationUserSchema,
+  selectScheduleUserSchema,
+} from './schema/schedule-user';
 import {
   insertSecretSchema,
   secret as secretSchema,
   selectSecretSchema,
 } from './schema/secret';
+import type { CreateTeam } from './schema/team';
+import {
+  insertTeamSchema,
+  team as scheduleSchema,
+  selectTeamSchema,
+} from './schema/team';
 import type { CreateUser } from './schema/user';
 import {
   insertUserSchema,
@@ -83,6 +84,7 @@ export const schema = {
   alertEvent: alertEventSchema,
   escalationPolicy: escalationPolicySchema,
   escalationPolicyStep: escalationPolicyStepSchema,
+  escalationPolicyStepTypeEnum,
   integration: integrationSchema,
   org: orgSchema,
   user: userSchema,
@@ -292,38 +294,38 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     },
   },
   rotations: {
-    createMany: async (rotations: CreateRotation[]) => {
+    createMany: async (rotations: CreateSchedule[]) => {
       const insertRotations = rotations.map((rotation) => {
         const insertRotation = {
-          id: IdGenerator.rotation(),
+          id: IdGenerator.schedule(),
           ...rotation,
         };
-        return insertRotationSchema.parse(insertRotation);
+        return insertScheduleSchema.parse(insertRotation);
       });
       const dbRotations = await db
         .insert(rotationSchema)
         .values(insertRotations)
         .returning();
       return dbRotations.map((rotation) =>
-        selectRotationSchema.parse(rotation),
+        selectScheduleSchema.parse(rotation),
       );
     },
   },
   rotationUsers: {
-    createMany: async (rotationUsers: CreateRotationUser[]) => {
+    createMany: async (rotationUsers: CreateScheduleUser[]) => {
       const insertRotationUsers = rotationUsers.map((rotationUser) => {
         const insertRotationUser = {
-          id: IdGenerator.rotationUser(),
+          id: IdGenerator.scheduleUser(),
           ...rotationUser,
         };
-        return insertRotationUserSchema.parse(insertRotationUser);
+        return insertScheduleUserSchema.parse(insertRotationUser);
       });
       const dbRotationUsers = await db
         .insert(rotationUserSchema)
         .values(insertRotationUsers)
         .returning();
       return dbRotationUsers.map((rotationUser) =>
-        selectRotationUserSchema.parse(rotationUser),
+        selectScheduleUserSchema.parse(rotationUser),
       );
     },
   },
@@ -332,10 +334,10 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       const schedules = await db.query.schedule.findMany({
         where: eq(scheduleSchema.orgId, orgId),
       });
-      return schedules.map((schedule) => selectScheduleSchema.parse(schedule));
+      return schedules.map((schedule) => selectTeamSchema.parse(schedule));
     },
-    create: async (schedule: CreateSchedule) => {
-      const parsedSchedule = insertScheduleSchema.parse(schedule);
+    create: async (schedule: CreateTeam) => {
+      const parsedSchedule = insertTeamSchema.parse(schedule);
       const dbSchedule = await db
         .insert(scheduleSchema)
         .values(parsedSchedule)
@@ -344,7 +346,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       if (!newSchedule) {
         throw new Error('Failed to create schedule');
       }
-      return selectScheduleSchema.parse(newSchedule);
+      return selectTeamSchema.parse(newSchedule);
     },
   },
 });

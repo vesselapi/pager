@@ -53,7 +53,7 @@ export const scheduleCreate = trpc
     });
 
     const rotations = input.rotations.map((rotation) => ({
-      id: IdGenerator.rotation(),
+      id: IdGenerator.schedule(),
       ...rotation,
     }));
     const dbRotations = await ctx.db.rotations.createMany(

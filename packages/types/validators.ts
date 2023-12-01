@@ -7,34 +7,40 @@ import {
   EscalationPolicyStepIdRegex,
   OrgId,
   OrgIdRegex,
-  RotationId,
-  RotationIdRegex,
   ScheduleId,
   ScheduleIdRegex,
+  ScheduleUserId,
+  ScheduleUserIdRegex,
   SecretExpoPushTokenId,
   SecretExpoPushTokenIdRegex,
   SecretId,
   SecretIdRegex,
+  TeamId,
+  TeamIdRegex,
   UserId,
   UserIdRegex,
 } from './types';
 
-const regexValidator = (regex: RegExp) =>
-  z.string().regex(regex, `Invalid id, expected format ${regex}`);
+const regexValidator = <T extends string>(regex: RegExp) =>
+  z
+    .string()
+    .regex(regex, `Invalid id, expected format ${regex}`)
+    .transform((x) => x as T);
 
 export const customValidators = {
-  escalationPolicyId: regexValidator(EscalationPolicyIdRegex).transform(
-    (x) => x as EscalationPolicyId,
+  escalationPolicyId: regexValidator<EscalationPolicyId>(
+    EscalationPolicyIdRegex,
   ),
-  escalationPolicyStepId: regexValidator(EscalationPolicyStepIdRegex).transform(
-    (x) => x as EscalationPolicyStepId,
+  escalationPolicyStepId: regexValidator<EscalationPolicyStepId>(
+    EscalationPolicyStepIdRegex,
   ),
-  orgId: regexValidator(OrgIdRegex).transform((x) => x as OrgId),
-  rotationId: regexValidator(RotationIdRegex).transform((x) => x as RotationId),
-  secretId: regexValidator(SecretIdRegex).transform((x) => x as SecretId),
-  secretExpoPushTokenId: regexValidator(SecretExpoPushTokenIdRegex).transform(
-    (x) => x as SecretExpoPushTokenId,
+  orgId: regexValidator<OrgId>(OrgIdRegex),
+  scheduleId: regexValidator<ScheduleId>(ScheduleIdRegex),
+  scheduleUserId: regexValidator<ScheduleUserId>(ScheduleUserIdRegex),
+  secretId: regexValidator<SecretId>(SecretIdRegex),
+  secretExpoPushTokenId: regexValidator<SecretExpoPushTokenId>(
+    SecretExpoPushTokenIdRegex,
   ),
-  scheduleId: regexValidator(ScheduleIdRegex).transform((x) => x as ScheduleId),
-  userId: regexValidator(UserIdRegex).transform((x) => x as UserId),
+  teamId: regexValidator<TeamId>(TeamIdRegex),
+  userId: regexValidator<UserId>(UserIdRegex),
 };
