@@ -3,7 +3,7 @@ import { addDays, format, getDay } from 'date-fns';
 
 const Styles = {
   rowHeight: 'h-[90px]',
-  rowBg: 'bg-slate-200',
+  rowBg: 'bg-zinc-200',
 };
 
 export const WeeklyEvent = ({
@@ -56,7 +56,7 @@ export const WeeklyCalendar = ({
       {days.map((day, i) => (
         <div
           key={day.day}
-          className={classNames(`h-[30px] flex items-center bg-slate-100`, {
+          className={classNames(`h-[30px] flex items-center bg-zinc-100`, {
             'border-r': i !== 0,
             'border-red-500': i === daysBeforeToday - 1,
           })}

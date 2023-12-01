@@ -1,5 +1,3 @@
-'use client';
-
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import type { ReactElement, ReactNode } from 'react';

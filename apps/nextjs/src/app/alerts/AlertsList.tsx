@@ -1,5 +1,3 @@
-'use client';
-
 import { useAuth } from '@clerk/nextjs';
 import classNames from 'classnames';
 import { useCallback, useMemo, useState } from 'react';
