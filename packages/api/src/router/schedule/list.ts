@@ -14,7 +14,6 @@ export const scheduleList = trpc
       db: () => db,
     }),
   )
-  .query(async ({ ctx }) => {
-    const schedules = await ctx.db.schedules.listByOrgId(ctx.auth.user.orgId);
-    return { schedules };
+  .query(({ ctx }) => {
+    return ctx.db.schedules.listByOrgId(ctx.auth.user.orgId);
   });

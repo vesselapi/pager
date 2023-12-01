@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { FaGithub, FaSlack } from 'react-icons/fa';
 import { HiOutlineMail } from 'react-icons/hi';
-import { TbBell, TbBook2, TbCalendarFilled } from 'react-icons/tb';
+import { TbBell, TbBook2, TbCalendarFilled, TbUsersGroup } from 'react-icons/tb';
 
 import Dropdown from './Dropdown';
 import UserIcon from './UserIcon';
@@ -85,9 +85,15 @@ const SideNav = ({ children }: { children: ReactNode }) => {
               activeRoute={pathname}
             />
             <NavItem
-              route="/schedule"
-              title="Schedule"
+              route="/schedules"
+              title="Schedules"
               Icon={TbCalendarFilled}
+              activeRoute={pathname}
+            />
+            <NavItem
+              route="/teams"
+              title="Teams"
+              Icon={TbUsersGroup}
               activeRoute={pathname}
             />
           </div>
