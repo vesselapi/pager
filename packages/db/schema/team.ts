@@ -2,8 +2,7 @@ import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 
-import type { OrgId, TeamId } from '@vessel/types';
-import { OrgIdRegex, TeamIdRegex } from '@vessel/types';
+import { customValidators } from '@vessel/types';
 
 import { relations } from 'drizzle-orm';
 import { org } from './org';
@@ -25,18 +24,12 @@ export const teamScheduleRelation = relations(team, ({ many }) => {
 });
 
 export const selectTeamSchema = createSelectSchema(team, {
-  id: (schema) => schema.id.transform((x) => x as TeamId),
-  orgId: (schema) => schema.orgId.transform((x) => x as OrgId),
+  id: customValidators.teamId,
+  orgId: customValidators.orgId,
 });
 
 export const insertTeamSchema = createInsertSchema(team, {
-  id: (schema) =>
-    schema.id
-      .regex(TeamIdRegex, `Invalid id, expected format ${TeamIdRegex}`)
-      .transform((x) => x as TeamId),
-  orgId: (schema) =>
-    schema.orgId
-      .regex(OrgIdRegex, `Invalid id, expected format ${OrgIdRegex}`)
-      .transform((x) => x as OrgId),
+  id: customValidators.teamId,
+  orgId: customValidators.orgId,
 });
 export type CreateTeam = Omit<z.infer<typeof insertTeamSchema>, 'id'>;
