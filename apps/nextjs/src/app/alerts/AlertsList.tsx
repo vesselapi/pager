@@ -10,6 +10,7 @@ import { TbClock, TbLetterCase, TbMinus, TbPlus } from 'react-icons/tb';
 
 import type { RouterOutputs } from '~/utils/api';
 import { api } from '~/utils/api';
+import Search from '../_components/Search';
 import Spinner from '../_components/Spinner';
 import AlertsListItem from './AlertListItem';
 import type {
@@ -21,7 +22,6 @@ import AlertListDisplayDropdown from './_components/AlertListDisplayDropdown';
 import AlertListFilterDropdown, {
   AlertListFilterPill,
 } from './_components/AlertListFilterDropdown';
-import AlertListSearch from './_components/AlertListSearch';
 import AlertListSortDropdown, {
   AlertListSortPill,
 } from './_components/AlertListSortDropdown';
@@ -132,7 +132,7 @@ const AlertsList = () => {
       <div className="pt-4">
         {/* Config Settings Bar */}
         <div className="flex items-center justify-between px-10">
-          <AlertListSearch search={search} setSearch={setSearch} />
+          <Search search={search} setSearch={setSearch} />
           <div>
             <AlertListFilterDropdown
               filterOptions={[

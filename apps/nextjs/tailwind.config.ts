@@ -16,7 +16,7 @@ export default {
     extend: {
       height: {
         card: '130px',
-        'card-lg': '165px',
+        'card-lg': '200px',
         'card-xl': '300px',
       },
       colors: {
