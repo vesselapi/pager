@@ -13,7 +13,7 @@ interface OAuth2Params<
   oauthRequestSchema?: TOauthRequest;
   oauthResponseSchema?: TOauthResponse;
   authUrl: HttpsUrl | (() => HttpsUrl);
-  tokenUrl: HttpsUrl | ((params: { oauthRequest: TSecret }) => HttpsUrl);
+  tokenUrl: HttpsUrl | ((params: TSecret) => HttpsUrl);
   externalId?: (secret: TSecret) => string | null;
   clientId: string;
   clientSecret: string;

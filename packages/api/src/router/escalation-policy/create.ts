@@ -16,14 +16,13 @@ const input = z.object({
     name: true,
   }),
   escalationPolicySteps: z.array(
-    z.object({
-      order: z.number(),
-      step: insertEscalationPolicyStepSchema.sourceType().pick({
-        scheduleId: true,
-        rotationId: true,
-        userId: true,
-        nextStepInSeconds: true,
-      }),
+    insertEscalationPolicyStepSchema.sourceType().pick({
+      type: true,
+      order: true,
+      scheduleId: true,
+      rotationId: true,
+      userId: true,
+      nextStepInSeconds: true,
     }),
   ),
 });
@@ -44,6 +43,9 @@ export const escalationPolicyCreate = trpc
     const escalationPolicySteps = input.escalationPolicySteps.map((step) => ({
       orgId,
       escalationPolicyId: escalationPolicy.id,
+      scheduleId: step.scheduleId ?? null,
+      rotationId: step.rotationId ?? null,
+      userId: step.userId ?? null,
       ...step,
     }));
     const dbEscalationPolicySteps =

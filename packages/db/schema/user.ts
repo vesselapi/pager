@@ -30,4 +30,5 @@ export const insertUserSchema = createInsertSchema(user, {
   expoPushTokenSecretId: customValidators.secretExpoPushTokenId,
 });
 
+export type User = z.infer<typeof selectUserSchema>;
 export type CreateUser = Omit<z.infer<typeof insertUserSchema>, 'id'>;

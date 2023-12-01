@@ -1,15 +1,23 @@
-import { json, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import {
+  integer,
+  json,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+} from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 
-import type { AlertId, UserId } from '@vessel/types';
-import { APP_ID, AlertIdRegex, UserIdRegex } from '@vessel/types';
+import { APP_ID, customValidators } from '@vessel/types';
+
+import { relations } from 'drizzle-orm';
 
 import { escalationPolicy } from './escalation-policy';
 import { org } from './org';
 import { user } from './user';
 
-export const alertSourceEnum = pgEnum('alert_source', [...APP_ID, 'vessel']);
+export const alertSourceEnum = pgEnum('alert_source', [...APP_ID, 'API']);
 export const statusEnum = pgEnum('status', ['ACKED', 'OPEN', 'CLOSED']);
 
 export const alert = pgTable('alert', {
@@ -23,25 +31,26 @@ export const alert = pgTable('alert', {
   escalationPolicyId: text('escalation_policy_id').references(
     () => escalationPolicy.id,
   ),
+  escalationStepState: integer('escalation_step_state').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   source: alertSourceEnum('source').notNull(),
   metadata: json('metadata'),
 });
 
+export const alertEscalationPolicyRelation = relations(alert, ({ one }) => ({
+  escalationPolicy: one(escalationPolicy),
+}));
+
 export const selectAlertSchema = createSelectSchema(alert, {
-  id: (schema) => schema.id.transform((x) => x as AlertId),
-  assignedToId: (schema) => schema.id.transform((x) => x as UserId),
+  id: customValidators.alertId,
+  assignedToId: customValidators.userId,
+  escalationPolicyId: customValidators.escalationPolicyId,
 });
 
 export const insertAlertSchema = createInsertSchema(alert, {
-  id: (schema) =>
-    schema.id
-      .regex(AlertIdRegex, `Invalid id, expected format ${AlertIdRegex}`)
-      .transform((x) => x as AlertId),
-  assignedToId: (schema) =>
-    schema.id
-      .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`)
-      .transform((x) => x as UserId),
+  id: customValidators.alertId,
+  assignedToId: customValidators.userId,
+  escalationPolicyId: customValidators.escalationPolicyId,
 });
 
 export type Alert = z.infer<typeof selectAlertSchema>;

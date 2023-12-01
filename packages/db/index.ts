@@ -8,6 +8,7 @@ import type {
   AlertId,
   AppId,
   OrgId,
+  ScheduleId,
   SecretId,
   UserId,
 } from '@vessel/types';
@@ -15,6 +16,7 @@ import type {
 import { IdGenerator } from './id-generator';
 import type { CreateAlert, UpsertAlert } from './schema/alert';
 import {
+  alertEscalationPolicyRelation,
   alert as alertSchema,
   alertSourceEnum,
   insertAlertSchema,
@@ -22,18 +24,22 @@ import {
   statusEnum,
 } from './schema/alert';
 import {
+  CreateAlertEvent,
   alertEvent as alertEventSchema,
+  insertAlertEventSchema,
   selectAlertEventSchema,
-} from './schema/alertEvent';
+} from './schema/alert-event';
 import {
   CreateEscalationPolicy,
   escalationPolicy as escalationPolicySchema,
+  escalationPolicyStepRelation,
   insertEscalationPolicySchema,
   selectEscalationPolicySchema,
 } from './schema/escalation-policy';
 import {
   CreateEscalationPolicyStep,
   escalationPolicyStep as escalationPolicyStepSchema,
+  escalationPolicyStepType,
   insertEscalationPolicyStepSchema,
   selectEscalationPolicyStepSchema,
 } from './schema/escalation-policy-step';
@@ -80,9 +86,12 @@ export const schema = {
   appIdEnum,
   statusEnum,
   alert: alertSchema,
+  alertEscalationPolicyRelation,
   alertEvent: alertEventSchema,
   escalationPolicy: escalationPolicySchema,
   escalationPolicyStep: escalationPolicyStepSchema,
+  escalationPolicyStepRelation,
+  escalationPolicyStepType,
   integration: integrationSchema,
   org: orgSchema,
   user: userSchema,
@@ -129,6 +138,35 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .returning();
       return selectAlertSchema.parse(dbAlerts[0]);
     },
+    findWithEscalationPolicy: async (id: AlertId) => {
+      const dbAlert = await db.query.alert.findFirst({
+        where: eq(alertSchema.id, id as string),
+        with: {
+          escalationPolicy: {
+            with: {
+              steps: true,
+            },
+          },
+        },
+      });
+      if (!dbAlert) {
+        return null;
+      }
+      const alert = selectAlertSchema.parse(dbAlert);
+      if (!dbAlert.escalationPolicy) {
+        throw new Error('Escalation policy not found');
+      }
+      const escalationPolicy = selectEscalationPolicySchema.parse(
+        dbAlert.escalationPolicy,
+      );
+      if (dbAlert.escalationPolicy.steps.length === 0) {
+        throw new Error('No steps found for escalation policy');
+      }
+      const escalationPolicySteps = dbAlert.escalationPolicy.steps.map((step) =>
+        selectEscalationPolicyStepSchema.parse(step),
+      );
+      return { alert, escalationPolicy, escalationPolicySteps };
+    },
   },
   alertEvent: {
     find: async (id: AlertEventId) => {
@@ -141,6 +179,17 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     list: async (...args: Parameters<typeof db.query.alertEvent.findMany>) => {
       const alertEvents = await db.query.alertEvent.findMany(...args);
       return alertEvents.map((a) => selectAlertEventSchema.parse(a));
+    },
+    create: async (alertEvent: CreateAlertEvent) => {
+      const insertAlertEvent = insertAlertEventSchema.parse({
+        id: IdGenerator.alertEvent,
+        ...alertEvent,
+      });
+      const dbAlertEvents = await db
+        .insert(alertEventSchema)
+        .values(insertAlertEvent)
+        .returning();
+      return selectAlertEventSchema.parse(dbAlertEvents[0]);
     },
   },
   escalationPolicy: {
@@ -204,6 +253,9 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
           eq(integrationSchema.externalId, externalId),
         ),
       });
+      if (!integration) {
+        return null;
+      }
       return selectIntegrationSchema.parse(integration);
     },
   },
@@ -333,6 +385,12 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         where: eq(scheduleSchema.orgId, orgId),
       });
       return schedules.map((schedule) => selectScheduleSchema.parse(schedule));
+    },
+    find: async (id: ScheduleId) => {
+      const schedules = await db.query.schedule.findFirst({
+        where: eq(scheduleSchema.id, id),
+      });
+      return selectScheduleSchema.parse(schedules);
     },
     create: async (schedule: CreateSchedule) => {
       const parsedSchedule = insertScheduleSchema.parse(schedule);
