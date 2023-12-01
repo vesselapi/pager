@@ -16,6 +16,8 @@ export const user = pgTable('user', {
   lastName: text('last_name'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   expoPushTokenSecretId: text('expo_push_token_secret_id'),
+  externalId: text('external_id').notNull(),
+  profilePicPath: text('profile_pic_path').notNull(),
 });
 
 export const selectUserSchema = createSelectSchema(user, {

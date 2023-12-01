@@ -34,6 +34,7 @@ export const userMe = procedure
       orgId: org.id,
       firstName: claims.first_name,
       lastName: claims.last_name,
+      externalId: claims.id,
     });
     return { user: newUser };
   });
