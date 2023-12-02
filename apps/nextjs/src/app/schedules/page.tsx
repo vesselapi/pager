@@ -1,7 +1,7 @@
 'use client';
 
-const SchedulePage = () => {
-  return <div></div>;
-};
+import ScheduleList from './SchedulesList';
+
+const SchedulePage = () => <ScheduleList />;
 
 export default SchedulePage;

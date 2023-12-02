@@ -1,6 +1,6 @@
 import { WeeklyCalendar, WeeklyEvent } from '../_components/Calendar';
 
-const SchedulePage = () => {
+const ScheduleList = () => {
   // const schedules = await
 
   return (
@@ -52,4 +52,4 @@ const SchedulePage = () => {
   );
 };
 
-export default SchedulePage;
+export default ScheduleList;

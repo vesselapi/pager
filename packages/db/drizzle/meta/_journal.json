@@ -8,6 +8,13 @@
       "when": 1701385328168,
       "tag": "0000_natural_scourge",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1701473156054,
+      "tag": "0001_freezing_valeria_richards",
+      "breakpoints": true
     }
   ]
 }
