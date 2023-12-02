@@ -22,8 +22,10 @@ export const makeUserManager = () => {
       return { key };
     };
     const addToUser = async (user: User) => {
+      const userWithoutImgS3Key = omit(user, ['imageS3Key']);
+      if (!user.imageS3Key) return { ...userWithoutImgS3Key, imageUrl: null };
       const imageUrl = await getUrl(user.id);
-      return { ...omit(user, ['imageS3Key']), imageUrl };
+      return { ...userWithoutImgS3Key, imageUrl };
     };
     return { getUrl, put, addToUser };
   };
