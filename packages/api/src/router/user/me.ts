@@ -4,8 +4,6 @@ import type { Db } from '@vessel/db';
 import { db } from '@vessel/db';
 
 import { IdGenerator } from '@vessel/db/id-generator';
-import { User } from '@vessel/db/schema/user';
-import { omit } from 'radash';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 import { UserManager, makeUserManager } from '../../services/user-manager';
 import { JwtClaims, procedure } from '../../trpc';
@@ -32,14 +30,10 @@ export const userMe = procedure
 
     const claims = ctx.auth.claims as JwtClaims;
 
-    const addProfilePicToUser = async (user: User) => {
-      const imageUrl = await ctx.userManager.profilePic.getUrl(user.id);
-      return { ...omit(user, ['imageS3Key']), imageUrl };
-    };
-
     const foundUser = await ctx.db.user.findByEmail(claims.email);
 
-    if (foundUser) return { user: await addProfilePicToUser(foundUser) };
+    if (foundUser)
+      return { user: await ctx.userManager.profilePic.addToUser(foundUser) };
 
     const org = await db.orgs.create();
 
@@ -65,5 +59,5 @@ export const userMe = procedure
       imageS3Key,
     });
 
-    return { user: await addProfilePicToUser(newUser) };
+    return { user: await ctx.userManager.profilePic.addToUser(newUser) };
   });
