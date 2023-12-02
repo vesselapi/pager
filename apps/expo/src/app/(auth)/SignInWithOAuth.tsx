@@ -1,4 +1,4 @@
-import { useOAuth } from '@clerk/clerk-expo';
+import { useOAuth, useSignIn } from '@clerk/clerk-expo';
 import { FontAwesome } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
@@ -14,6 +14,7 @@ const SignInWithOAuth = () => {
   // Warm up the android browser to improve UX
   // https://docs.expo.dev/guides/authentication/#improving-user-experience
   useWarmUpBrowser();
+  const { signIn, setActive, isLoaded } = useSignIn();
 
   const { startOAuthFlow: startOAuthFlowGoogle } = useOAuth({
     strategy: 'oauth_google',
@@ -41,6 +42,23 @@ const SignInWithOAuth = () => {
         console.error('OAuth error', err);
       }
     }, [startFlow]);
+
+  const onSignInPress = async () => {
+    if (!isLoaded) {
+      return;
+    }
+    try {
+      const completeSignIn = await signIn.create({
+        identifier: 'avery+guest@vessel.dev',
+        password: 'vesselguest',
+      });
+      // This is an important step,
+      // This indicates the user is signed in
+      await setActive({ session: completeSignIn.createdSessionId });
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
 
   return (
     <SafeAreaView>
@@ -74,6 +92,13 @@ const SignInWithOAuth = () => {
                 className="mr-3"
               />
               <Text className="text-xl">Sign in with Github</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View className="rounded-lg border-2 bg-white p-4 mb-4">
+          <TouchableOpacity onPress={onSignInPress}>
+            <View className="w-full flex-row items-center justify-center">
+              <Text className="text-xl">Continue as guest</Text>
             </View>
           </TouchableOpacity>
         </View>
