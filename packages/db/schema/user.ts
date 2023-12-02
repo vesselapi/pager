@@ -17,7 +17,7 @@ export const user = pgTable('user', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   expoPushTokenSecretId: text('expo_push_token_secret_id'),
   externalId: text('external_id').notNull(),
-  profilePicPath: text('profile_pic_path').notNull(),
+  imageS3Key: text('image_s3_key'),
 });
 
 export const selectUserSchema = createSelectSchema(user, {
@@ -33,4 +33,4 @@ export const insertUserSchema = createInsertSchema(user, {
 });
 
 export type User = z.infer<typeof selectUserSchema>;
-export type CreateUser = Omit<z.infer<typeof insertUserSchema>, 'id'>;
+export type CreateUser = z.infer<typeof insertUserSchema>;
