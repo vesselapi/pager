@@ -11,7 +11,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- CREATE TYPE "escalation_policy_step_type" AS ENUM('USER', 'ROTATION');
+ CREATE TYPE "escalation_policy_step_type" AS ENUM('USER', 'SCHEDULE');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -49,7 +49,6 @@ CREATE TABLE IF NOT EXISTS "escalation_policy_step" (
 	"org_id" text NOT NULL,
 	"next_step_in_seconds" integer NOT NULL,
 	"schedule_id" text,
-	"rotation_id" text,
 	"user_id" text
 );
 --> statement-breakpoint
@@ -75,27 +74,20 @@ CREATE TABLE IF NOT EXISTS "org" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "rotation_user" (
+CREATE TABLE IF NOT EXISTS "schedule_user" (
 	"id" text PRIMARY KEY NOT NULL,
 	"order" integer NOT NULL,
 	"org_id" text NOT NULL,
-	"rotation_id" text NOT NULL,
-	"user_id" text NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "rotation" (
-	"id" text PRIMARY KEY NOT NULL,
-	"org_id" text NOT NULL,
 	"schedule_id" text NOT NULL,
-	"start_time" timestamp NOT NULL,
-	"length_in_seconds" numeric NOT NULL,
-	"name" text NOT NULL,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"user_id" text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "schedule" (
 	"id" text PRIMARY KEY NOT NULL,
 	"org_id" text NOT NULL,
+	"team_id" text NOT NULL,
+	"start_time" timestamp NOT NULL,
+	"length_in_seconds" numeric NOT NULL,
 	"name" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
@@ -106,6 +98,13 @@ CREATE TABLE IF NOT EXISTS "secret" (
 	"org_id" text,
 	"user_id" text,
 	"encrypted_data" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "team" (
+	"id" text PRIMARY KEY NOT NULL,
+	"org_id" text NOT NULL,
+	"name" text NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
@@ -163,12 +162,6 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "escalation_policy_step" ADD CONSTRAINT "escalation_policy_step_rotation_id_rotation_id_fk" FOREIGN KEY ("rotation_id") REFERENCES "rotation"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
  ALTER TABLE "escalation_policy_step" ADD CONSTRAINT "escalation_policy_step_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
@@ -199,37 +192,31 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "rotation_user" ADD CONSTRAINT "rotation_user_org_id_org_id_fk" FOREIGN KEY ("org_id") REFERENCES "org"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "schedule_user" ADD CONSTRAINT "schedule_user_org_id_org_id_fk" FOREIGN KEY ("org_id") REFERENCES "org"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "rotation_user" ADD CONSTRAINT "rotation_user_rotation_id_schedule_id_fk" FOREIGN KEY ("rotation_id") REFERENCES "schedule"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "schedule_user" ADD CONSTRAINT "schedule_user_schedule_id_schedule_id_fk" FOREIGN KEY ("schedule_id") REFERENCES "schedule"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "rotation_user" ADD CONSTRAINT "rotation_user_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "rotation" ADD CONSTRAINT "rotation_org_id_org_id_fk" FOREIGN KEY ("org_id") REFERENCES "org"("id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "rotation" ADD CONSTRAINT "rotation_schedule_id_schedule_id_fk" FOREIGN KEY ("schedule_id") REFERENCES "schedule"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "schedule_user" ADD CONSTRAINT "schedule_user_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "schedule" ADD CONSTRAINT "schedule_org_id_org_id_fk" FOREIGN KEY ("org_id") REFERENCES "org"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "schedule" ADD CONSTRAINT "schedule_team_id_team_id_fk" FOREIGN KEY ("team_id") REFERENCES "team"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -242,6 +229,12 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "secret" ADD CONSTRAINT "secret_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "team" ADD CONSTRAINT "team_org_id_org_id_fk" FOREIGN KEY ("org_id") REFERENCES "org"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

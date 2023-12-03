@@ -1,8 +1,9 @@
 import { integer, pgEnum, pgTable, text } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
+import type { z } from 'zod';
 
-import { ScheduleId, UserId, customValidators } from '@vessel/types';
+import type { ScheduleId, UserId } from '@vessel/types';
+import { customValidators } from '@vessel/types';
 
 import { escalationPolicy } from './escalation-policy';
 import { org } from './org';
