@@ -3,7 +3,7 @@ import Button from '../_components/Button';
 import Input from '../_components/Input';
 
 /**
- * TODO(@zkirby): Replace this with a form library when I get around to it
+ * TODO(@zkirby): Replace this with a form library
  */
 const TeamListAddTeamForm = ({
   onClose,

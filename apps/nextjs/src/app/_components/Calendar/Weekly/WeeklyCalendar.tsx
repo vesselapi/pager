@@ -7,10 +7,10 @@ const Styles = {
 };
 
 export const WeeklyEvent = ({
-  cols,
+  days: cols,
   children,
 }: {
-  cols: number;
+  days: number;
   children: React.ReactElement;
 }) => {
   return (

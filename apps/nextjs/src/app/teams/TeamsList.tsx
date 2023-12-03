@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { TbCheck, TbPlus } from 'react-icons/tb';
 import type { RouterOutputs } from '~/utils/api';
+import { api } from '~/utils/api';
 import Button from '../_components/Button';
 import Modal from '../_components/Modal';
 import Search from '../_components/Search';
@@ -32,17 +33,8 @@ const TeamItem = ({
 };
 
 const TeamsList = () => {
-  const apiTeams = {
-    isFetching: false,
-    data: {
-      teams: [
-        {
-          id: 'team-eng-be',
-          name: 'Backend Eng',
-        },
-      ],
-    },
-  };
+  const listTeams = api.team.list.useQuery();
+  const createTeam = api.team.create.useMutation();
 
   // NOTE(@zkirby): We might want to consider making this an
   // API query param, but for now we'll assume there are few enough
@@ -52,15 +44,18 @@ const TeamsList = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const teams = useMemo(() => {
-    if (!apiTeams?.data?.teams) return [];
+    if (!listTeams?.data?.teams) return [];
 
-    return apiTeams.data.teams.filter((team) =>
+    return listTeams.data.teams.filter((team) =>
       team.name.toLowerCase().includes(search.toLowerCase()),
     );
-  }, [apiTeams?.data?.teams, search]);
+  }, [listTeams?.data?.teams, search]);
 
   // TODO: replace w/ implementation
-  const onSubmit = ({ name }: { name: string }) => console.log(name);
+  const onSubmit = async ({ name }: { name: string }) => {
+    await createTeam.mutateAsync({ team: { name } });
+    await listTeams.refetch();
+  };
 
   return (
     <div>
@@ -97,7 +92,7 @@ const TeamsList = () => {
 
       {/* Teams List */}
       <div>
-        {apiTeams.isFetching ? (
+        {listTeams.isFetching ? (
           <Spinner className="mt-5 px-10" />
         ) : (
           teams.map((team) => <TeamItem key={team.id} team={team} />)
