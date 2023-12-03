@@ -12,17 +12,29 @@
     "development": {
       "extends": "base",
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_bWFqb3ItZmxvdW5kZXItMTUuY2xlcmsuYWNjb3VudHMuZGV2JA",
+        "WEBAPP_URL": ""
+      }
     },
     "preview": {
       "extends": "base",
       "distribution": "internal",
       "ios": {
         "simulator": true
+      },
+      "env": {
+        "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "",
+        "WEBAPP_URL": ""
       }
     },
     "production": {
-      "extends": "base"
+      "extends": "base",
+      "env": {
+        "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "",
+        "WEBAPP_URL": ""
+      }
     }
   },
   "submit": {

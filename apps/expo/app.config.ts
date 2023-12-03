@@ -1,8 +1,9 @@
 import type { ExpoConfig } from '@expo/config';
 
 const defineConfig = (): ExpoConfig => ({
+  owner: 'vessel',
   name: 'Pager',
-  slug: 'pager',
+  slug: 'vessel',
   scheme: 'expo',
   version: '0.1.0',
   orientation: 'portrait',
