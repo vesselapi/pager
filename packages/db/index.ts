@@ -23,21 +23,21 @@ import {
   selectAlertSchema,
   statusEnum,
 } from './schema/alert';
+import type { CreateAlertEvent } from './schema/alert-event';
 import {
-  CreateAlertEvent,
   alertEvent as alertEventSchema,
   insertAlertEventSchema,
   selectAlertEventSchema,
 } from './schema/alert-event';
+import type { CreateEscalationPolicy } from './schema/escalation-policy';
 import {
-  CreateEscalationPolicy,
   escalationPolicy as escalationPolicySchema,
   escalationPolicyStepRelation,
   insertEscalationPolicySchema,
   selectEscalationPolicySchema,
 } from './schema/escalation-policy';
+import type { CreateEscalationPolicyStep } from './schema/escalation-policy-step';
 import {
-  CreateEscalationPolicyStep,
   escalationPolicyStep as escalationPolicyStepSchema,
   escalationPolicyStepType,
   insertEscalationPolicyStepSchema,
@@ -64,13 +64,10 @@ import {
   scheduleUser as scheduleUserSchema,
   selectScheduleUserSchema,
 } from './schema/schedule-user';
+import type { insertSecretSchema } from './schema/secret';
+import { secret as secretSchema, selectSecretSchema } from './schema/secret';
+import type { CreateTeam } from './schema/team';
 import {
-  insertSecretSchema,
-  secret as secretSchema,
-  selectSecretSchema,
-} from './schema/secret';
-import {
-  CreateTeam,
   insertTeamSchema,
   selectTeamSchema,
   teamScheduleRelation,
@@ -397,7 +394,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return teams.map((team) => selectTeamSchema.parse(team));
     },
     create: async (team: CreateTeam) => {
-      const insertTeam = insertTeamSchema.parse(team);
+      const insertTeam = insertTeamSchema.parse({ id: IdGenerator.team(), ...team});
       const dbTeam = await db.insert(teamSchema).values(insertTeam).returning();
       return selectTeamSchema.parse(dbTeam[0]);
     },

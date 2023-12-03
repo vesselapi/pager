@@ -423,9 +423,9 @@ importers:
 
   packages/db:
     dependencies:
-      '@types/minimist':
-        specifier: ^1.2.5
-        version: 1.2.5
+      '@faker-js/faker':
+        specifier: ^8.3.1
+        version: 8.3.1
       '@vessel/types':
         specifier: workspace:^
         version: link:../types
@@ -441,13 +441,13 @@ importers:
       postgres:
         specifier: ^3.4.3
         version: 3.4.3
-      radash:
-        specifier: ^11.0.0
-        version: 11.0.0
       zod:
         specifier: ^3.22.3
         version: 3.22.3
     devDependencies:
+      '@types/minimist':
+        specifier: ^1.2.5
+        version: 1.2.5
       '@vessel/eslint-config':
         specifier: workspace:^0.2.0
         version: link:../../tooling/eslint
@@ -5565,6 +5565,11 @@ packages:
       js-yaml: 4.1.0
     dev: false
 
+  /@faker-js/faker@8.3.1:
+    resolution: {integrity: sha512-FdgpFxY6V6rLZE9mmIBb9hM0xpfvQOSNOLnzolzKwsE1DH+gC7lEKV1p1IbR0lAYyvYd5a4u3qWJzowUkw1bIw==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
+    dev: false
+
   /@fastify/busboy@2.1.0:
     resolution: {integrity: sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA==}
     engines: {node: '>=14'}
@@ -7496,7 +7501,7 @@ packages:
 
   /@types/minimist@1.2.5:
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
-    dev: false
+    dev: true
 
   /@types/node-fetch@2.6.2:
     resolution: {integrity: sha512-DHqhlq5jeESLy19TYhLakJ07kNumXWjcDdxXsLUMJZ6ue8VZJj4kLPQVE/2mdHh3xZziNF1xppu5lwmS53HR+A==}
