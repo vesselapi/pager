@@ -387,14 +387,42 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     },
   },
   teams: {
-    listByOrgId: async (orgId: OrgId) => {
+    listByOrgId: async (
+      orgId: OrgId,
+      { withUsers }: { withUsers?: boolean },
+    ) => {
+      if (withUsers) {
+        const teamsWithScheduleUsers = await db.query.team.findMany({
+          where: eq(teamSchema.orgId, orgId),
+          with: {
+            schedules: {
+              with: {
+                users: true,
+              },
+            },
+          },
+        });
+        return teamsWithScheduleUsers.map((team) => {
+          const users = team.schedules.flatMap((schedule) => {
+            return schedule.users.map((user) => selectUserSchema.parse(user));
+          });
+          return {
+            ...selectTeamSchema.parse(team),
+            users,
+          };
+        });
+      }
+
       const teams = await db.query.team.findMany({
         where: eq(teamSchema.orgId, orgId),
       });
       return teams.map((team) => selectTeamSchema.parse(team));
     },
     create: async (team: CreateTeam) => {
-      const insertTeam = insertTeamSchema.parse({ id: IdGenerator.team(), ...team});
+      const insertTeam = insertTeamSchema.parse({
+        id: IdGenerator.team(),
+        ...team,
+      });
       const dbTeam = await db.insert(teamSchema).values(insertTeam).returning();
       return selectTeamSchema.parse(dbTeam[0]);
     },

@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
-    "seed": "pnpm with-env tsx drizzle/seed/index.ts",
+    "seed": "pnpm with-env tsx seed/index.ts",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "generate": "drizzle-kit generate:pg",
     "pull": "drizzle-kit introspect:pg",

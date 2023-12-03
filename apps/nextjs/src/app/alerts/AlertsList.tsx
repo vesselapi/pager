@@ -8,8 +8,8 @@ import { TbClock, TbLetterCase, TbMinus, TbPlus } from 'react-icons/tb';
 
 import type { RouterOutputs } from '~/utils/api';
 import { api } from '~/utils/api';
+import Loader from '../_components/Loader';
 import Search from '../_components/Search';
-import Spinner from '../_components/Spinner';
 import AlertsListItem from './AlertListItem';
 import type {
   DisplaySettings,
@@ -242,10 +242,11 @@ const AlertsList = () => {
               !configsAreApplied && display.style === 'condensed',
           })}
         >
-          {alerts.isFetching ? (
-            <Spinner className="mt-5 px-10" />
-          ) : (
-            alerts.data?.map((a: RouterOutputs['alert']['all']['0']) => {
+          <Loader
+            className="mt-5 px-10"
+            status={{ loading: alerts.isFetching }}
+          >
+            {alerts.data?.map((a: RouterOutputs['alert']['all']['0']) => {
               const user = users.data?.find((u) => u.id === a.assignedToId) ?? {
                 firstName: '',
                 lastName: '',
@@ -268,8 +269,8 @@ const AlertsList = () => {
                   onReopen={() => update({ status: 'OPEN' })}
                 />
               );
-            })
-          )}
+            })}
+          </Loader>
         </div>
       </div>
     </div>

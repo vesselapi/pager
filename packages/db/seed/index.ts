@@ -2,9 +2,9 @@ import { faker } from '@faker-js/faker';
 import type { EscalationPolicyId, OrgId, TeamId, UserId } from '@vessel/types';
 import parse from 'minimist';
 import { list, parallel, shuffle } from 'radash';
-import { db } from '../..';
-import type { CreateEscalationPolicyStep } from '../../schema/escalation-policy-step';
-import type { CreateScheduleUser } from '../../schema/schedule-user';
+import { db } from '..';
+import type { CreateEscalationPolicyStep } from '../schema/escalation-policy-step';
+import type { CreateScheduleUser } from '../schema/schedule-user';
 
 interface SeedArgs {
   /**

@@ -3,9 +3,9 @@ import { TbCheck, TbPlus } from 'react-icons/tb';
 import type { RouterOutputs } from '~/utils/api';
 import { api } from '~/utils/api';
 import Button from '../_components/Button';
+import Loader from '../_components/Loader';
 import Modal from '../_components/Modal';
 import Search from '../_components/Search';
-import Spinner from '../_components/Spinner';
 import TeamListAddTeamForm from './TeamListAddTeamForm';
 
 const TeamItem = ({
@@ -33,7 +33,11 @@ const TeamItem = ({
 };
 
 const TeamsList = () => {
-  const listTeams = api.team.list.useQuery();
+  const listTeams = api.team.list.useQuery({
+    _experimental: {
+      withUsers: true,
+    },
+  });
   const createTeam = api.team.create.useMutation();
 
   // NOTE(@zkirby): We might want to consider making this an
@@ -91,13 +95,14 @@ const TeamsList = () => {
       </div>
 
       {/* Teams List */}
-      <div>
-        {listTeams.isFetching ? (
-          <Spinner className="mt-5 px-10" />
-        ) : (
-          teams.map((team) => <TeamItem key={team.id} team={team} />)
-        )}
-      </div>
+      <Loader
+        className={'px-10 mt-5'}
+        status={{ loading: listTeams.isFetching }}
+      >
+        {teams.map((team) => (
+          <TeamItem key={team.id} team={team} />
+        ))}
+      </Loader>
     </div>
   );
 };

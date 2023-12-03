@@ -1,10 +1,10 @@
 import { WeeklyCalendar, WeeklyEvent } from '../_components/Calendar';
 
-const ScheduleListCard = () => {
+const ScheduleListCard = ({ name }: { name: string }) => {
   return (
     <div className="h-card-lg px-4 py-5 rounded border-[1px] border-zinc-200 mt-5">
       <div className="flex justify-between mb-5">
-        <div className="text-zinc-600">Backend Primary Rotation</div>
+        <div className="text-zinc-600">{name}</div>
         <div className="flex">
           <div className="h-[20px] w-[20px] bg-zinc-500 rounded-full ring ring-yellow-300 scale-110 -ml-0.5">
             ZK
