@@ -189,6 +189,8 @@ const run = async ({ userId, numAlerts = 25 }: SeedArgs) => {
       policyId: policy.id,
     }),
   );
+
+  console.log('Done!');
 };
 
 run(
