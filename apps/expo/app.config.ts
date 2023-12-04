@@ -19,7 +19,7 @@ const defineConfig = (): ExpoConfig => ({
   },
   assetBundlePatterns: ['**/*'],
   ios: {
-    bundleIdentifier: 'your.bundle.identifier',
+    bundleIdentifier: 'com.vessel.pager',
     supportsTablet: true,
   },
   android: {

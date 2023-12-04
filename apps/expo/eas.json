@@ -27,9 +27,6 @@
     "preview": {
       "extends": "base",
       "distribution": "internal",
-      "ios": {
-        "simulator": true
-      },
       "env": {
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_bWFqb3ItZmxvdW5kZXItMTUuY2xlcmsuYWNjb3VudHMuZGV2JA",
         "EXPO_PUBLIC_WEBAPP_URL": "https://pager.staging.vessel.dev"
