@@ -9,10 +9,12 @@ const createInitials = (
 };
 
 const UserIcon = ({
+  size = 'sm',
   className,
   firstName,
   lastName,
 }: {
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
   firstName?: string | null;
   lastName?: string | null;
@@ -31,7 +33,12 @@ const UserIcon = ({
     <div
       className={classNames(
         className,
-        'flex h-[20px] w-[20px] items-center justify-center rounded-full ring-2 ring-white bg-slate-500 text-xxs text-slate-200',
+        'flex items-center justify-center rounded-full ring-2 ring-white bg-slate-500 text-slate-200',
+        {
+          'h-[20px] w-[20px] text-xxs': size === 'sm',
+          'h-[30px] w-[30px] text-xs': size === 'md',
+          'h-[40px] w-[40px] text-sm': size === 'lg',
+        },
       )}
     >
       <div>{createInitials(firstName, lastName)}</div>

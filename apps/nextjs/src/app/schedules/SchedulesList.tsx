@@ -9,7 +9,11 @@ const ScheduleList = () => {
     <div className="px-10">
       <Loader className="mt-5" status={{ loading: schedules.isFetching }}>
         {schedules.data?.schedules?.map((schedule) => (
-          <ScheduleListCard key={schedule.id} {...schedule} />
+          <ScheduleListCard
+            key={schedule.id}
+            teamName={schedule.team.name}
+            {...schedule}
+          />
         ))}
       </Loader>
     </div>

@@ -19,7 +19,7 @@ export default {
     extend: {
       height: {
         card: '130px',
-        'card-lg': '200px',
+        'card-lg': '215px',
         'card-xl': '300px',
       },
       colors: {

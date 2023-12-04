@@ -131,6 +131,10 @@ type DbAlertWithEscalationPolicyAndSteps = Alert & {
 type DbScheduleWithScheduleUsersAndUsers = Schedule & {
   scheduleUsers: (ScheduleUser & { user: User })[];
 };
+type DbScheduleWithScheduleUsersAndUsersAndTeam =
+  DbScheduleWithScheduleUsersAndUsers & {
+    team: Team;
+  };
 type DbTeamWithSchedulesAndScheduleUsersAndUsers = Team & {
   schedules: DbScheduleWithScheduleUsersAndUsers[];
 };
@@ -395,16 +399,18 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       const dbSchedules = (await db.query.schedule.findMany({
         where: eq(scheduleSchema.orgId, orgId),
         with: {
+          team: true,
           scheduleUsers: {
             with: {
               user: true,
             },
           },
         },
-      })) as unknown as DbScheduleWithScheduleUsersAndUsers[];
+      })) as unknown as DbScheduleWithScheduleUsersAndUsersAndTeam[];
 
       return dbSchedules.map((schedule) => ({
         ...selectScheduleSchema.parse(schedule),
+        team: selectTeamSchema.parse(schedule.team),
         users: schedule.scheduleUsers.map((scheduleUser) => ({
           ...selectUserSchema.parse(scheduleUser.user),
           ...selectScheduleUserSchema.parse(scheduleUser),

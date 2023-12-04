@@ -1,51 +1,30 @@
 import type { RouterOutputs } from '@vessel/api';
 import classNames from 'classnames';
 import { useMemo } from 'react';
+import { TbPhoneFilled } from 'react-icons/tb';
 import { WeeklyCalendar, WeeklyEvent } from '../_components/Calendar';
 import UserIcon from '../_components/UserIcon';
-
-const ColorRotation = [
-  {
-    bg: 'bg-red-100',
-    txt: 'text-red-800',
-  },
-  {
-    bg: 'bg-blue-100',
-    txt: 'text-blue-800',
-  },
-  {
-    bg: 'bg-green-100',
-    txt: 'text-green-800',
-  },
-  {
-    bg: 'bg-purple-100',
-    txt: 'text-purple-800',
-  },
-];
 
 const TotalScheduleDays = 14;
 const ScheduleDaysBeforeToday = 3;
 
-const Rotation = ({
-  name,
-  bgColor,
-  txtColor,
-  isOncall,
-}: {
-  name: string;
-  bgColor: string;
-  txtColor: string;
-  isOncall: boolean;
-}) => {
+const Rotation = ({ name, isOncall }: { name: string; isOncall: boolean }) => {
   return (
     <div className="flex items-center h-full w-full">
       <div
         className={classNames(
-          `rounded mr-1 p-2 text-center w-full`,
-          bgColor,
-          txtColor,
+          `rounded mr-1 p-2 w-full bg-gray-300 text-gray-700 text-sm flex items-center justify-center`,
+          {
+            'opacity-60': !isOncall,
+            'opacity-100 font-medium': isOncall,
+          },
         )}
       >
+        {isOncall && (
+          <div className="text-red-400 text-base mr-2">
+            <TbPhoneFilled />
+          </div>
+        )}
         {name}
       </div>
     </div>
@@ -54,20 +33,19 @@ const Rotation = ({
 
 const ScheduleListCard = ({
   name,
+  teamName,
   lengthInSeconds,
+  startTime,
   users,
 }: {
   name: string;
+  teamName: string;
   lengthInSeconds: string;
+  startTime: Date;
   users: RouterOutputs['schedule']['list']['schedules']['0']['users'];
 }) => {
   const scheduleUsers = useMemo(() => {
-    return users
-      .map((u, i) => ({
-        ...u,
-        color: ColorRotation[i % ColorRotation.length]!,
-      }))
-      .sort((a, b) => a.order - b.order);
+    return users.sort((a, b) => a.order - b.order);
   }, [users]);
 
   /**
@@ -86,7 +64,6 @@ const ScheduleListCard = ({
     return [
       {
         name: `${lastUser.firstName} ${lastUser.lastName}`,
-        color: lastUser.color,
         length: ScheduleDaysBeforeToday,
       },
     ];
@@ -101,7 +78,6 @@ const ScheduleListCard = ({
         const user = scheduleUsers[i % scheduleUsers.length]!;
         return {
           name: `${user.firstName} ${user.lastName}`,
-          color: user.color,
           length: rotationLengthInDays,
           isOncall: i === 0,
         };
@@ -114,7 +90,6 @@ const ScheduleListCard = ({
       const nextUser = scheduleUsers[numFullRotations % scheduleUsers.length]!;
       rotations.push({
         name: `${nextUser.firstName} ${nextUser.lastName}`,
-        color: nextUser.color,
         length: remainingDays,
         isOncall: false,
       });
@@ -124,9 +99,12 @@ const ScheduleListCard = ({
   }, [rotationLengthInDays, scheduleUsers]);
 
   return (
-    <div className="h-card-lg px-4 py-5 rounded border-[1px] border-zinc-200 mt-5">
-      <div className="flex justify-between mb-5">
-        <div className="text-zinc-600">{name}</div>
+    <div className="h-card-lg px-4 py-4 rounded border-[1px] border-zinc-200 mt-5">
+      <div className="flex items-center justify-between mb-5">
+        <div className="text-zinc-600 text-sm">
+          <div className="text-xs text-zinc-400">{teamName}</div>
+          {name}
+        </div>
         <div className="flex">
           {scheduleUsers.map((u) => (
             <UserIcon key={u.id} className={`-ml-0.5`} {...u} />
@@ -141,22 +119,14 @@ const ScheduleListCard = ({
         {/* Events before today */}
         {eventsBeforeToday.map((e) => (
           <WeeklyEvent key={e.name} days={e.length}>
-            <Rotation
-              name={e.name}
-              bgColor={e.color.bg}
-              txtColor={e.color.txt}
-            />
+            <Rotation name={e.name} />
           </WeeklyEvent>
         ))}
 
         {/* Events after today */}
         {eventAfterToday.map((e) => (
           <WeeklyEvent key={e.name} days={e.length}>
-            <Rotation
-              name={e.name}
-              bgColor={e.color.bg}
-              txtColor={e.color.txt}
-            />
+            <Rotation name={e.name} isOncall={e.isOncall} />
           </WeeklyEvent>
         ))}
       </WeeklyCalendar>
