@@ -32,7 +32,7 @@ const getBaseUrl = () => {
   const localhost = debuggerHost?.split(':')[0];
 
   if (!localhost) {
-    return Constants.expoConfig?.extra?.webappUrl;
+    return process.env.EXPO_PUBLIC_WEBAPP_URL;
   }
   return `http://${localhost}:3000`;
 };

@@ -34,8 +34,7 @@ const defineConfig = (): ExpoConfig => ({
      * NOTE(@zkirby): There must be a .env file with this variable in the same
      * directory as the app.config file for expo to pick this up.
      */
-    clerkPublishableKey: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-    webappUrl: process.env.WEBAPP_URL,
+    clerkPublishableKey: process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY,
     eas: { projectId: 'd90f23a9-bbca-450d-abca-0b42c78c9353' },
   },
   experiments: {
