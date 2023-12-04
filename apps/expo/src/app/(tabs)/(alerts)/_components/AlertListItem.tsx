@@ -60,14 +60,14 @@ const AlertListItem = ({
 
             <View>
               <Text
-                className={'mb-1.5 mr-2 text-lg font-medium w-[220px]'}
+                className={'mb-1.5 mr-2 text-lg font-medium w-[190px]'}
                 numberOfLines={1}
               >
                 {title}
               </Text>
               <Text
                 numberOfLines={2}
-                className={'w-[65%] text-sm text-gray-500'}
+                className={'w-[190px] text-sm text-gray-500'}
               >
                 {summary}
               </Text>

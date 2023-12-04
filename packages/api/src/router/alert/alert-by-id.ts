@@ -7,7 +7,7 @@ import { AlertIdRegex } from '@vessel/types';
 
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
-import { createAlertView } from './createAlertView';
+import { createAlertView } from './alert.view';
 
 interface Context {
   db: Db;

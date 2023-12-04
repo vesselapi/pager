@@ -138,7 +138,7 @@ const AlertsList = () => {
             <AlertListFilterDropdown
               filterOptions={[
                 StatusFilterConfig,
-                AssignedToFilterConfig(users.data),
+                AssignedToFilterConfig(users.data?.users),
               ]}
               onFilter={(f: FilterSetting) => setFilters((pf) => [...pf, f])}
             />
@@ -249,7 +249,9 @@ const AlertsList = () => {
             <Spinner className="mt-5 px-10" />
           ) : (
             sift(alerts.data).map((a) => {
-              const user = users.data?.find((u) => u.id === a.assignedToId);
+              const user = users.data?.users?.find(
+                (u) => u.id === a.assignedToId,
+              );
 
               return (
                 <AlertsListItem
