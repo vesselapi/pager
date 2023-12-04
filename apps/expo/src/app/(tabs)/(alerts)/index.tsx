@@ -73,6 +73,7 @@ const AlertListPage = () => {
           ) : (
             <FlatList
               data={alerts.data}
+              contentContainerStyle={{ paddingBottom: 300 }}
               renderItem={({ item }) => (
                 <AlertListItem
                   alert={item}
