@@ -12,7 +12,7 @@ export const makeUserManager = () => {
     const getUrl = async (id: UserId) => {
       return blobStore.getSignedUrl({
         key: PROFILE_PIC_S3_PATH(id),
-        expiresInSecs: 1000 * 60 * 12, // 12 hours expiry
+        expiresInSecs: 60 * 60 * 12, // 12 hours expiry
       });
     };
     const put = async ({ id, url }: { id: UserId; url: string }) => {
