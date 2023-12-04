@@ -17,6 +17,7 @@ export const env = createEnv({
     DATABASE_SECRET_STORE_KEY: z.string(),
     CLERK_SECRET_KEY: z.string(),
     AWS_SNS_TOPIC_ALERT_ARN: z.string(),
+    AWS_SFN_ALERT_PAGE_ARN: z.string(),
     TWILIO_ACCOUNT_SID: z.string(),
     TWILIO_AUTH_TOKEN: z.string(),
     TWILIO_PHONE_NUMBER: z.string(),
@@ -24,6 +25,10 @@ export const env = createEnv({
     INTEGRATION_SENTRY_CLIENT_ID: z.string(),
     INTEGRATION_SENTRY_SECRET: z.string(),
     INTEGRATION_SENTRY_INSTALL_URL: z.string(),
+    S3_URL: z.string().url(),
+    S3_BUCKET: z.string(),
+    S3_ACCESS_KEY_ID: z.string(),
+    S3_SECRET_ACCESS_KEY: z.string(),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -45,6 +50,7 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     AWS_SNS_TOPIC_ALERT_ARN: process.env.AWS_SNS_TOPIC_ALERT_ARN,
+    AWS_SFN_ALERT_PAGE_ARN: process.env.AWS_SFN_ALERT_PAGE_ARN,
     TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
     TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
     TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER,
@@ -52,6 +58,10 @@ export const env = createEnv({
     INTEGRATION_SENTRY_CLIENT_ID: process.env.INTEGRATION_SENTRY_CLIENT_ID,
     INTEGRATION_SENTRY_SECRET: process.env.INTEGRATION_SENTRY_SECRET,
     INTEGRATION_SENTRY_INSTALL_URL: process.env.INTEGRATION_SENTRY_INSTALL_URL,
+    S3_URL: process.env.S3_URL,
+    S3_BUCKET: process.env.S3_BUCKET,
+    S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
+    S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:

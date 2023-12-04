@@ -8,16 +8,13 @@ interface Context {
   db: Db;
 }
 
-export const scheduleList = trpc
+export const teamList = trpc
   .use(
     useServicesHook<Context>({
       db: () => db,
     }),
   )
   .query(async ({ ctx }) => {
-    const { orgId } = ctx.auth.user;
-    const schedules = await ctx.db.schedules.listByOrgId(orgId);
-    return {
-      schedules,
-    };
+    const teams = await ctx.db.teams.listByOrgId(ctx.auth.user.orgId);
+    return { teams };
   });

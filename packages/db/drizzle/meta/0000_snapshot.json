@@ -1,9 +1,52 @@
 {
+  "id": "306d215c-ff3c-49d9-ade4-8099a49bf30e",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
-  "id": "c19467d6-5902-4576-9d3f-8506f7abff5e",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "alert_event": {
+      "name": "alert_event",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "alert_event_id_alert_id_fk": {
+          "name": "alert_event_id_alert_id_fk",
+          "tableFrom": "alert_event",
+          "tableTo": "alert",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "alert": {
       "name": "alert",
       "schema": "",
@@ -38,6 +81,18 @@
           "primaryKey": false,
           "notNull": false
         },
+        "escalation_policy_id": {
+          "name": "escalation_policy_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "escalation_step_state": {
+          "name": "escalation_step_state",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -64,8 +119,12 @@
           "name": "alert_org_id_org_id_fk",
           "tableFrom": "alert",
           "tableTo": "org",
-          "columnsFrom": ["org_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -73,8 +132,25 @@
           "name": "alert_assigned_to_id_user_id_fk",
           "tableFrom": "alert",
           "tableTo": "user",
-          "columnsFrom": ["assigned_to_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "assigned_to_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "alert_escalation_policy_id_escalation_policy_id_fk": {
+          "name": "alert_escalation_policy_id_escalation_policy_id_fk",
+          "tableFrom": "alert",
+          "tableTo": "escalation_policy",
+          "columnsFrom": [
+            "escalation_policy_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -82,25 +158,54 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "alert_event": {
-      "name": "alert_event",
+    "escalation_policy_step": {
+      "name": "escalation_policy_step",
       "schema": "",
       "columns": {
         "id": {
           "name": "id",
           "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "escalation_policy_step_type",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "escalation_policy_id": {
+          "name": "escalation_policy_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "next_step_in_seconds": {
+          "name": "next_step_in_seconds",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "schedule_id": {
+          "name": "schedule_id",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "message": {
-          "name": "message",
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -108,12 +213,97 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "alert_event_id_alert_id_fk": {
-          "name": "alert_event_id_alert_id_fk",
-          "tableFrom": "alert_event",
-          "tableTo": "alert",
-          "columnsFrom": ["id"],
-          "columnsTo": ["id"],
+        "escalation_policy_step_escalation_policy_id_escalation_policy_id_fk": {
+          "name": "escalation_policy_step_escalation_policy_id_escalation_policy_id_fk",
+          "tableFrom": "escalation_policy_step",
+          "tableTo": "escalation_policy",
+          "columnsFrom": [
+            "escalation_policy_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "escalation_policy_step_org_id_org_id_fk": {
+          "name": "escalation_policy_step_org_id_org_id_fk",
+          "tableFrom": "escalation_policy_step",
+          "tableTo": "org",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "escalation_policy_step_schedule_id_schedule_id_fk": {
+          "name": "escalation_policy_step_schedule_id_schedule_id_fk",
+          "tableFrom": "escalation_policy_step",
+          "tableTo": "schedule",
+          "columnsFrom": [
+            "schedule_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "escalation_policy_step_user_id_user_id_fk": {
+          "name": "escalation_policy_step_user_id_user_id_fk",
+          "tableFrom": "escalation_policy_step",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "escalation_policy": {
+      "name": "escalation_policy",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "escalation_policy_org_id_org_id_fk": {
+          "name": "escalation_policy_org_id_org_id_fk",
+          "tableFrom": "escalation_policy",
+          "tableTo": "org",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -155,6 +345,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "escalation_policy_id": {
+          "name": "escalation_policy_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -169,8 +365,12 @@
           "name": "integration_org_id_org_id_fk",
           "tableFrom": "integration",
           "tableTo": "org",
-          "columnsFrom": ["org_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -178,8 +378,25 @@
           "name": "integration_secret_id_secret_id_fk",
           "tableFrom": "integration",
           "tableTo": "secret",
-          "columnsFrom": ["secret_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "secret_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "integration_escalation_policy_id_escalation_policy_id_fk": {
+          "name": "integration_escalation_policy_id_escalation_policy_id_fk",
+          "tableFrom": "integration",
+          "tableTo": "escalation_policy",
+          "columnsFrom": [
+            "escalation_policy_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -216,8 +433,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "rotation_user": {
-      "name": "rotation_user",
+    "schedule_user": {
+      "name": "schedule_user",
       "schema": "",
       "columns": {
         "id": {
@@ -238,8 +455,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "rotation_id": {
-          "name": "rotation_id",
+        "schedule_id": {
+          "name": "schedule_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -253,30 +470,42 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "rotation_user_org_id_org_id_fk": {
-          "name": "rotation_user_org_id_org_id_fk",
-          "tableFrom": "rotation_user",
+        "schedule_user_org_id_org_id_fk": {
+          "name": "schedule_user_org_id_org_id_fk",
+          "tableFrom": "schedule_user",
           "tableTo": "org",
-          "columnsFrom": ["org_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "rotation_user_rotation_id_schedule_id_fk": {
-          "name": "rotation_user_rotation_id_schedule_id_fk",
-          "tableFrom": "rotation_user",
+        "schedule_user_schedule_id_schedule_id_fk": {
+          "name": "schedule_user_schedule_id_schedule_id_fk",
+          "tableFrom": "schedule_user",
           "tableTo": "schedule",
-          "columnsFrom": ["rotation_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "schedule_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "rotation_user_user_id_user_id_fk": {
-          "name": "rotation_user_user_id_user_id_fk",
-          "tableFrom": "rotation_user",
+        "schedule_user_user_id_user_id_fk": {
+          "name": "schedule_user_user_id_user_id_fk",
+          "tableFrom": "schedule_user",
           "tableTo": "user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -284,8 +513,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "rotation": {
-      "name": "rotation",
+    "schedule": {
+      "name": "schedule",
       "schema": "",
       "columns": {
         "id": {
@@ -300,8 +529,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "schedule_id": {
-          "name": "schedule_id",
+        "team_id": {
+          "name": "team_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -334,21 +563,29 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "rotation_org_id_org_id_fk": {
-          "name": "rotation_org_id_org_id_fk",
-          "tableFrom": "rotation",
+        "schedule_org_id_org_id_fk": {
+          "name": "schedule_org_id_org_id_fk",
+          "tableFrom": "schedule",
           "tableTo": "org",
-          "columnsFrom": ["org_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "rotation_schedule_id_schedule_id_fk": {
-          "name": "rotation_schedule_id_schedule_id_fk",
-          "tableFrom": "rotation",
-          "tableTo": "schedule",
-          "columnsFrom": ["schedule_id"],
-          "columnsTo": ["id"],
+        "schedule_team_id_team_id_fk": {
+          "name": "schedule_team_id_team_id_fk",
+          "tableFrom": "schedule",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -356,8 +593,82 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "schedule": {
-      "name": "schedule",
+    "secret": {
+      "name": "secret",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "iv": {
+          "name": "iv",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "encrypted_data": {
+          "name": "encrypted_data",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "secret_org_id_org_id_fk": {
+          "name": "secret_org_id_org_id_fk",
+          "tableFrom": "secret",
+          "tableTo": "org",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "secret_user_id_user_id_fk": {
+          "name": "secret_user_id_user_id_fk",
+          "tableFrom": "secret",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "team": {
+      "name": "team",
       "schema": "",
       "columns": {
         "id": {
@@ -388,63 +699,16 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "schedule_org_id_org_id_fk": {
-          "name": "schedule_org_id_org_id_fk",
-          "tableFrom": "schedule",
+        "team_org_id_org_id_fk": {
+          "name": "team_org_id_org_id_fk",
+          "tableFrom": "team",
           "tableTo": "org",
-          "columnsFrom": ["org_id"],
-          "columnsTo": ["id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "secret": {
-      "name": "secret",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "iv": {
-          "name": "iv",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "encrypted_data": {
-          "name": "encrypted_data",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "secret_org_id_org_id_fk": {
-          "name": "secret_org_id_org_id_fk",
-          "tableFrom": "secret",
-          "tableTo": "org",
-          "columnsFrom": ["org_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -492,6 +756,24 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "expo_push_token_secret_id": {
+          "name": "expo_push_token_secret_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "external_id": {
+          "name": "external_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_s3_key": {
+          "name": "image_s3_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -500,8 +782,12 @@
           "name": "user_org_id_org_id_fk",
           "tableFrom": "user",
           "tableTo": "org",
-          "columnsFrom": ["org_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -511,7 +797,9 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       }
     }
@@ -521,7 +809,7 @@
       "name": "alert_source",
       "values": {
         "sentry": "sentry",
-        "vessel": "vessel"
+        "API": "API"
       }
     },
     "status": {
@@ -530,6 +818,13 @@
         "ACKED": "ACKED",
         "OPEN": "OPEN",
         "CLOSED": "CLOSED"
+      }
+    },
+    "escalation_policy_step_type": {
+      "name": "escalation_policy_step_type",
+      "values": {
+        "USER": "USER",
+        "SCHEDULE": "SCHEDULE"
       }
     },
     "app_id": {

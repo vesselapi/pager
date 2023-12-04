@@ -34,6 +34,7 @@ const defineConfig = (): ExpoConfig => ({
      * directory as the app.config file for expo to pick this up.
      */
     clerkPublishableKey: process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    eas: { projectId: 'd90f23a9-bbca-450d-abca-0b42c78c9353' },
   },
   experiments: {
     tsconfigPaths: true,

@@ -1,9 +1,8 @@
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import type { z } from 'zod';
+import { z } from 'zod';
 
-import type { OrgId, UserId } from '@vessel/types';
-import { OrgIdRegex, UserIdRegex } from '@vessel/types';
+import { customValidators } from '@vessel/types';
 
 import { org } from './org';
 
@@ -16,22 +15,22 @@ export const user = pgTable('user', {
   firstName: text('first_name'),
   lastName: text('last_name'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+  expoPushTokenSecretId: text('expo_push_token_secret_id'),
+  externalId: text('external_id').notNull(),
+  imageS3Key: text('image_s3_key'),
 });
 
 export const selectUserSchema = createSelectSchema(user, {
-  id: (schema) => schema.id.transform((x) => x as UserId),
-  orgId: (schema) => schema.orgId.transform((x) => x as OrgId),
+  id: customValidators.userId,
+  orgId: customValidators.orgId,
+  expoPushTokenSecretId: customValidators.secretExpoPushTokenId,
 });
 
 export const insertUserSchema = createInsertSchema(user, {
-  id: (schema) =>
-    schema.id
-      .regex(UserIdRegex, `Invalid id, expected format ${UserIdRegex}`)
-      .transform((x) => x as UserId),
-  orgId: (schema) =>
-    schema.id
-      .regex(OrgIdRegex, `Invalid id, expected format ${OrgIdRegex}`)
-      .transform((x) => x as OrgId),
+  id: customValidators.userId,
+  orgId: customValidators.orgId,
+  expoPushTokenSecretId: customValidators.secretExpoPushTokenId,
 });
 
-export type CreateUser = Omit<z.infer<typeof insertUserSchema>, 'id'>;
+export type User = z.infer<typeof selectUserSchema>;
+export type CreateUser = z.infer<typeof insertUserSchema>;

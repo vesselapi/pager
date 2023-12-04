@@ -4,6 +4,8 @@ import { z } from 'zod';
 
 import { customValidators } from '@vessel/types';
 
+import { relations } from 'drizzle-orm';
+import { escalationPolicyStep } from './escalation-policy-step';
 import { org } from './org';
 
 export const escalationPolicy = pgTable('escalation_policy', {
@@ -13,6 +15,13 @@ export const escalationPolicy = pgTable('escalation_policy', {
     .notNull(),
   name: text('name').notNull(),
 });
+
+export const escalationPolicyStepRelation = relations(
+  escalationPolicy,
+  ({ many }) => ({
+    steps: many(escalationPolicyStep),
+  }),
+);
 
 export const selectEscalationPolicySchema = createSelectSchema(
   escalationPolicy,
@@ -30,6 +39,7 @@ export const insertEscalationPolicySchema = createInsertSchema(
   },
 );
 
+export type EscalationPolicy = z.infer<typeof selectEscalationPolicySchema>;
 export type CreateEscalationPolicy = Omit<
   z.infer<typeof insertEscalationPolicySchema>,
   'id'
