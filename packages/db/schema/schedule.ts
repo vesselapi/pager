@@ -46,4 +46,5 @@ export const insertScheduleSchema = createInsertSchema(schedule, {
   orgId: customValidators.orgId,
   teamId: customValidators.teamId,
 });
+export type Schedule = z.infer<typeof selectScheduleSchema>;
 export type CreateSchedule = Omit<z.infer<typeof insertScheduleSchema>, 'id'>;

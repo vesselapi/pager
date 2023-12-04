@@ -32,4 +32,6 @@ export const insertTeamSchema = createInsertSchema(team, {
   id: customValidators.teamId,
   orgId: customValidators.orgId,
 });
+
+export type Team = z.infer<typeof selectTeamSchema>;
 export type CreateTeam = Omit<z.infer<typeof insertTeamSchema>, 'id'>;

@@ -57,6 +57,7 @@ export const insertScheduleUserSchema = createInsertSchema(scheduleUser, {
   userId: customValidators.userId,
 });
 
+export type ScheduleUser = z.infer<typeof selectScheduleUserSchema>;
 export type CreateScheduleUser = Omit<
   z.infer<typeof insertScheduleUserSchema>,
   'id'
