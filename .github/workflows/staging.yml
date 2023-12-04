@@ -25,7 +25,7 @@ jobs:
         run: |
           git checkout main
           git fetch origin
-          git checkout test
+          git checkout staging
           git pull
           git merge origin/main
           git push origin test
