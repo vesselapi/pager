@@ -28,4 +28,4 @@ jobs:
           git checkout staging
           git pull
           git merge origin/main
-          git push origin test
+          git push origin staging
