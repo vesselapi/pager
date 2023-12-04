@@ -8,6 +8,10 @@ import Modal from '../_components/Modal';
 import Search from '../_components/Search';
 import TeamListAddTeamForm from './TeamListAddTeamForm';
 
+/**
+ * TODO(@zkirby): When the teams return the list of users
+ * implement the "joined" and the "Members" section.
+ */
 const TeamItem = ({
   team,
 }: {
@@ -22,6 +26,7 @@ const TeamItem = ({
           Joined
         </div>
       </div>
+      {/* Placeholder user profiles */}
       <div className="flex">
         <div className="ring rounded-full ring-white h-[20px] w-[20px] bg-zinc-600"></div>
         <div className="ring rounded-full ring-white h-[20px] w-[20px] bg-zinc-600"></div>
@@ -33,11 +38,7 @@ const TeamItem = ({
 };
 
 const TeamsList = () => {
-  const listTeams = api.team.list.useQuery({
-    _experimental: {
-      withUsers: true,
-    },
-  });
+  const listTeams = api.team.list.useQuery();
   const createTeam = api.team.create.useMutation();
 
   // NOTE(@zkirby): We might want to consider making this an
@@ -57,6 +58,7 @@ const TeamsList = () => {
 
   // TODO: replace w/ implementation
   const onSubmit = async ({ name }: { name: string }) => {
+    setIsOpen(false);
     await createTeam.mutateAsync({ team: { name } });
     await listTeams.refetch();
   };

@@ -118,8 +118,8 @@ const AlertsList = () => {
   const currentUser = useAuth();
 
   const update = useCallback(
-    async (alert: Partial<RouterOutputs['alert']['all']['0']>) => {
-      await updateAlert.mutateAsync({ id: alert.id, alert });
+    async (id: string, alert: Partial<RouterOutputs['alert']['all']['0']>) => {
+      await updateAlert.mutateAsync({ id, alert });
       await alerts.refetch();
     },
     [],
@@ -261,12 +261,12 @@ const AlertsList = () => {
                   status={a.status}
                   firstName={user.firstName}
                   lastName={user.lastName}
-                  onAck={() => update({ status: 'ACKED' })}
-                  onClose={() => update({ status: 'CLOSED' })}
+                  onAck={() => update(a.id, { status: 'ACKED' })}
+                  onClose={() => update(a.id, { status: 'CLOSED' })}
                   onSelfAssign={() =>
-                    update({ assignedToId: currentUser.userId })
+                    update(a.id, { assignedToId: currentUser.userId })
                   }
-                  onReopen={() => update({ status: 'OPEN' })}
+                  onReopen={() => update(a.id, { status: 'OPEN' })}
                 />
               );
             })}

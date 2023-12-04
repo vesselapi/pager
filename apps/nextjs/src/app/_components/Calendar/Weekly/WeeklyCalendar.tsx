@@ -11,7 +11,7 @@ export const WeeklyEvent = ({
   children,
 }: {
   days: number;
-  children: React.ReactElement;
+  children: React.ReactElement | React.ReactElement[];
 }) => {
   return (
     <div
@@ -33,9 +33,7 @@ export const WeeklyCalendar = ({
 }: {
   totalDays: 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14;
   daysBeforeToday?: number;
-  children:
-    | React.ReactElement<typeof WeeklyEvent>[]
-    | React.ReactElement<typeof WeeklyEvent>;
+  children: React.ReactElement[] | React.ReactElement;
 }) => {
   const today = new Date();
   const days = Array.from({ length: totalDays }, (_, i) => {
@@ -53,13 +51,10 @@ export const WeeklyCalendar = ({
       )}
     >
       {/* Column headers */}
-      {days.map((day, i) => (
+      {days.map((day) => (
         <div
           key={day.day}
-          className={classNames(`h-[30px] flex items-center bg-zinc-100`, {
-            'border-r': i !== 0,
-            'border-red-500': i === daysBeforeToday - 1,
-          })}
+          className={classNames(`h-[30px] flex items-center bg-zinc-100`)}
         >
           <div className="text-smr text-gray-400 ml-1">{day.label}</div>
         </div>

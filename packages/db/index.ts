@@ -205,6 +205,17 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .returning();
       return selectEscalationPolicySchema.parse(dbEscalationPolicy[0]);
     },
+    listByOrgId: async (orgId: OrgId) => {
+      const dbEscalationPolicies = await db.query.escalationPolicy.findMany({
+        where: eq(escalationPolicySchema.orgId, orgId),
+        with: {
+          steps: true,
+        },
+      });
+      return dbEscalationPolicies.map((policy) =>
+        selectEscalationPolicySchema.parse(policy),
+      );
+    },
   },
   escalationPolicyStep: {
     createMany: async (escalationPolicySteps: CreateEscalationPolicyStep[]) => {
@@ -359,9 +370,6 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     listByOrgId: async (orgId: OrgId) => {
       const dbSchedules = await db.query.schedule.findMany({
         where: eq(scheduleSchema.orgId, orgId),
-        with: {
-          users: true,
-        },
       });
       return dbSchedules.map((schedule) =>
         selectScheduleSchema.parse(schedule),
@@ -385,34 +393,17 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         selectScheduleUserSchema.parse(scheduleUser),
       );
     },
+    listByOrgId: async (orgId: OrgId) => {
+      const scheduleUsers = await db.query.scheduleUser.findMany({
+        where: eq(teamSchema.orgId, orgId),
+      });
+      return scheduleUsers.map((scheduleUser) =>
+        selectScheduleUserSchema.parse(scheduleUser),
+      );
+    },
   },
   teams: {
-    listByOrgId: async (
-      orgId: OrgId,
-      { withUsers }: { withUsers?: boolean },
-    ) => {
-      if (withUsers) {
-        const teamsWithScheduleUsers = await db.query.team.findMany({
-          where: eq(teamSchema.orgId, orgId),
-          with: {
-            schedules: {
-              with: {
-                users: true,
-              },
-            },
-          },
-        });
-        return teamsWithScheduleUsers.map((team) => {
-          const users = team.schedules.flatMap((schedule) => {
-            return schedule.users.map((user) => selectUserSchema.parse(user));
-          });
-          return {
-            ...selectTeamSchema.parse(team),
-            users,
-          };
-        });
-      }
-
+    listByOrgId: async (orgId: OrgId) => {
       const teams = await db.query.team.findMany({
         where: eq(teamSchema.orgId, orgId),
       });

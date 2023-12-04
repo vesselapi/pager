@@ -155,24 +155,24 @@ const AlertsListItem = ({
     return (
       <div
         className={classNames(
-          `grid cursor-pointer grid-cols-[1fr_10fr_2fr_2fr] justify-between border-b-[1px] border-zinc-200 px-10 py-3 hover:bg-zinc-200`,
+          `cursor-pointer flex w-full justify-between border-b-[1px] border-zinc-200 px-10 py-3 hover:bg-zinc-200`,
           className,
         )}
       >
-        <div className="text-smr flex items-center">
-          <div
-            className={classNames(
-              StatusToColor[status as keyof typeof StatusToColor],
-              'text-smr rounded bg-opacity-80 px-2 font-medium',
-            )}
-          >
-            {capitalize(status)}
+        <div className="flex items-center">
+          <div className="text-smr flex items-center w-[80px]">
+            <div
+              className={classNames(
+                StatusToColor[status as keyof typeof StatusToColor],
+                'text-smr rounded bg-opacity-80 px-2 font-medium',
+              )}
+            >
+              {capitalize(status)}
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center whitespace-nowrap">
-          <h2 className="mr-1.5 text-base">{title}</h2>
-          <div className="text-zinc-500">
+          <h2 className="mr-1.5 truncate w-[300px]">{title}</h2>
+          <div className="text-zinc-500 truncate w-[450px]">
             Occaeacat sint aute nulla proident nulla proident nulla proident
             nulla proident....
           </div>
@@ -185,9 +185,6 @@ const AlertsListItem = ({
           <div className="mr-4 whitespace-nowrap">
             {format(createdAt, 'dd/MM p')}
           </div>
-        </div>
-
-        <div className="flex items-center justify-end">
           <ActionButtons
             status={status}
             onAck={onAck}

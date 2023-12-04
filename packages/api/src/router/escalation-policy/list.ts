@@ -8,13 +8,16 @@ interface Context {
   db: Db;
 }
 
-export const teamList = trpc
+export const escalationPolicyList = trpc
   .use(
     useServicesHook<Context>({
       db: () => db,
     }),
   )
   .query(async ({ ctx }) => {
-    const teams = await ctx.db.teams.listByOrgId(ctx.auth.user.orgId);
-    return { teams };
+    const { orgId } = ctx.auth.user;
+    const escalationPolicies = await ctx.db.escalationPolicy.listByOrgId(orgId);
+    return {
+      escalationPolicies,
+    };
   });
