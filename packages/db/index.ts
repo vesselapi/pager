@@ -312,13 +312,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return users.map((a) => selectUserSchema.parse(a));
     },
     create: async (user: CreateUser) => {
-      const dbUser = await db
-        .insert(userSchema)
-        .values({
-          id: IdGenerator.user(),
-          ...user,
-        })
-        .returning();
+      const dbUser = await db.insert(userSchema).values(user).returning();
       if (dbUser.length !== 1)
         throw new Error(
           `Expected exactly one user to be created, got ${dbUser.length}`,
