@@ -39,7 +39,7 @@ const NavItem = ({
       )}
     >
       <Icon className="mr-1.5 font-bold text-zinc-600" />
-      <div className="text-sm">{title}</div>
+      <div className="text-xs">{title}</div>
     </Link>
   );
 };
@@ -52,11 +52,11 @@ const SideNav = ({ children }: { children: ReactNode }) => {
   const user = useUser();
 
   return (
-    <div className="flex text-sm">
+    <div className="flex">
       <div className="bg-light-grey relative left-0 top-0 flex h-screen w-[220px] flex-col justify-between border-r-[1px] border-zinc-200 px-3 text-black">
         <div>
           <div className="flex items-center justify-between px-2 py-3">
-            <div className="text-sm flex">
+            <div className="text-xs flex">
               <Image
                 src="/vessel-icon.svg"
                 width={18}
@@ -105,7 +105,7 @@ const SideNav = ({ children }: { children: ReactNode }) => {
             />
           </div>
         </div>
-        <div className="text-sm m-3 grid grid-cols-2 opacity-40">
+        <div className="text-xs m-3 grid grid-cols-2 opacity-40">
           <div className="flex cursor-pointer items-center">
             <FaSlack className="mr-1" />
             Slack

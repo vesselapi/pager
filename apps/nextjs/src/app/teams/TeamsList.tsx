@@ -27,17 +27,16 @@ const TeamItem = ({
   );
 
   return (
-    <div className="flex justify-between text-zinc-600 items-center border-b-[1px] border-zinc-200 px-10 py-3 hover:bg-zinc-200 cursor-pointer">
+    <div className="flex text-sm justify-between text-zinc-600 items-center border-b-[1px] border-zinc-200 px-10 py-3 hover:bg-zinc-200 cursor-pointer">
       <div className="flex items-center">
         <div>{team.name}</div>
         {userHasJoined ? (
-          <div className="text-sm rounded ml-3 text-zinc-400 bg-gray-200 flex items-center px-1">
+          <div className="text-xs rounded ml-3 text-zinc-400 bg-gray-200 flex items-center px-1">
             <TbCheck />
             Joined
           </div>
         ) : null}
       </div>
-      {/* Placeholder user profiles */}
       <div className="flex">
         {team.users.map((u) => (
           <UserIcon key={u.id} {...u} />
@@ -93,7 +92,7 @@ const TeamsList = () => {
         <Search search={search} setSearch={setSearch} />
         <Button
           onClick={() => setIsOpen(true)}
-          className="mr-1.5 flex items-center"
+          className="mr-1.5 flex items-center text-sm"
         >
           <TbPlus className="mr-1.5" />
           Add team
@@ -101,7 +100,7 @@ const TeamsList = () => {
       </div>
 
       {/* Headers */}
-      <div className="mt-4 flex justify-between border-b-[1px] border-t-[1px] border-zinc-200 px-10 py-3 text-slate-400">
+      <div className="mt-4 flex justify-between border-b-[1px] border-t-[1px] border-zinc-200 px-10 py-3 text-slate-400 text-sm">
         <div>Name</div>
         <div>Members</div>
       </div>

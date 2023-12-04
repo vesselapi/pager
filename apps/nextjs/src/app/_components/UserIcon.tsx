@@ -21,7 +21,7 @@ const UserIcon = ({
     return (
       <div
         className={classNames(
-          'h-[20px] w-[20px] rounded-full bg-gray-500 ring-1 ring-gray-400',
+          'h-[20px] w-[20px] rounded-full bg-slate-500 ring-2 ring-white',
           className,
         )}
       ></div>
@@ -30,8 +30,8 @@ const UserIcon = ({
   return (
     <div
       className={classNames(
-        'flex h-[20px] w-[20px] items-center justify-center rounded-full bg-gray-500 text-xxs text-slate-200',
         className,
+        'flex h-[20px] w-[20px] items-center justify-center rounded-full ring-2 ring-white bg-slate-500 text-xxs text-slate-200',
       )}
     >
       <div>{createInitials(firstName, lastName)}</div>

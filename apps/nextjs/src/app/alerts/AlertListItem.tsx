@@ -9,7 +9,7 @@ import {
 } from 'react-icons/tb';
 
 const Styles = {
-  ButtonCondensed: 'h-[35px] w-[35px] rounded-full',
+  ButtonCondensed: 'h-[30px] w-[30px] rounded-full',
   ButtonExpanded: 'rounded mb-2 text-sm',
   ButtonShared: (colors: string) =>
     `${colors} border mr-2 text-lg hover:bg-opacity-40 flex items-center justify-between px-2 whitespace-nowrap`,
@@ -159,12 +159,12 @@ const AlertsListItem = ({
           className,
         )}
       >
-        <div className="flex items-center">
-          <div className="text-sm flex items-center w-[80px]">
+        <div className="text-sm flex items-center">
+          <div className="flex items-center w-[70px]">
             <div
               className={classNames(
                 StatusToColor[status as keyof typeof StatusToColor],
-                'text-sm rounded bg-opacity-80 px-2 font-medium',
+                'text-sm rounded bg-opacity-80 px-2',
               )}
             >
               {capitalize(status)}
@@ -172,13 +172,13 @@ const AlertsListItem = ({
           </div>
 
           <h2 className="mr-1.5 truncate w-[300px]">{title}</h2>
-          <div className="text-zinc-500 truncate w-[450px]">
-            Occaeacat sint aute nulla proident nulla proident nulla proident
-            nulla proident....
+          <div className="text-zinc-500 truncate w-[500px]">
+            Occaeacat sint aute nulla proident nullulla proident nullaulla
+            proident nullaa proident nulla proident nulla proident....
           </div>
         </div>
 
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end text-xs">
           <div className="mr-2 font-bold text-zinc-600">
             {(firstName?.slice(0, 1) ?? '') + (lastName?.slice(0, 1) ?? '')}
           </div>

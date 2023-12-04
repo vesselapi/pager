@@ -6,7 +6,7 @@ const Pill = ({ children }: { children: ReactNode }) => {
   const tLength = childArray.length - 1;
 
   return (
-    <div className="text-sm flex">
+    <div className="text-xs flex">
       {childArray.map((child, index: number) => (
         <div
           key={index}

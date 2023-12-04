@@ -11,7 +11,7 @@ export default {
     ...Array.from({ length: 15 }, (_, i) => `col-span-${i + 1}`),
   ],
   /**
-   * Our theme *is* the UI of our application, changes here
+   * Our theme is crucial to the UI of our application, changes here
    * can have far-reaching consequences and should be done with
    * intention.
    */
@@ -24,9 +24,26 @@ export default {
       },
       colors: {
         'light-grey': '#fafafa',
+
+        'red-500': '#F15D3D',
+        'red-400': '#F37155',
+        'red-300': '#F4856E',
+        'red-200': '#F69A86',
+        'red-100': '#F8AE9E',
+
+        'green-500': '#45E93A',
+        'green-400': '#5CEC53',
+        'green-300': '#74EE6B',
+        'green-200': '#8BF184',
+        'green-100': '#A2F49D',
+
+        'purple-400': '#C454F3',
+        'purple-300': '#CD6DF4',
+        'purple-200': '#D585F6',
+        'purple-100': '#DE9DF8',
       },
       /**
-       * @Guidelines - Learn smaller, more compact sizes.
+       * @Guidelines - Lean smaller, more compact sizes.
        */
       fontSize: {
         xxxs: '4px',

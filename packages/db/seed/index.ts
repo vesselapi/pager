@@ -30,7 +30,7 @@ const makeTeammate = ({ orgId }: { orgId: OrgId }) => {
   return db.user.create({
     orgId,
     email: faker.internet.email(),
-    firstName: `[TEST USER] ${faker.person.firstName()}`,
+    firstName: `${faker.person.firstName()} (Test User)`,
     lastName: faker.person.lastName(),
   });
 };

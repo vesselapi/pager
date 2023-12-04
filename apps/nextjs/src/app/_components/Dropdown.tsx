@@ -37,7 +37,7 @@ const Dropdown = ({
               'w-[85px]': size === 'sm',
               'w-[170px]': size === 'md',
             },
-            'text-sm absolute z-10 mt-1.5 origin-top-right rounded-md border-[1px] border-zinc-200 border-opacity-20 bg-white text-zinc-600 shadow focus:outline-none',
+            'text-xs absolute z-10 mt-1.5 origin-top-right rounded-md border-[1px] border-zinc-200 border-opacity-20 bg-white text-zinc-600 shadow focus:outline-none',
           )}
         >
           {React.Children.map(children, (child) => (

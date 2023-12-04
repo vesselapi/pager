@@ -1,12 +1,56 @@
 import type { RouterOutputs } from '@vessel/api';
+import classNames from 'classnames';
 import { useMemo } from 'react';
 import { WeeklyCalendar, WeeklyEvent } from '../_components/Calendar';
 import UserIcon from '../_components/UserIcon';
 
-const ColorRotation = ['red'];
+const ColorRotation = [
+  {
+    bg: 'bg-red-100',
+    txt: 'text-red-800',
+  },
+  {
+    bg: 'bg-blue-100',
+    txt: 'text-blue-800',
+  },
+  {
+    bg: 'bg-green-100',
+    txt: 'text-green-800',
+  },
+  {
+    bg: 'bg-purple-100',
+    txt: 'text-purple-800',
+  },
+];
 
 const TotalScheduleDays = 14;
 const ScheduleDaysBeforeToday = 3;
+
+const Rotation = ({
+  name,
+  bgColor,
+  txtColor,
+  isOncall,
+}: {
+  name: string;
+  bgColor: string;
+  txtColor: string;
+  isOncall: boolean;
+}) => {
+  return (
+    <div className="flex items-center h-full w-full">
+      <div
+        className={classNames(
+          `rounded mr-1 p-2 text-center w-full`,
+          bgColor,
+          txtColor,
+        )}
+      >
+        {name}
+      </div>
+    </div>
+  );
+};
 
 const ScheduleListCard = ({
   name,
@@ -21,7 +65,7 @@ const ScheduleListCard = ({
     return users
       .map((u, i) => ({
         ...u,
-        color: ColorRotation[i % ColorRotation.length],
+        color: ColorRotation[i % ColorRotation.length]!,
       }))
       .sort((a, b) => a.order - b.order);
   }, [users]);
@@ -59,18 +103,20 @@ const ScheduleListCard = ({
           name: `${user.firstName} ${user.lastName}`,
           color: user.color,
           length: rotationLengthInDays,
+          isOncall: i === 0,
         };
       }),
     ];
 
     const remainingDays =
-      rotationLengthInDays - numFullRotations * rotationLengthInDays;
+      allocatedDays - numFullRotations * rotationLengthInDays;
     if (remainingDays > 0) {
       const nextUser = scheduleUsers[numFullRotations % scheduleUsers.length]!;
       rotations.push({
         name: `${nextUser.firstName} ${nextUser.lastName}`,
         color: nextUser.color,
         length: remainingDays,
+        isOncall: false,
       });
     }
 
@@ -95,22 +141,22 @@ const ScheduleListCard = ({
         {/* Events before today */}
         {eventsBeforeToday.map((e) => (
           <WeeklyEvent key={e.name} days={e.length}>
-            <div className="flex items-center h-full w-full">
-              <div className={`bg-red-100 rounded mr-1 p-2 text-center w-full`}>
-                {e.name}
-              </div>
-            </div>
+            <Rotation
+              name={e.name}
+              bgColor={e.color.bg}
+              txtColor={e.color.txt}
+            />
           </WeeklyEvent>
         ))}
 
         {/* Events after today */}
         {eventAfterToday.map((e) => (
           <WeeklyEvent key={e.name} days={e.length}>
-            <div className="flex items-center h-full w-full">
-              <div className={`bg-red-100 rounded mr-1 p-2 text-center w-full`}>
-                {e.name}
-              </div>
-            </div>
+            <Rotation
+              name={e.name}
+              bgColor={e.color.bg}
+              txtColor={e.color.txt}
+            />
           </WeeklyEvent>
         ))}
       </WeeklyCalendar>

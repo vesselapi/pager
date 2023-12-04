@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { addDays, format, getDay } from 'date-fns';
+import { addDays, format, getDay, isToday } from 'date-fns';
 
 const Styles = {
   rowHeight: 'h-[90px]',
@@ -40,7 +40,7 @@ export const WeeklyCalendar = ({
     const date = addDays(today, i - daysBeforeToday);
     const day = getDay(date);
     const label = format(date, 'd/M EEEEEE');
-    return { day, label };
+    return { day, label, isToday: isToday(date) };
   });
 
   return (
@@ -56,17 +56,15 @@ export const WeeklyCalendar = ({
           key={day.day}
           className={classNames(`h-[30px] flex items-center bg-zinc-100`)}
         >
-          <div className="text-sm text-gray-400 ml-1">{day.label}</div>
+          <div
+            className={classNames(`text-sm text-gray-400 ml-1`, {
+              'font-bold ': day.isToday,
+            })}
+          >
+            {day.label}
+          </div>
         </div>
       ))}
-      {/* TODO(@zkirby): This could be improved with some creative use of col-start-x */}
-      {/* <div
-        className={classNames(
-          `col-span-${daysBeforeToday} border-r border-red-500`,
-          Styles.rowBg,
-          Styles.rowHeight,
-        )}
-      ></div> */}
       {children}
     </div>
   );
