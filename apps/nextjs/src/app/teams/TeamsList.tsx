@@ -7,6 +7,7 @@ import Button from '../_components/Button';
 import Loader from '../_components/Loader';
 import Modal from '../_components/Modal';
 import Search from '../_components/Search';
+import UserIcon from '../_components/UserIcon';
 import TeamListAddTeamForm from './TeamListAddTeamForm';
 
 /**
@@ -38,14 +39,9 @@ const TeamItem = ({
       </div>
       {/* Placeholder user profiles */}
       <div className="flex">
-        {team.users.map((u) => {
-          return (
-            <div
-              key={u.id}
-              className="ring rounded-full text-center ring-white h-[20px] w-[20px] bg-zinc-600 text-white text-sm"
-            >{`${u.firstName?.[0]}${u.lastName?.[0]}`}</div>
-          );
-        })}
+        {team.users.map((u) => (
+          <UserIcon key={u.id} {...u} />
+        ))}
       </div>
     </div>
   );

@@ -15,6 +15,7 @@ import {
   TbUsersGroup,
 } from 'react-icons/tb';
 
+import { useUser } from '../../hooks/useUser';
 import Dropdown from './Dropdown';
 import UserIcon from './UserIcon';
 
@@ -48,6 +49,7 @@ const NavItem = ({
  */
 const SideNav = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
+  const user = useUser();
 
   return (
     <div className="flex text-sm">
@@ -64,7 +66,7 @@ const SideNav = ({ children }: { children: ReactNode }) => {
               />
               Vessel
             </div>
-            <Dropdown position="right" OpenButton={<UserIcon />}>
+            <Dropdown position="right" OpenButton={<UserIcon {...user} />}>
               {/* TODO(@zkirby): Enable dark mode */}
               {/* <Switch
                 checked={darkMode}

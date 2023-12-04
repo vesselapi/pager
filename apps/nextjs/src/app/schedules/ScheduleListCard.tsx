@@ -1,6 +1,7 @@
 import type { RouterOutputs } from '@vessel/api';
 import { useMemo } from 'react';
 import { WeeklyCalendar, WeeklyEvent } from '../_components/Calendar';
+import UserIcon from '../_components/UserIcon';
 
 const ColorRotation = ['red'];
 
@@ -82,12 +83,7 @@ const ScheduleListCard = ({
         <div className="text-zinc-600">{name}</div>
         <div className="flex">
           {scheduleUsers.map((u) => (
-            <div
-              key={u.id}
-              className={`h-[20px] w-[20px] bg-red-500 rounded-full ring ring-white text-sm text-center -ml-0.5`}
-            >
-              {`${u.firstName?.[0]}${u.lastName?.[0]}`}
-            </div>
+            <UserIcon key={u.id} className={`-ml-0.5`} {...u} />
           ))}
         </div>
       </div>
