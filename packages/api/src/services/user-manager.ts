@@ -12,13 +12,13 @@ export const makeUserManager = () => {
     const getUrl = async (id: UserId) => {
       return blobStore.getSignedUrl({
         key: PROFILE_PIC_S3_PATH(id),
-        expiresInMs: 1000 * 60 * 60 * 12, // 12 hours expiry
+        expiresInSecs: 1000 * 60 * 12, // 12 hours expiry
       });
     };
     const put = async ({ id, url }: { id: UserId; url: string }) => {
       const key = PROFILE_PIC_S3_PATH(id);
       const res = await fetch(url);
-      await blobStore.put({ key, data: await res.blob() });
+      await blobStore.put({ key, data: await res.arrayBuffer() });
       return { key };
     };
     const addToUser = async (user: User) => {

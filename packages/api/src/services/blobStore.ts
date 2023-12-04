@@ -21,15 +21,15 @@ export const blobClient = (client: S3Client) => {
 
   const getSignedUrl = async ({
     key,
-    expiresInMs,
+    expiresInSecs,
   }: {
     key: string;
-    expiresInMs: number;
+    expiresInSecs: number;
   }) =>
     await s3GetSignedUrl(
       client,
       new GetObjectCommand({ Bucket: env.S3_BUCKET, Key: key }),
-      { expiresIn: expiresInMs },
+      { expiresIn: expiresInSecs },
     );
 
   const put = async ({
