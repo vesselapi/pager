@@ -15,12 +15,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      #   - name: Setup Git User
-      #     run: |
-      #       git config user.name "GitHub Action"
-      #       git config user.email "<EMAIL>"
-
       - name: Update Staging Branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
