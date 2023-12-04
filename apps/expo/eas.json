@@ -18,6 +18,12 @@
         "EXPO_PUBLIC_WEBAPP_URL": "https://pager.staging.vessel.dev"
       }
     },
+    "development-simulator": {
+      "extends": "development",
+      "ios": {
+        "simulator": true
+      }
+    },
     "preview": {
       "extends": "base",
       "distribution": "internal",

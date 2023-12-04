@@ -7,10 +7,10 @@ const defineConfig = (): ExpoConfig => ({
   scheme: 'expo',
   version: '0.1.0',
   orientation: 'portrait',
-  icon: './assets/icon.jpg',
+  icon: './assets/icon.png',
   userInterfaceStyle: 'light',
   splash: {
-    image: './assets/icon.jpg',
+    image: './assets/icon.png',
     resizeMode: 'contain',
     backgroundColor: '#171717',
   },
@@ -25,7 +25,7 @@ const defineConfig = (): ExpoConfig => ({
   android: {
     package: 'com.vessel.pager',
     adaptiveIcon: {
-      foregroundImage: './assets/icon.jpg',
+      foregroundImage: './assets/icon.png',
       backgroundColor: '#1F104A',
     },
   },
