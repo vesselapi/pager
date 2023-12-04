@@ -14,8 +14,10 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.428.0",
     "@aws-sdk/client-sfn": "^3.462.0",
     "@aws-sdk/client-sns": "^3.450.0",
+    "@aws-sdk/s3-request-presigner": "^3.465.0",
     "@exobase/core": "1.0.0-rc.25",
     "@exobase/hooks": "1.0.0-rc.53",
     "@exobase/use-lambda": "1.0.0-rc.24",
