@@ -25,6 +25,10 @@ export const env = createEnv({
     INTEGRATION_SENTRY_CLIENT_ID: z.string(),
     INTEGRATION_SENTRY_SECRET: z.string(),
     INTEGRATION_SENTRY_INSTALL_URL: z.string(),
+    S3_URL: z.string().url(),
+    S3_BUCKET: z.string(),
+    S3_ACCESS_KEY_ID: z.string(),
+    S3_SECRET_ACCESS_KEY: z.string(),
   },
   /**
    * Specify your client-side environment variables schema here.
@@ -58,6 +62,10 @@ export const env = createEnv({
     INTEGRATION_SENTRY_CLIENT_ID: process.env.INTEGRATION_SENTRY_CLIENT_ID,
     INTEGRATION_SENTRY_SECRET: process.env.INTEGRATION_SENTRY_SECRET,
     INTEGRATION_SENTRY_INSTALL_URL: process.env.INTEGRATION_SENTRY_INSTALL_URL,
+    S3_URL: process.env.S3_URL,
+    S3_BUCKET: process.env.S3_BUCKET,
+    S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
+    S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:

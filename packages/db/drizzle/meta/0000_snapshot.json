@@ -1,8 +1,8 @@
 {
+  "id": "306d215c-ff3c-49d9-ade4-8099a49bf30e",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
-  "id": "76fcd28b-8694-41f5-9fc1-5a49c0f781a8",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "alert_event": {
       "name": "alert_event",
@@ -204,12 +204,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "rotation_id": {
-          "name": "rotation_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "user_id": {
           "name": "user_id",
           "type": "text",
@@ -251,19 +245,6 @@
           "tableTo": "schedule",
           "columnsFrom": [
             "schedule_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "escalation_policy_step_rotation_id_rotation_id_fk": {
-          "name": "escalation_policy_step_rotation_id_rotation_id_fk",
-          "tableFrom": "escalation_policy_step",
-          "tableTo": "rotation",
-          "columnsFrom": [
-            "rotation_id"
           ],
           "columnsTo": [
             "id"
@@ -452,8 +433,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "rotation_user": {
-      "name": "rotation_user",
+    "schedule_user": {
+      "name": "schedule_user",
       "schema": "",
       "columns": {
         "id": {
@@ -474,8 +455,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "rotation_id": {
-          "name": "rotation_id",
+        "schedule_id": {
+          "name": "schedule_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -489,9 +470,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "rotation_user_org_id_org_id_fk": {
-          "name": "rotation_user_org_id_org_id_fk",
-          "tableFrom": "rotation_user",
+        "schedule_user_org_id_org_id_fk": {
+          "name": "schedule_user_org_id_org_id_fk",
+          "tableFrom": "schedule_user",
           "tableTo": "org",
           "columnsFrom": [
             "org_id"
@@ -502,12 +483,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "rotation_user_rotation_id_schedule_id_fk": {
-          "name": "rotation_user_rotation_id_schedule_id_fk",
-          "tableFrom": "rotation_user",
+        "schedule_user_schedule_id_schedule_id_fk": {
+          "name": "schedule_user_schedule_id_schedule_id_fk",
+          "tableFrom": "schedule_user",
           "tableTo": "schedule",
           "columnsFrom": [
-            "rotation_id"
+            "schedule_id"
           ],
           "columnsTo": [
             "id"
@@ -515,9 +496,9 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "rotation_user_user_id_user_id_fk": {
-          "name": "rotation_user_user_id_user_id_fk",
-          "tableFrom": "rotation_user",
+        "schedule_user_user_id_user_id_fk": {
+          "name": "schedule_user_user_id_user_id_fk",
+          "tableFrom": "schedule_user",
           "tableTo": "user",
           "columnsFrom": [
             "user_id"
@@ -532,8 +513,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "rotation": {
-      "name": "rotation",
+    "schedule": {
+      "name": "schedule",
       "schema": "",
       "columns": {
         "id": {
@@ -548,8 +529,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "schedule_id": {
-          "name": "schedule_id",
+        "team_id": {
+          "name": "team_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -582,74 +563,25 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "rotation_org_id_org_id_fk": {
-          "name": "rotation_org_id_org_id_fk",
-          "tableFrom": "rotation",
-          "tableTo": "org",
-          "columnsFrom": [
-            "org_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "rotation_schedule_id_schedule_id_fk": {
-          "name": "rotation_schedule_id_schedule_id_fk",
-          "tableFrom": "rotation",
-          "tableTo": "schedule",
-          "columnsFrom": [
-            "schedule_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "schedule": {
-      "name": "schedule",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "org_id": {
-          "name": "org_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
         "schedule_org_id_org_id_fk": {
           "name": "schedule_org_id_org_id_fk",
           "tableFrom": "schedule",
           "tableTo": "org",
           "columnsFrom": [
             "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "schedule_team_id_team_id_fk": {
+          "name": "schedule_team_id_team_id_fk",
+          "tableFrom": "schedule",
+          "tableTo": "team",
+          "columnsFrom": [
+            "team_id"
           ],
           "columnsTo": [
             "id"
@@ -735,6 +667,55 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "team": {
+      "name": "team",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "org_id": {
+          "name": "org_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "team_org_id_org_id_fk": {
+          "name": "team_org_id_org_id_fk",
+          "tableFrom": "team",
+          "tableTo": "org",
+          "columnsFrom": [
+            "org_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "user": {
       "name": "user",
       "schema": "",
@@ -778,6 +759,18 @@
         },
         "expo_push_token_secret_id": {
           "name": "expo_push_token_secret_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "external_id": {
+          "name": "external_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_s3_key": {
+          "name": "image_s3_key",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -831,7 +824,7 @@
       "name": "escalation_policy_step_type",
       "values": {
         "USER": "USER",
-        "ROTATION": "ROTATION"
+        "SCHEDULE": "SCHEDULE"
       }
     },
     "app_id": {
