@@ -1,6 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
+import { unique } from 'radash';
 import type { z } from 'zod';
 
 import type {
@@ -16,9 +17,9 @@ import type {
 import { IdGenerator } from './id-generator';
 import type { CreateAlert, UpsertAlert } from './schema/alert';
 import {
-  alertEscalationPolicyRelation,
   alert as alertSchema,
   alertSourceEnum,
+  alertToEscalationPolicyRelation,
   insertAlertSchema,
   selectAlertSchema,
   statusEnum,
@@ -32,7 +33,8 @@ import {
 import type { CreateEscalationPolicy } from './schema/escalation-policy';
 import {
   escalationPolicy as escalationPolicySchema,
-  escalationPolicyStepRelation,
+  escalationPolicyToAlertRelation,
+  escalationPolicyToStepRelation,
   insertEscalationPolicySchema,
   selectEscalationPolicySchema,
 } from './schema/escalation-policy';
@@ -42,6 +44,7 @@ import {
   escalationPolicyStepType,
   insertEscalationPolicyStepSchema,
   selectEscalationPolicyStepSchema,
+  stepToEscalationPolicyRelation,
 } from './schema/escalation-policy-step';
 import type { CreateIntegration } from './schema/integration';
 import {
@@ -55,13 +58,16 @@ import type { CreateSchedule } from './schema/schedule';
 import {
   insertScheduleSchema,
   schedule as scheduleSchema,
-  scheduleUserRelations,
+  scheduleToScheduleUserRelation,
+  scheduleToTeamRelation,
   selectScheduleSchema,
 } from './schema/schedule';
 import type { CreateScheduleUser } from './schema/schedule-user';
 import {
   insertScheduleUserSchema,
   scheduleUser as scheduleUserSchema,
+  scheduleUserToScheduleRelation,
+  scheduleUserToUserRelation,
   selectScheduleUserSchema,
 } from './schema/schedule-user';
 import type { insertSecretSchema } from './schema/secret';
@@ -85,12 +91,14 @@ export const schema = {
   appIdEnum,
   statusEnum,
   alert: alertSchema,
-  alertEscalationPolicyRelation,
+  alertToEscalationPolicyRelation,
   alertEvent: alertEventSchema,
   escalationPolicy: escalationPolicySchema,
   escalationPolicyStep: escalationPolicyStepSchema,
-  escalationPolicyStepRelation,
+  escalationPolicyToAlertRelation,
+  escalationPolicyToStepRelation,
   escalationPolicyStepType,
+  stepToEscalationPolicyRelation,
   integration: integrationSchema,
   org: orgSchema,
   user: userSchema,
@@ -98,8 +106,11 @@ export const schema = {
   team: teamSchema,
   teamScheduleRelation,
   schedule: scheduleSchema,
+  scheduleToScheduleUserRelation,
+  scheduleToTeamRelation,
   scheduleUser: scheduleUserSchema,
-  scheduleUserRelations,
+  scheduleUserToUserRelation,
+  scheduleUserToScheduleRelation,
 };
 
 export * from 'drizzle-orm';
@@ -370,10 +381,22 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     listByOrgId: async (orgId: OrgId) => {
       const dbSchedules = await db.query.schedule.findMany({
         where: eq(scheduleSchema.orgId, orgId),
+        with: {
+          scheduleUsers: {
+            with: {
+              user: true,
+            },
+          },
+        },
       });
-      return dbSchedules.map((schedule) =>
-        selectScheduleSchema.parse(schedule),
-      );
+      return dbSchedules.map((schedule) => ({
+        ...selectScheduleSchema.parse(schedule),
+        // @ts-expect-error TODO: Figure out why drizzle isn't picking up this relation correctly
+        users: schedule.scheduleUsers.map((scheduleUser) => ({
+          ...selectUserSchema.parse(scheduleUser.user),
+          ...selectScheduleUserSchema.parse(scheduleUser),
+        })),
+      }));
     },
   },
   scheduleUsers: {
@@ -406,8 +429,37 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     listByOrgId: async (orgId: OrgId) => {
       const teams = await db.query.team.findMany({
         where: eq(teamSchema.orgId, orgId),
+        // TODO(@zkirby): There's no way this is efficient at scale...
+        with: {
+          schedules: {
+            with: {
+              scheduleUsers: {
+                with: {
+                  user: true,
+                },
+              },
+            },
+          },
+        },
       });
-      return teams.map((team) => selectTeamSchema.parse(team));
+      return teams.map((team) => {
+        return {
+          ...selectTeamSchema.parse(team),
+          // schedules: team.schedules.map((schedule) =>
+          //   selectScheduleSchema.parse(schedule),
+          // ),
+          users: unique(
+            team.schedules.flatMap((schedule) =>
+              /// @ts-expect-error TODO: Figure out why drizzle isn't picking up this relation correctly
+              schedule.scheduleUsers.map((scheduleUser) => ({
+                ...selectScheduleUserSchema.parse(scheduleUser),
+                ...selectUserSchema.parse(scheduleUser.user),
+              })),
+            ),
+            (u) => u.id,
+          ),
+        };
+      });
     },
     create: async (team: CreateTeam) => {
       const insertTeam = insertTeamSchema.parse({

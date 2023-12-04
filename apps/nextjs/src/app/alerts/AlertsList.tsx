@@ -114,7 +114,7 @@ const AlertsList = () => {
     filters: allFilters,
   });
   const updateAlert = api.alert.update.useMutation();
-  const users = api.user.all.useQuery();
+  const users = api.user.list.useQuery();
   const currentUser = useAuth();
 
   const update = useCallback(

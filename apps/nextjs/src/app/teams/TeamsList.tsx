@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { TbCheck, TbPlus } from 'react-icons/tb';
 import type { RouterOutputs } from '~/utils/api';
 import { api } from '~/utils/api';
+import { useUser } from '../../hooks/useUser';
 import Button from '../_components/Button';
 import Loader from '../_components/Loader';
 import Modal from '../_components/Modal';
@@ -14,24 +15,36 @@ import TeamListAddTeamForm from './TeamListAddTeamForm';
  */
 const TeamItem = ({
   team,
+  user,
 }: {
   team: RouterOutputs['team']['list']['teams']['0'];
+  user: RouterOutputs['user']['me']['user'];
 }) => {
+  const userJoined = useMemo(() => {
+    return team.users.some((u) => u.id === user.id);
+  }, [team.users, user]);
+
   return (
     <div className="flex justify-between text-zinc-600 items-center border-b-[1px] border-zinc-200 px-10 py-3 hover:bg-zinc-200 cursor-pointer">
       <div className="flex items-center">
         <div>{team.name}</div>
-        <div className="text-smr rounded ml-3 text-zinc-400 bg-gray-200 flex items-center px-1">
-          <TbCheck />
-          Joined
-        </div>
+        {userJoined ? (
+          <div className="text-smr rounded ml-3 text-zinc-400 bg-gray-200 flex items-center px-1">
+            <TbCheck />
+            Joined
+          </div>
+        ) : null}
       </div>
       {/* Placeholder user profiles */}
       <div className="flex">
-        <div className="ring rounded-full ring-white h-[20px] w-[20px] bg-zinc-600"></div>
-        <div className="ring rounded-full ring-white h-[20px] w-[20px] bg-zinc-600"></div>
-        <div className="ring rounded-full ring-white h-[20px] w-[20px] bg-zinc-600"></div>
-        <div className="ring rounded-full ring-white h-[20px] w-[20px] bg-zinc-600"></div>
+        {team.users.map((u) => {
+          return (
+            <div
+              key={u.id}
+              className="ring rounded-full text-center ring-white h-[20px] w-[20px] bg-zinc-600 text-white text-smr"
+            >{`${u.firstName[0]}${u.lastName[0]}`}</div>
+          );
+        })}
       </div>
     </div>
   );
@@ -40,6 +53,7 @@ const TeamItem = ({
 const TeamsList = () => {
   const listTeams = api.team.list.useQuery();
   const createTeam = api.team.create.useMutation();
+  const user = useUser();
 
   // NOTE(@zkirby): We might want to consider making this an
   // API query param, but for now we'll assume there are few enough
@@ -99,10 +113,10 @@ const TeamsList = () => {
       {/* Teams List */}
       <Loader
         className={'px-10 mt-5'}
-        status={{ loading: listTeams.isFetching }}
+        status={{ loading: listTeams.isFetching || !user }}
       >
         {teams.map((team) => (
-          <TeamItem key={team.id} team={team} />
+          <TeamItem key={team.id} team={team} user={user!} />
         ))}
       </Loader>
     </div>

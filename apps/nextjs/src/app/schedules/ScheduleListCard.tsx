@@ -16,7 +16,6 @@ const ScheduleListCard = ({
   users: any[];
 }) => {
   const scheduleUsers = useMemo(() => {
-    console.log(users);
     return users
       .map((u, i) => ({
         ...u,
