@@ -1,3 +1,4 @@
+import type { RouterOutputs } from '@vessel/api';
 import { useMemo } from 'react';
 import { WeeklyCalendar, WeeklyEvent } from '../_components/Calendar';
 
@@ -12,8 +13,8 @@ const ScheduleListCard = ({
   users,
 }: {
   name: string;
-  lengthInSeconds: number;
-  users: any[];
+  lengthInSeconds: string;
+  users: RouterOutputs['schedule']['list']['schedules']['0']['users'];
 }) => {
   const scheduleUsers = useMemo(() => {
     return users
@@ -30,7 +31,7 @@ const ScheduleListCard = ({
    * calculate what events we should put.
    */
   const rotationLengthInDays = useMemo(() => {
-    return Math.ceil(lengthInSeconds / 86400);
+    return Math.ceil(parseInt(lengthInSeconds) / 86400);
   }, [lengthInSeconds]);
 
   // TODO: Figure out how to calculate who is actually on-call
@@ -85,7 +86,7 @@ const ScheduleListCard = ({
               key={u.id}
               className={`h-[20px] w-[20px] bg-red-500 rounded-full ring ring-white text-smr text-center -ml-0.5`}
             >
-              {`${u.firstName[0]}${u.lastName[0]}`}
+              {`${u.firstName?.[0]}${u.lastName?.[0]}`}
             </div>
           ))}
         </div>

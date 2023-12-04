@@ -20,15 +20,16 @@ const TeamItem = ({
   team: RouterOutputs['team']['list']['teams']['0'];
   user: RouterOutputs['user']['me']['user'];
 }) => {
-  const userJoined = useMemo(() => {
-    return team.users.some((u) => u.id === user.id);
-  }, [team.users, user]);
+  const userHasJoined = useMemo(
+    () => team.users.some((u) => u.id === user.id),
+    [team.users, user],
+  );
 
   return (
     <div className="flex justify-between text-zinc-600 items-center border-b-[1px] border-zinc-200 px-10 py-3 hover:bg-zinc-200 cursor-pointer">
       <div className="flex items-center">
         <div>{team.name}</div>
-        {userJoined ? (
+        {userHasJoined ? (
           <div className="text-smr rounded ml-3 text-zinc-400 bg-gray-200 flex items-center px-1">
             <TbCheck />
             Joined
@@ -42,7 +43,7 @@ const TeamItem = ({
             <div
               key={u.id}
               className="ring rounded-full text-center ring-white h-[20px] w-[20px] bg-zinc-600 text-white text-smr"
-            >{`${u.firstName[0]}${u.lastName[0]}`}</div>
+            >{`${u.firstName?.[0]}${u.lastName?.[0]}`}</div>
           );
         })}
       </div>
@@ -70,7 +71,6 @@ const TeamsList = () => {
     );
   }, [listTeams?.data?.teams, search]);
 
-  // TODO: replace w/ implementation
   const onSubmit = async ({ name }: { name: string }) => {
     setIsOpen(false);
     await createTeam.mutateAsync({ team: { name } });
