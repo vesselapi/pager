@@ -63,11 +63,7 @@ const AlertListItem = ({
             >
               {title}
             </Text>
-            <Text
-              className={
-                'w-[65%] text-sm text-gray-500 overflow-ellipsis overflow-hidden'
-              }
-            >
+            <Text className={'w-[65%] text-sm text-gray-500'}>
               Occaeacat sint aute nulla proident nulla proident nulla proident
               nulla proident....
             </Text>
