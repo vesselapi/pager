@@ -58,16 +58,12 @@ const AlertListItem = ({
 
           <View>
             <Text
-              className={'mb-1.5 mr-2 text-lg font-medium w-[220px]'}
+              className={'mb-1.5 mr-2 text-lg font-medium w-[190px]'}
               numberOfLines={1}
             >
               {title}
             </Text>
-            <Text
-              className={
-                'w-[65%] text-sm text-gray-500 overflow-ellipsis overflow-hidden'
-              }
-            >
+            <Text className={'w-[65%] text-sm text-gray-500'}>
               Occaeacat sint aute nulla proident nulla proident nulla proident
               nulla proident....
             </Text>
