@@ -14,8 +14,8 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_bWFqb3ItZmxvdW5kZXItMTUuY2xlcmsuYWNjb3VudHMuZGV2JA",
-        "WEBAPP_URL": "https://pager.staging.vessel.dev"
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_bWFqb3ItZmxvdW5kZXItMTUuY2xlcmsuYWNjb3VudHMuZGV2JA",
+        "EXPO_PUBLIC_WEBAPP_URL": "https://pager.staging.vessel.dev"
       }
     },
     "preview": {
@@ -25,15 +25,15 @@
         "simulator": true
       },
       "env": {
-        "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_bWFqb3ItZmxvdW5kZXItMTUuY2xlcmsuYWNjb3VudHMuZGV2JA",
-        "WEBAPP_URL": "https://pager.staging.vessel.dev"
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_bWFqb3ItZmxvdW5kZXItMTUuY2xlcmsuYWNjb3VudHMuZGV2JA",
+        "EXPO_PUBLIC_WEBAPP_URL": "https://pager.staging.vessel.dev"
       }
     },
     "production": {
       "extends": "base",
       "env": {
-        "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsudmVzc2VsLmRldiQ",
-        "WEBAPP_URL": "https://pager.vessel.dev"
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsudmVzc2VsLmRldiQ",
+        "EXPO_PUBLIC_WEBAPP_URL": "https://pager.vessel.dev"
       }
     }
   },

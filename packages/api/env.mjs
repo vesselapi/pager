@@ -7,7 +7,6 @@ export const env = createEnv({
       .string()
       .optional()
       .transform((v) => (v ? `https://${v}` : 'localhost:3000')),
-    WEBAPP_URL: z.string().url(),
   },
   /**
    * Specify your server-side environment variables schema here. This way you can ensure the app isn't
@@ -32,7 +31,9 @@ export const env = createEnv({
    * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_` or `EXPO_PUBLIC_`
    */
   client: {
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().optional(),
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+    EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+    EXPO_PUBLIC_WEBAPP_URL: z.string().url(),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
@@ -40,11 +41,13 @@ export const env = createEnv({
   runtimeEnv: {
     VERCEL_URL: process.env.VERCEL_URL,
     PORT: process.env.PORT,
-    WEBAPP_URL: process.env.WEBAPP_URL,
+    EXPO_PUBLIC_WEBAPP_URL: process.env.EXPO_PUBLIC_WEBAPP_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     DATABASE_SECRET_STORE_KEY: process.env.DATABASE_SECRET_STORE_KEY,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY:
+      process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     AWS_SNS_TOPIC_ALERT_ARN: process.env.AWS_SNS_TOPIC_ALERT_ARN,
     AWS_SFN_ALERT_PAGE_ARN: process.env.AWS_SFN_ALERT_PAGE_ARN,
@@ -62,5 +65,3 @@ export const env = createEnv({
     !!process.env.SKIP_ENV_VALIDATION ||
     process.env.npm_lifecycle_event === 'lint',
 });
-
-console.log({ env: { x: env.EXPO_PUBLIC_WEBAPP_URL }, trueEnv: process.env });
