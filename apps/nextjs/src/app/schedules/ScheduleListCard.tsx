@@ -84,7 +84,7 @@ const ScheduleListCard = ({
           {scheduleUsers.map((u) => (
             <div
               key={u.id}
-              className={`h-[20px] w-[20px] bg-red-500 rounded-full ring ring-white text-smr text-center -ml-0.5`}
+              className={`h-[20px] w-[20px] bg-red-500 rounded-full ring ring-white text-sm text-center -ml-0.5`}
             >
               {`${u.firstName?.[0]}${u.lastName?.[0]}`}
             </div>

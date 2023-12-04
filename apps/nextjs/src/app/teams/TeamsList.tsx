@@ -30,7 +30,7 @@ const TeamItem = ({
       <div className="flex items-center">
         <div>{team.name}</div>
         {userHasJoined ? (
-          <div className="text-smr rounded ml-3 text-zinc-400 bg-gray-200 flex items-center px-1">
+          <div className="text-sm rounded ml-3 text-zinc-400 bg-gray-200 flex items-center px-1">
             <TbCheck />
             Joined
           </div>
@@ -42,7 +42,7 @@ const TeamItem = ({
           return (
             <div
               key={u.id}
-              className="ring rounded-full text-center ring-white h-[20px] w-[20px] bg-zinc-600 text-white text-smr"
+              className="ring rounded-full text-center ring-white h-[20px] w-[20px] bg-zinc-600 text-white text-sm"
             >{`${u.firstName?.[0]}${u.lastName?.[0]}`}</div>
           );
         })}

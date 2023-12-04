@@ -10,7 +10,7 @@ import {
 
 const Styles = {
   ButtonCondensed: 'h-[35px] w-[35px] rounded-full',
-  ButtonExpanded: 'rounded mb-2 text-smr',
+  ButtonExpanded: 'rounded mb-2 text-sm',
   ButtonShared: (colors: string) =>
     `${colors} border mr-2 text-lg hover:bg-opacity-40 flex items-center justify-between px-2 whitespace-nowrap`,
 };
@@ -160,11 +160,11 @@ const AlertsListItem = ({
         )}
       >
         <div className="flex items-center">
-          <div className="text-smr flex items-center w-[80px]">
+          <div className="text-sm flex items-center w-[80px]">
             <div
               className={classNames(
                 StatusToColor[status as keyof typeof StatusToColor],
-                'text-smr rounded bg-opacity-80 px-2 font-medium',
+                'text-sm rounded bg-opacity-80 px-2 font-medium',
               )}
             >
               {capitalize(status)}

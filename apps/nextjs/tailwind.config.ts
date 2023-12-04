@@ -10,9 +10,12 @@ export default {
     ...Array.from({ length: 15 }, (_, i) => `grid-cols-${i + 1}`),
     ...Array.from({ length: 15 }, (_, i) => `col-span-${i + 1}`),
   ],
+  /**
+   * Our theme *is* the UI of our application, changes here
+   * can have far-reaching consequences and should be done with
+   * intention.
+   */
   theme: {
-    // TODO(@zkirby): Add base styles here as named-variables
-    // to ensure consistency.
     extend: {
       height: {
         card: '130px',
@@ -22,8 +25,23 @@ export default {
       colors: {
         'light-grey': '#fafafa',
       },
+      /**
+       * @Guidelines - Learn smaller, more compact sizes.
+       */
       fontSize: {
-        smr: '0.9em', // small-regular
+        xxxs: '4px',
+        xxs: '8px',
+        xs: '12px',
+        sm: '14px',
+        base: '16px',
+        lg: '18px',
+        xl: '20px',
+        '2xl': '24px',
+        '3xl': '30px',
+        '4xl': '36px',
+        '5xl': '48px',
+        '6xl': '64px',
+        '7xl': '72px',
       },
       gridTemplateColumns: {
         '13': 'repeat(13, minmax(0, 1fr))',

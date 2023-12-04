@@ -8,7 +8,12 @@ import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { FaGithub, FaSlack } from 'react-icons/fa';
 import { HiOutlineMail } from 'react-icons/hi';
-import { TbBell, TbBook2, TbCalendarFilled, TbUsersGroup } from 'react-icons/tb';
+import {
+  TbBell,
+  TbBook2,
+  TbCalendarFilled,
+  TbUsersGroup,
+} from 'react-icons/tb';
 
 import Dropdown from './Dropdown';
 import UserIcon from './UserIcon';
@@ -33,7 +38,7 @@ const NavItem = ({
       )}
     >
       <Icon className="mr-1.5 font-bold text-zinc-600" />
-      <div className="text-smr">{title}</div>
+      <div className="text-sm">{title}</div>
     </Link>
   );
 };
@@ -49,7 +54,7 @@ const SideNav = ({ children }: { children: ReactNode }) => {
       <div className="bg-light-grey relative left-0 top-0 flex h-screen w-[220px] flex-col justify-between border-r-[1px] border-zinc-200 px-3 text-black">
         <div>
           <div className="flex items-center justify-between px-2 py-3">
-            <div className="text-smr flex">
+            <div className="text-sm flex">
               <Image
                 src="/vessel-icon.svg"
                 width={18}
@@ -98,7 +103,7 @@ const SideNav = ({ children }: { children: ReactNode }) => {
             />
           </div>
         </div>
-        <div className="text-smr m-3 grid grid-cols-2 opacity-40">
+        <div className="text-sm m-3 grid grid-cols-2 opacity-40">
           <div className="flex cursor-pointer items-center">
             <FaSlack className="mr-1" />
             Slack

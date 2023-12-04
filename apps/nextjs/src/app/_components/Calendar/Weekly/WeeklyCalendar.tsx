@@ -56,7 +56,7 @@ export const WeeklyCalendar = ({
           key={day.day}
           className={classNames(`h-[30px] flex items-center bg-zinc-100`)}
         >
-          <div className="text-smr text-gray-400 ml-1">{day.label}</div>
+          <div className="text-sm text-gray-400 ml-1">{day.label}</div>
         </div>
       ))}
       {/* TODO(@zkirby): This could be improved with some creative use of col-start-x */}
