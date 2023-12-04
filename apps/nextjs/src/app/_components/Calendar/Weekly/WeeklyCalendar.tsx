@@ -68,9 +68,6 @@ export const WeeklyCalendar = ({
             })}
           >
             {day.label}
-            {day.isToday && (
-              <div className="w-[7px] h-[7px] rounded-full bg-red-400 ml-1.5"></div>
-            )}
           </div>
         </div>
       ))}

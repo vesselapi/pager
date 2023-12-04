@@ -1,5 +1,6 @@
 import type { RouterOutputs } from '@vessel/api';
 import classNames from 'classnames';
+import { differenceInSeconds } from 'date-fns';
 import { useMemo } from 'react';
 import { TbPhoneFilled } from 'react-icons/tb';
 import { WeeklyCalendar, WeeklyEvent } from '../_components/Calendar';
@@ -44,7 +45,18 @@ const ScheduleListCard = ({
   startTime: Date;
   users: RouterOutputs['schedule']['list']['schedules']['0']['users'];
 }) => {
-  const scheduleUsers = useMemo(() => {
+  /**
+   * Re-order the users such that the oncall user is first.
+   * This makes creating the schedules view significantly easier.
+   */
+  const orderedScheduleUsers = useMemo(() => {
+    const rotationsSinceInception = Math.floor(
+      differenceInSeconds(Date.now(), startTime) /
+        parseInt(lengthInSeconds) /
+        1000,
+    );
+    const onCallUserIndex = rotationsSinceInception % users.length;
+
     return users.sort((a, b) => a.order - b.order);
   }, [users]);
 
@@ -59,7 +71,7 @@ const ScheduleListCard = ({
 
   // TODO: Figure out how to calculate who is actually on-call
   const eventsBeforeToday = useMemo(() => {
-    const lastUser = scheduleUsers[scheduleUsers.length - 1]!;
+    const lastUser = orderedScheduleUsers[orderedScheduleUsers.length - 1]!;
 
     return [
       {
@@ -67,7 +79,7 @@ const ScheduleListCard = ({
         length: ScheduleDaysBeforeToday,
       },
     ];
-  }, [scheduleUsers]);
+  }, [orderedScheduleUsers]);
 
   const eventAfterToday = useMemo(() => {
     const allocatedDays = TotalScheduleDays - ScheduleDaysBeforeToday;
@@ -75,7 +87,7 @@ const ScheduleListCard = ({
 
     const rotations = [
       ...Array.from({ length: numFullRotations }, (_, i) => {
-        const user = scheduleUsers[i % scheduleUsers.length]!;
+        const user = orderedScheduleUsers[i % orderedScheduleUsers.length]!;
         return {
           name: `${user.firstName} ${user.lastName}`,
           length: rotationLengthInDays,
@@ -87,7 +99,8 @@ const ScheduleListCard = ({
     const remainingDays =
       allocatedDays - numFullRotations * rotationLengthInDays;
     if (remainingDays > 0) {
-      const nextUser = scheduleUsers[numFullRotations % scheduleUsers.length]!;
+      const nextUser =
+        orderedScheduleUsers[numFullRotations % orderedScheduleUsers.length]!;
       rotations.push({
         name: `${nextUser.firstName} ${nextUser.lastName}`,
         length: remainingDays,
@@ -96,7 +109,7 @@ const ScheduleListCard = ({
     }
 
     return rotations;
-  }, [rotationLengthInDays, scheduleUsers]);
+  }, [rotationLengthInDays, orderedScheduleUsers]);
 
   return (
     <div className="h-card-lg px-4 py-4 rounded border-[1px] border-zinc-200 mt-5">
@@ -106,7 +119,7 @@ const ScheduleListCard = ({
           {name}
         </div>
         <div className="flex">
-          {scheduleUsers.map((u) => (
+          {orderedScheduleUsers.map((u) => (
             <UserIcon key={u.id} className={`-ml-0.5`} {...u} />
           ))}
         </div>
