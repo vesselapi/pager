@@ -58,11 +58,11 @@ const alertPage = async ({ args, services }: Props<Args, Services>) => {
       { alertId: alert.id, userId: currentStep.userId },
       'Alert user',
     );
-  } else if (currentStep.type === 'ROTATION') {
-    // TODO: Add logic to look up the user associated with the rotation and page
+  } else if (currentStep.type === 'SCHEDULE') {
+    // TODO: Add logic to look up the user associated with the schedule
     logger.info(
-      { alertId: alert.id, rotationId: currentStep.rotationId },
-      'Alert rotation',
+      { alertId: alert.id, scheduleId: currentStep.scheduleId },
+      'Alert schedule',
     );
   }
 

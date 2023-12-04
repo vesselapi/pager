@@ -9,11 +9,11 @@ import type {
   EscalationPolicyStepId,
   IntegrationId,
   OrgId,
-  RotationId,
-  RotationUserId,
   ScheduleId,
+  ScheduleUserId,
   SecretExpoPushTokenId,
   SecretIntegrationId,
+  TeamId,
   UserId,
 } from '@vessel/types';
 
@@ -37,16 +37,16 @@ export const IdGenerator = {
     `v_escalationPolicy_${randomString()}`,
   escalationPolicyStep: (): EscalationPolicyStepId =>
     `v_escalationPolicyStep_${randomString()}`,
+  org: (): OrgId => `v_org_${randomString()}`,
   integration: (): IntegrationId => `v_integration_${randomString()}`,
   schedule: (): ScheduleId => `v_schedule_${randomString()}`,
-  rotation: (): RotationId => `v_rotation_${randomString()}`,
-  rotationUser: (): RotationUserId => `v_rotationUser_${randomString()}`,
+  scheduleUser: (): ScheduleUserId => `v_scheduleUser_${randomString()}`,
   secrets: {
     integration: (): SecretIntegrationId =>
       `v_secret_integration_${randomString()}`,
     expoPushToken: (): SecretExpoPushTokenId =>
       `v_secret_expoPushToken_${randomString()}`,
   },
-  org: (): OrgId => `v_org_${randomString()}`,
+  team: (): TeamId => `v_team_${randomString()}`,
   user: (): UserId => `v_user_${randomString()}`,
 };
