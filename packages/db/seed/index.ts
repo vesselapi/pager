@@ -3,6 +3,7 @@ import type { EscalationPolicyId, OrgId, TeamId, UserId } from '@vessel/types';
 import parse from 'minimist';
 import { list, parallel, shuffle } from 'radash';
 import { db } from '..';
+import { IdGenerator } from '../id-generator';
 import type { CreateEscalationPolicyStep } from '../schema/escalation-policy-step';
 import type { CreateScheduleUser } from '../schema/schedule-user';
 
@@ -28,10 +29,12 @@ const makeTeam = ({ orgId }: { orgId: OrgId }) => {
 };
 const makeTeammate = ({ orgId }: { orgId: OrgId }) => {
   return db.user.create({
+    id: IdGenerator.user(),
     orgId,
     email: faker.internet.email(),
     firstName: `${faker.person.firstName()} (Test User)`,
     lastName: faker.person.lastName(),
+    externalId: 'test-user',
   });
 };
 const makeSchedules = async ({

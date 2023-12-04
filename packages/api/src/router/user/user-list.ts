@@ -4,7 +4,8 @@ import { db } from '@vessel/db';
 import { parallel } from 'radash';
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
-import { UserManager, makeUserManager } from '../../services/user-manager';
+import type { UserManager } from '../../services/user-manager';
+import { makeUserManager } from '../../services/user-manager';
 
 interface Context {
   db: Db;

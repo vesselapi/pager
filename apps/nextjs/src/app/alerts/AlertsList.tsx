@@ -1,4 +1,3 @@
-import { useAuth } from '@clerk/nextjs';
 import classNames from 'classnames';
 import { useCallback, useMemo, useState } from 'react';
 import { GrStatusGood } from 'react-icons/gr';
@@ -8,6 +7,7 @@ import { TbClock, TbLetterCase, TbMinus, TbPlus } from 'react-icons/tb';
 
 import type { RouterOutputs } from '~/utils/api';
 import { api } from '~/utils/api';
+import { useUser } from '../../hooks/useUser';
 import Loader from '../_components/Loader';
 import Search from '../_components/Search';
 import AlertsListItem from './AlertListItem';
@@ -115,7 +115,7 @@ const AlertsList = () => {
   });
   const updateAlert = api.alert.update.useMutation();
   const users = api.user.list.useQuery();
-  const currentUser = useAuth();
+  const currentUser = useUser();
 
   const update = useCallback(
     async (id: string, alert: Partial<RouterOutputs['alert']['all']['0']>) => {
@@ -135,7 +135,7 @@ const AlertsList = () => {
             <AlertListFilterDropdown
               filterOptions={[
                 StatusFilterConfig,
-                AssignedToFilterConfig(users.data),
+                AssignedToFilterConfig(users.data?.users),
               ]}
               onFilter={(f: FilterSetting) => setFilters((pf) => [...pf, f])}
             />
@@ -247,7 +247,9 @@ const AlertsList = () => {
             status={{ loading: alerts.isFetching }}
           >
             {alerts.data?.map((a: RouterOutputs['alert']['all']['0']) => {
-              const user = users.data?.find((u) => u.id === a.assignedToId) ?? {
+              const user = users.data?.users.find(
+                (u) => u.id === a.assignedToId,
+              ) ?? {
                 firstName: '',
                 lastName: '',
               };
@@ -264,7 +266,7 @@ const AlertsList = () => {
                   onAck={() => update(a.id, { status: 'ACKED' })}
                   onClose={() => update(a.id, { status: 'CLOSED' })}
                   onSelfAssign={() =>
-                    update(a.id, { assignedToId: currentUser.userId })
+                    update(a.id, { assignedToId: currentUser?.id })
                   }
                   onReopen={() => update(a.id, { status: 'OPEN' })}
                 />

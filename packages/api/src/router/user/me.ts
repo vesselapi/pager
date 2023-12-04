@@ -5,8 +5,9 @@ import { db } from '@vessel/db';
 
 import { IdGenerator } from '@vessel/db/id-generator';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
-import { UserManager, makeUserManager } from '../../services/user-manager';
-import { JwtClaims, procedure } from '../../trpc';
+import type { UserManager } from '../../services/user-manager';
+import { makeUserManager } from '../../services/user-manager';
+import { procedure } from '../../trpc';
 
 interface Context {
   db: Db;
@@ -28,7 +29,7 @@ export const userMe = procedure
       });
     }
 
-    const claims = ctx.auth.claims as JwtClaims;
+    const claims = ctx.auth.claims;
 
     const foundUser = await ctx.db.user.findByEmail(claims.email);
 
