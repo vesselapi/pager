@@ -5,17 +5,11 @@ import { MdOutlineClose } from 'react-icons/md';
 import { RxAvatar } from 'react-icons/rx';
 import { TbClock, TbLetterCase, TbMinus, TbPlus } from 'react-icons/tb';
 
-import type { RouterOutputs } from '~/utils/api';
 import { api } from '~/utils/api';
 import { useUser } from '../../hooks/useUser';
 import Loader from '../_components/Loader';
 import Search from '../_components/Search';
 import AlertsListItem from './AlertListItem';
-import type {
-  DisplaySettings,
-  FilterSetting,
-  SortSetting,
-} from './AlertListTypes';
 import AlertListDisplayDropdown from './_components/AlertListDisplayDropdown';
 import AlertListFilterDropdown, {
   AlertListFilterPill,
@@ -24,6 +18,11 @@ import AlertListSortDropdown, {
   AlertListSortPill,
 } from './_components/AlertListSortDropdown';
 import { useSearch } from './_hooks/useSearch';
+import type {
+  DisplaySettings,
+  FilterSetting,
+  SortSetting,
+} from './alerts.types';
 
 // -------------------------------
 // Filter Configs
@@ -73,7 +72,7 @@ const AssignedToFilterConfig = <T extends { email: string | null; id: string }>(
 
 const AlertsList = () => {
   const [display, setDisplay] = useState<DisplaySettings>({
-    style: 'condensed',
+    cardType: 'condensed',
   });
   const [sorts, setSorts] = useState<SortSetting[]>([]);
   const [search, setSearch] = useSearch();
@@ -236,10 +235,10 @@ const AlertsList = () => {
       <div className="h-screen overflow-y-auto">
         <div
           className={classNames({
-            'px-10': display.style === 'expanded',
+            'px-10': display.cardType === 'expanded',
             'mt-4': !configsAreApplied,
             'border-t-[1px]':
-              !configsAreApplied && display.style === 'condensed',
+              !configsAreApplied && display.cardType === 'condensed',
           })}
         >
           <Loader

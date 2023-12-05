@@ -32,10 +32,7 @@ const getBaseUrl = () => {
   const localhost = debuggerHost?.split(':')[0];
 
   if (!localhost) {
-    // return "https://turbo.t3.gg";
-    throw new Error(
-      'Failed to get localhost. Please point to your production server.',
-    );
+    return process.env.EXPO_PUBLIC_WEBAPP_URL;
   }
   return `http://${localhost}:3000`;
 };

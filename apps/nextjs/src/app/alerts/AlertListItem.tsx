@@ -7,6 +7,7 @@ import {
   TbHandStop,
   TbThumbUpFilled,
 } from 'react-icons/tb';
+import type { Alert, User } from './alerts.types';
 
 const Styles = {
   ButtonCondensed: 'h-[30px] w-[30px] rounded-full',
@@ -132,26 +133,22 @@ const ActionButtons = ({
 
 const AlertsListItem = ({
   className,
-  status,
-  title,
-  createdAt,
-  style,
-  firstName,
-  lastName,
+  cardType,
+  alert,
+  user,
   onAck,
   onClose,
   onSelfAssign,
   onReopen,
 }: {
   className?: string;
-  status: string;
-  title: string | null;
-  createdAt: Date;
-  style: 'condensed' | 'expanded';
-  firstName: string | null;
-  lastName: string | null;
+  cardType: 'condensed' | 'expanded';
+  alert: Alert;
+  user?: User;
 } & TActionButtons) => {
-  if (style === 'condensed') {
+  const { status, title, createdAt, summary } = alert;
+
+  if (cardType === 'condensed') {
     return (
       <div
         className={classNames(
@@ -172,15 +169,13 @@ const AlertsListItem = ({
           </div>
 
           <h2 className="mr-1.5 truncate w-[300px]">{title}</h2>
-          <div className="text-zinc-500 truncate w-[500px]">
-            Occaeacat sint aute nulla proident nullulla proident nullaulla
-            proident nullaa proident nulla proident nulla proident....
-          </div>
+          <div className="text-zinc-500 truncate w-[500px]">{summary}</div>
         </div>
 
         <div className="flex items-center justify-end text-xs">
           <div className="mr-2 font-bold text-zinc-600">
-            {(firstName?.slice(0, 1) ?? '') + (lastName?.slice(0, 1) ?? '')}
+            {(user?.firstName?.slice(0, 1) ?? '') +
+              (user?.lastName?.slice(0, 1) ?? '')}
           </div>
           <div className="mr-4 whitespace-nowrap">
             {format(createdAt, 'dd/MM p')}

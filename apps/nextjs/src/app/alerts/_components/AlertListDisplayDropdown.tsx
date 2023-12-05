@@ -9,8 +9,8 @@ const AlertListDisplayDropdown = ({
   display,
   setDisplay,
 }: {
-  display: { style: 'condensed' | 'expanded' };
-  setDisplay: (d: { style: 'condensed' | 'expanded' }) => void;
+  display: { cardType: 'condensed' | 'expanded' };
+  setDisplay: (d: { cardType: 'condensed' | 'expanded' }) => void;
 }) => {
   return (
     <Dropdown
@@ -29,8 +29,8 @@ const AlertListDisplayDropdown = ({
             { value: 'expanded', label: 'Expanded', Icon: <RxCardStack /> },
             { value: 'condensed', label: 'Condensed', Icon: <BsList /> },
           ]}
-          value={display.style}
-          onChange={(style) => setDisplay({ style })}
+          value={display.cardType}
+          onChange={(cardType) => setDisplay({ cardType })}
         />
       </div>
     </Dropdown>
