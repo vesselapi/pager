@@ -2,7 +2,7 @@ import type { ExpoConfig } from '@expo/config';
 
 const defineConfig = (): ExpoConfig => ({
   owner: 'vessel',
-  name: 'Pager',
+  name: 'Vessel - Oncall Management',
   slug: 'vessel',
   scheme: 'expo',
   version: '0.1.0',

@@ -45,9 +45,19 @@
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsudmVzc2VsLmRldiQ",
         "EXPO_PUBLIC_WEBAPP_URL": "https://pager.vessel.dev"
       }
+    },
+    "preview-production": {
+      "extends": "base",
+      "channel": "internal",
+      "env": {
+        "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsudmVzc2VsLmRldiQ",
+        "EXPO_PUBLIC_WEBAPP_URL": "https://pager.vessel.dev"
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": { "companyName": "Vessel" }
+    }
   }
 }
