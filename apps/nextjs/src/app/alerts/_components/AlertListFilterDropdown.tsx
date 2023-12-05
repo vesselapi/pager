@@ -4,7 +4,7 @@ import { MdFilterList, MdOutlineClose } from 'react-icons/md';
 
 import Dropdown from '../../_components/Dropdown';
 import Pill from '../../_components/Pill';
-import type { ConfigOption, FilterSetting } from '../AlertListTypes';
+import type { ConfigOption, FilterSetting } from '../alerts.types';
 
 const AlertListFilterPill = ({
   label,

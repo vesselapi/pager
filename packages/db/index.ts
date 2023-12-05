@@ -8,8 +8,8 @@ import type {
   AlertId,
   AppId,
   OrgId,
-  ScheduleId,
   SecretId,
+  TeamId,
   UserId,
 } from '@vessel/types';
 
@@ -51,29 +51,31 @@ import {
   selectIntegrationSchema,
 } from './schema/integration';
 import { org as orgSchema, selectOrgSchema } from './schema/org';
-import type { CreateRotation } from './schema/rotation';
-import {
-  insertRotationSchema,
-  rotation as rotationSchema,
-  selectRotationSchema,
-} from './schema/rotation';
-import type { CreateRotationUser } from './schema/rotation-user';
-import {
-  insertRotationUserSchema,
-  rotationUser as rotationUserSchema,
-  selectRotationUserSchema,
-} from './schema/rotation-user';
 import type { CreateSchedule } from './schema/schedule';
 import {
   insertScheduleSchema,
   schedule as scheduleSchema,
+  scheduleUserRelations,
   selectScheduleSchema,
 } from './schema/schedule';
+import type { CreateScheduleUser } from './schema/schedule-user';
+import {
+  insertScheduleUserSchema,
+  scheduleUser as scheduleUserSchema,
+  selectScheduleUserSchema,
+} from './schema/schedule-user';
 import {
   insertSecretSchema,
   secret as secretSchema,
   selectSecretSchema,
 } from './schema/secret';
+import {
+  CreateTeam,
+  insertTeamSchema,
+  selectTeamSchema,
+  teamScheduleRelation,
+  team as teamSchema,
+} from './schema/team';
 import type { CreateUser } from './schema/user';
 import {
   insertUserSchema,
@@ -96,9 +98,11 @@ export const schema = {
   org: orgSchema,
   user: userSchema,
   secret: secretSchema,
+  team: teamSchema,
+  teamScheduleRelation,
   schedule: scheduleSchema,
-  rotation: rotationSchema,
-  rotationUser: rotationUserSchema,
+  scheduleUser: scheduleUserSchema,
+  scheduleUserRelations,
 };
 
 export * from 'drizzle-orm';
@@ -308,13 +312,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return users.map((a) => selectUserSchema.parse(a));
     },
     create: async (user: CreateUser) => {
-      const dbUser = await db
-        .insert(userSchema)
-        .values({
-          id: IdGenerator.user(),
-          ...user,
-        })
-        .returning();
+      const dbUser = await db.insert(userSchema).values(user).returning();
       if (dbUser.length !== 1)
         throw new Error(
           `Expected exactly one user to be created, got ${dbUser.length}`,
@@ -343,66 +341,89 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return selectSecretSchema.parse(dbSecret[0]);
     },
   },
-  rotations: {
-    createMany: async (rotations: CreateRotation[]) => {
-      const insertRotations = rotations.map((rotation) => {
-        const insertRotation = {
-          id: IdGenerator.rotation(),
-          ...rotation,
-        };
-        return insertRotationSchema.parse(insertRotation);
-      });
-      const dbRotations = await db
-        .insert(rotationSchema)
-        .values(insertRotations)
-        .returning();
-      return dbRotations.map((rotation) =>
-        selectRotationSchema.parse(rotation),
-      );
-    },
-  },
-  rotationUsers: {
-    createMany: async (rotationUsers: CreateRotationUser[]) => {
-      const insertRotationUsers = rotationUsers.map((rotationUser) => {
-        const insertRotationUser = {
-          id: IdGenerator.rotationUser(),
-          ...rotationUser,
-        };
-        return insertRotationUserSchema.parse(insertRotationUser);
-      });
-      const dbRotationUsers = await db
-        .insert(rotationUserSchema)
-        .values(insertRotationUsers)
-        .returning();
-      return dbRotationUsers.map((rotationUser) =>
-        selectRotationUserSchema.parse(rotationUser),
-      );
-    },
-  },
   schedules: {
-    listByOrgId: async (orgId: OrgId) => {
-      const schedules = await db.query.schedule.findMany({
-        where: eq(scheduleSchema.orgId, orgId),
-      });
-      return schedules.map((schedule) => selectScheduleSchema.parse(schedule));
-    },
-    find: async (id: ScheduleId) => {
-      const schedules = await db.query.schedule.findFirst({
-        where: eq(scheduleSchema.id, id),
-      });
-      return selectScheduleSchema.parse(schedules);
-    },
     create: async (schedule: CreateSchedule) => {
-      const parsedSchedule = insertScheduleSchema.parse(schedule);
+      const insertSchedule = insertScheduleSchema.parse({
+        id: IdGenerator.schedule(),
+        ...schedule,
+      });
       const dbSchedule = await db
         .insert(scheduleSchema)
-        .values(parsedSchedule)
+        .values(insertSchedule)
         .returning();
-      const newSchedule = dbSchedule[0];
-      if (!newSchedule) {
-        throw new Error('Failed to create schedule');
+      return selectScheduleSchema.parse(dbSchedule[0]);
+    },
+    listByOrgId: async (orgId: OrgId) => {
+      const dbSchedules = await db.query.schedule.findMany({
+        where: eq(scheduleSchema.orgId, orgId),
+        with: {
+          users: true,
+        },
+      });
+      return dbSchedules.map((schedule) =>
+        selectScheduleSchema.parse(schedule),
+      );
+    },
+  },
+  scheduleUsers: {
+    createMany: async (scheduleUsers: CreateScheduleUser[]) => {
+      const insertScheduleUsers = scheduleUsers.map((scheduleUser) => {
+        const insertScheduleUser = {
+          id: IdGenerator.scheduleUser(),
+          ...scheduleUser,
+        };
+        return insertScheduleUserSchema.parse(insertScheduleUser);
+      });
+      const dbScheduleUsers = await db
+        .insert(scheduleUserSchema)
+        .values(insertScheduleUsers)
+        .returning();
+      return dbScheduleUsers.map((scheduleUser) =>
+        selectScheduleUserSchema.parse(scheduleUser),
+      );
+    },
+  },
+  teams: {
+    listByOrgId: async (orgId: OrgId) => {
+      const teams = await db.query.team.findMany({
+        where: eq(teamSchema.orgId, orgId),
+      });
+      return teams.map((team) => selectTeamSchema.parse(team));
+    },
+    create: async (team: CreateTeam) => {
+      const insertTeam = insertTeamSchema.parse(team);
+      const dbTeam = await db.insert(teamSchema).values(insertTeam).returning();
+      return selectTeamSchema.parse(dbTeam[0]);
+    },
+    find: async (teamId: TeamId) => {
+      const dbTeam = await db.query.team.findFirst({
+        where: eq(teamSchema.id, teamId),
+        with: {
+          schedules: {
+            with: {
+              users: true,
+            },
+          },
+        },
+      });
+      if (!dbTeam) {
+        return null;
       }
-      return selectScheduleSchema.parse(newSchedule);
+      const team = selectTeamSchema.parse(dbTeam);
+      const schedules = dbTeam.schedules.map((dbSchedule) => {
+        const schedule = selectScheduleSchema.parse(dbSchedule);
+        const users = dbSchedule.users.map((dbUser) =>
+          selectUserSchema.parse(dbUser),
+        );
+        return {
+          ...schedule,
+          users,
+        };
+      });
+      return {
+        ...team,
+        schedules,
+      };
     },
   },
 });

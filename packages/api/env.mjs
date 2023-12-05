@@ -25,14 +25,19 @@ export const env = createEnv({
     INTEGRATION_SENTRY_CLIENT_ID: z.string(),
     INTEGRATION_SENTRY_SECRET: z.string(),
     INTEGRATION_SENTRY_INSTALL_URL: z.string(),
+    S3_URL: z.string().url(),
+    S3_BUCKET: z.string(),
+    S3_ACCESS_KEY_ID: z.string(),
+    S3_SECRET_ACCESS_KEY: z.string(),
   },
   /**
    * Specify your client-side environment variables schema here.
-   * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_`.
+   * For them to be exposed to the client, prefix them with `NEXT_PUBLIC_` or `EXPO_PUBLIC_`
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+    EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().optional(),
+    EXPO_PUBLIC_WEBAPP_URL: z.string().url().optional(),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
@@ -40,10 +45,13 @@ export const env = createEnv({
   runtimeEnv: {
     VERCEL_URL: process.env.VERCEL_URL,
     PORT: process.env.PORT,
+    EXPO_PUBLIC_WEBAPP_URL: process.env.EXPO_PUBLIC_WEBAPP_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     DATABASE_SECRET_STORE_KEY: process.env.DATABASE_SECRET_STORE_KEY,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY:
+      process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     AWS_SNS_TOPIC_ALERT_ARN: process.env.AWS_SNS_TOPIC_ALERT_ARN,
     AWS_SFN_ALERT_PAGE_ARN: process.env.AWS_SFN_ALERT_PAGE_ARN,
@@ -54,6 +62,10 @@ export const env = createEnv({
     INTEGRATION_SENTRY_CLIENT_ID: process.env.INTEGRATION_SENTRY_CLIENT_ID,
     INTEGRATION_SENTRY_SECRET: process.env.INTEGRATION_SENTRY_SECRET,
     INTEGRATION_SENTRY_INSTALL_URL: process.env.INTEGRATION_SENTRY_INSTALL_URL,
+    S3_URL: process.env.S3_URL,
+    S3_BUCKET: process.env.S3_BUCKET,
+    S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,
+    S3_SECRET_ACCESS_KEY: process.env.S3_SECRET_ACCESS_KEY,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   skipValidation:

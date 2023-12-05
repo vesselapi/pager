@@ -20,7 +20,6 @@ const input = z.object({
       type: true,
       order: true,
       scheduleId: true,
-      rotationId: true,
       userId: true,
       nextStepInSeconds: true,
     }),
@@ -44,7 +43,6 @@ export const escalationPolicyCreate = trpc
       orgId,
       escalationPolicyId: escalationPolicy.id,
       scheduleId: step.scheduleId ?? null,
-      rotationId: step.rotationId ?? null,
       userId: step.userId ?? null,
       ...step,
     }));

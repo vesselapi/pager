@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "861551563613",
+    "project_id": "vessel-f2624",
+    "storage_bucket": "vessel-f2624.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861551563613:android:73a9441fe09d26ab038eb4",
+        "android_client_info": {
+          "package_name": "com.vessel.pager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqiNT0SVPZiiabtznYgOrApiIdWzhTmr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

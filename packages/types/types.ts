@@ -29,14 +29,14 @@ export const UserIdRegex = /^v_user_[a-z0-9]+$/;
 
 export type IntegrationId = `v_integration_${string}`; // v_integration_{hash}
 
-export type RotationId = `v_rotation_${string}`;
-export const RotationIdRegex = /^v_rotation_[a-z0-9]+/;
-
-export type RotationUserId = `v_rotationUser_${string}`;
-export const RotationUserIdRegex = /^v_rotation_user_[a-z0-9]+/;
+export type TeamId = `v_team_${string}`;
+export const TeamIdRegex = /^v_team_[a-z0-9]+/;
 
 export type ScheduleId = `v_schedule_${string}`;
-export const ScheduleIdRegex = /^v_secret_[a-z0-9]+/;
+export const ScheduleIdRegex = /^v_schedule_[a-z0-9]+/;
+
+export type ScheduleUserId = `v_scheduleUser_${string}`;
+export const ScheduleUserIdRegex = /^v_scheduleUser_[a-z0-9]+/;
 
 export const IntegrationIdRegex = /^v_integration_[a-z0-9]+$/;
 

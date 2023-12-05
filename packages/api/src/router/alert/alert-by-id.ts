@@ -7,6 +7,7 @@ import { AlertIdRegex } from '@vessel/types';
 
 import { trpc } from '../../middlewares/trpc/common-trpc-hook';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
+import { createAlertView } from './alert.view';
 
 interface Context {
   db: Db;
@@ -25,6 +26,7 @@ export const alertById = trpc
     }),
   )
   .input(input)
-  .query(({ ctx, input }) => {
-    return ctx.db.alerts.find(input.id);
+  .query(async ({ ctx, input }) => {
+    const dbAlert = await ctx.db.alerts.find(input.id);
+    return createAlertView(dbAlert);
   });

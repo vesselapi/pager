@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import { customValidators } from '@vessel/types';
 
@@ -16,6 +16,8 @@ export const user = pgTable('user', {
   lastName: text('last_name'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   expoPushTokenSecretId: text('expo_push_token_secret_id'),
+  externalId: text('external_id').notNull(),
+  imageS3Key: text('image_s3_key'),
 });
 
 export const selectUserSchema = createSelectSchema(user, {
@@ -31,4 +33,4 @@ export const insertUserSchema = createInsertSchema(user, {
 });
 
 export type User = z.infer<typeof selectUserSchema>;
-export type CreateUser = Omit<z.infer<typeof insertUserSchema>, 'id'>;
+export type CreateUser = z.infer<typeof insertUserSchema>;
