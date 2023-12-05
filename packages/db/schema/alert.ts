@@ -37,7 +37,7 @@ export const alert = pgTable('alert', {
   metadata: json('metadata'),
 });
 
-export const alertToEscalationPolicyRelation = relations(alert, ({ one }) => ({
+export const alertEscalationPolicyRelation = relations(alert, ({ one }) => ({
   escalationPolicy: one(escalationPolicy),
 }));
 

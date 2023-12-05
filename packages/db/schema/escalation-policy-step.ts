@@ -1,15 +1,13 @@
 import { integer, pgEnum, pgTable, text } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import type { z } from 'zod';
+import { z } from 'zod';
 
-import type { ScheduleId, UserId } from '@vessel/types';
-import { customValidators } from '@vessel/types';
+import { ScheduleId, UserId, customValidators } from '@vessel/types';
 
 import { escalationPolicy } from './escalation-policy';
 import { org } from './org';
 import { schedule } from './schedule';
 
-import { relations } from 'drizzle-orm';
 import { user } from './user';
 
 export const escalationPolicyStepType = pgEnum('escalation_policy_step_type', [
@@ -31,16 +29,6 @@ export const escalationPolicyStep = pgTable('escalation_policy_step', {
   scheduleId: text('schedule_id').references(() => schedule.id),
   userId: text('user_id').references(() => user.id),
 });
-
-export const stepToEscalationPolicyRelation = relations(
-  escalationPolicyStep,
-  ({ one }) => ({
-    escalationPolicy: one(escalationPolicy, {
-      fields: [escalationPolicyStep.escalationPolicyId],
-      references: [escalationPolicy.id],
-    }),
-  }),
-);
 
 const selectSchema = createSelectSchema(escalationPolicyStep, {
   id: customValidators.escalationPolicyStepId,

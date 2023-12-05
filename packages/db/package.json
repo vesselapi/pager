@@ -8,7 +8,6 @@
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
-    "seed": "pnpm with-env tsx seed/index.ts",
     "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
     "generate": "drizzle-kit generate:pg",
     "pull": "drizzle-kit introspect:pg",
@@ -20,16 +19,13 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@faker-js/faker": "^8.3.1",
     "@vessel/types": "workspace:^",
     "drizzle-orm": "^0.29.1",
     "drizzle-zod": "^0.5.1",
-    "minimist": "^1.2.8",
     "postgres": "^3.4.3",
     "zod": "^3.22.3"
   },
   "devDependencies": {
-    "@types/minimist": "^1.2.5",
     "@vessel/eslint-config": "workspace:^0.2.0",
     "@vessel/prettier-config": "workspace:^0.1.0",
     "@vessel/tsconfig": "workspace:^0.1.0",

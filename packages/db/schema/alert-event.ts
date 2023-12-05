@@ -3,14 +3,9 @@ import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 
 import { customValidators } from '@vessel/types';
 
-import type { z } from 'zod';
+import { z } from 'zod';
 import { alert } from './alert';
 
-/**
- * TODO: Implement Alert Event Relations
- *
- * @about An Audit Log of all events that happen to an alert.
- */
 export const alertEvent = pgTable('alert_event', {
   id: text('id').primaryKey(), // v_alertEvent_[hash]
   alertId: text('id').references(() => alert.id),
