@@ -16,6 +16,7 @@ const defineConfig = (): ExpoConfig => ({
   },
   updates: {
     fallbackToCacheTimeout: 0,
+    url: 'https://u.expo.dev/d90f23a9-bbca-450d-abca-0b42c78c9353',
   },
   assetBundlePatterns: ['**/*'],
   ios: {
@@ -28,6 +29,7 @@ const defineConfig = (): ExpoConfig => ({
       foregroundImage: './assets/icon.png',
       backgroundColor: '#1F104A',
     },
+    googleServicesFile: './google-services.json',
   },
   extra: {
     /**
@@ -40,6 +42,9 @@ const defineConfig = (): ExpoConfig => ({
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
+  },
+  runtimeVersion: {
+    policy: 'appVersion',
   },
   plugins: ['expo-router', './expo-plugins/with-modify-gradle.js'],
 });

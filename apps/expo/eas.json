@@ -26,6 +26,7 @@
     },
     "preview": {
       "extends": "base",
+      "channel": "preview",
       "distribution": "internal",
       "env": {
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_bWFqb3ItZmxvdW5kZXItMTUuY2xlcmsuYWNjb3VudHMuZGV2JA",
@@ -34,6 +35,7 @@
     },
     "production": {
       "extends": "base",
+      "channel": "production",
       "env": {
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_live_Y2xlcmsudmVzc2VsLmRldiQ",
         "EXPO_PUBLIC_WEBAPP_URL": "https://pager.vessel.dev"
