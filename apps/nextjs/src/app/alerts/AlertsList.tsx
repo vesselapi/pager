@@ -5,6 +5,7 @@ import { MdOutlineClose } from 'react-icons/md';
 import { RxAvatar } from 'react-icons/rx';
 import { TbClock, TbLetterCase, TbMinus, TbPlus } from 'react-icons/tb';
 
+import type { RouterOutputs } from '~/utils/api';
 import { api } from '~/utils/api';
 import { useUser } from '../../hooks/useUser';
 import Loader from '../_components/Loader';
@@ -248,20 +249,14 @@ const AlertsList = () => {
             {alerts.data?.map((a: RouterOutputs['alert']['all']['0']) => {
               const user = users.data?.users.find(
                 (u) => u.id === a.assignedToId,
-              ) ?? {
-                firstName: '',
-                lastName: '',
-              };
+              );
 
               return (
                 <AlertsListItem
                   key={a.id}
-                  style={display.style}
-                  createdAt={a.createdAt}
-                  title={a.title}
-                  status={a.status}
-                  firstName={user.firstName}
-                  lastName={user.lastName}
+                  cardType={display.cardType}
+                  alert={a}
+                  user={user}
                   onAck={() => update(a.id, { status: 'ACKED' })}
                   onClose={() => update(a.id, { status: 'CLOSED' })}
                   onSelfAssign={() =>
