@@ -461,15 +461,13 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return teams.map((team) => {
         return {
           ...selectTeamSchema.parse(team),
-          users: unique(
-            team.schedules.flatMap((schedule) =>
-              schedule.scheduleUsers.map((scheduleUser) => ({
-                ...selectScheduleUserSchema.parse(scheduleUser),
-                ...selectUserSchema.parse(scheduleUser.user),
-              })),
-            ),
-            (u) => u.id,
-          ),
+          schedules: team.schedules.map((schedule) => ({
+            ...selectScheduleSchema.parse(schedule),
+            scheduleUsers: schedule.scheduleUsers.map((scheduleUser) => ({
+              ...selectScheduleUserSchema.parse(scheduleUser),
+              user: selectUserSchema.parse(scheduleUser.user),
+            })),
+          })),
         };
       });
     },
