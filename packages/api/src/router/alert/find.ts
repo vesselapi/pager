@@ -28,5 +28,8 @@ export const alertById = trpc
   .input(input)
   .query(async ({ ctx, input }) => {
     const dbAlert = await ctx.db.alerts.find(input.id);
+    if (!dbAlert) {
+      return null;
+    }
     return createAlertView(dbAlert);
   });

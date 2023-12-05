@@ -17,7 +17,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup-composite
       - run: pnpm format:check
-      - run: pnpm build:changes
+      - run: pnpm typecheck
   verify-env-vars:
     name: Verify environment variables are on dev and prod
     runs-on: ubuntu-latest

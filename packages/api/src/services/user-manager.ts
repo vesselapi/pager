@@ -18,7 +18,8 @@ export const makeUserManager = () => {
     const put = async ({ id, url }: { id: UserId; url: string }) => {
       const key = PROFILE_PIC_S3_PATH(id);
       const res = await fetch(url);
-      await blobStore.put({ key, data: await res.arrayBuffer() });
+      const buf = Buffer.from(new Uint8Array(await res.arrayBuffer()));
+      await blobStore.put({ key, data: buf });
       return { key };
     };
     const addToUser = async (user: User) => {

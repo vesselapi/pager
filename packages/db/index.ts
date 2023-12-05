@@ -509,6 +509,11 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       };
     },
   },
+  // NOTE: This is primarily used for scripts only. Scripts will hang at the end
+  // because the connection is still open. This will close the connection.
+  _end: async () => {
+    await queryClient.end();
+  },
 });
 
 export const db = createDbClient(drizzleDbClient);
