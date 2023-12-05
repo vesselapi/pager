@@ -1,32 +1,35 @@
 import type { ExpoConfig } from '@expo/config';
 
 const defineConfig = (): ExpoConfig => ({
+  owner: 'vessel',
   name: 'Pager',
-  slug: 'pager',
+  slug: 'vessel',
   scheme: 'expo',
   version: '0.1.0',
   orientation: 'portrait',
-  icon: './assets/icon.jpg',
+  icon: './assets/icon.png',
   userInterfaceStyle: 'light',
   splash: {
-    image: './assets/icon.jpg',
+    image: './assets/icon.png',
     resizeMode: 'contain',
     backgroundColor: '#171717',
   },
   updates: {
     fallbackToCacheTimeout: 0,
+    url: 'https://u.expo.dev/d90f23a9-bbca-450d-abca-0b42c78c9353',
   },
   assetBundlePatterns: ['**/*'],
   ios: {
-    bundleIdentifier: 'your.bundle.identifier',
+    bundleIdentifier: 'com.vessel.pager',
     supportsTablet: true,
   },
   android: {
     package: 'com.vessel.pager',
     adaptiveIcon: {
-      foregroundImage: './assets/icon.jpg',
+      foregroundImage: './assets/icon.png',
       backgroundColor: '#1F104A',
     },
+    googleServicesFile: './google-services.json',
   },
   extra: {
     /**
@@ -39,6 +42,9 @@ const defineConfig = (): ExpoConfig => ({
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
+  },
+  runtimeVersion: {
+    policy: 'appVersion',
   },
   plugins: ['expo-router', './expo-plugins/with-modify-gradle.js'],
 });
