@@ -94,7 +94,10 @@ const makeEscalationPolicySteps = (steps: CreateEscalationPolicyStep[]) => {
  * - 1 Policy with three steps: primary schedule -> secondary schedule -> user
  * - N Alerts assigned to the user.
  */
-const run = async ({ userId, numAlerts = 25 }: SeedArgs) => {
+export const seedAlertsForUser = async ({
+  userId,
+  numAlerts = 25,
+}: SeedArgs) => {
   const user = await db.user.find(userId);
 
   if (!user) {
@@ -194,9 +197,10 @@ const run = async ({ userId, numAlerts = 25 }: SeedArgs) => {
   );
 
   console.log('Done!');
+  await db._end();
 };
 
-run(
+seedAlertsForUser(
   parse(process.argv.slice(2), {
     alias: {
       'user-id': 'userId',
