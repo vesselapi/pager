@@ -21,7 +21,6 @@ const TeamListAddTeamForm = ({
         type="text"
         value={teamName}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          // @ts-expect-error TODO(@zkirby): Fiddle with ts config so the HTMLInput types are correct (include value).
           setTeamName(e.target.value as string)
         }
         placeholder="e.g. Backend"
