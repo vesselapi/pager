@@ -10,10 +10,6 @@ import Search from '../_components/Search';
 import UserIcon from '../_components/UserIcon';
 import TeamListAddTeamForm from './TeamListAddTeamForm';
 
-/**
- * TODO(@zkirby): When the teams return the list of users
- * implement the "joined" and the "Members" section.
- */
 const TeamItem = ({
   team,
   user,

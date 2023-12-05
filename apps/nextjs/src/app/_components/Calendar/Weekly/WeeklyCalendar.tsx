@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import { addDays, format, getDay, isToday } from 'date-fns';
 
 const Styles = {
-  rowHeight: 'h-[90px]',
   rowBg: 'bg-zinc-100',
 };
 
@@ -14,9 +13,7 @@ export const WeeklyEvent = ({
   children: React.ReactElement | React.ReactElement[];
 }) => {
   return (
-    <div
-      className={classNames(`col-span-${cols}`, Styles.rowBg, Styles.rowHeight)}
-    >
+    <div className={classNames(`col-span-${cols} h-[90px]`, Styles.rowBg)}>
       {children}
     </div>
   );
@@ -32,7 +29,15 @@ export const WeeklyCalendar = ({
   daysBeforeToday = 0,
   children,
 }: {
+  /**
+   * The total number of days to show in the calendar
+   */
   totalDays: 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14;
+  /**
+   * Number of 'padding' days to show in the front
+   * of the calendar before today, e.g., if this is 3
+   * then the cal would be | today - 3 | today - 2 | today - 1 | today | today + 1 | ...
+   */
   daysBeforeToday?: number;
   children: React.ReactElement[] | React.ReactElement;
 }) => {

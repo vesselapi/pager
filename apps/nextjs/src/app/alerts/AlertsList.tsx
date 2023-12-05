@@ -5,7 +5,6 @@ import { MdOutlineClose } from 'react-icons/md';
 import { RxAvatar } from 'react-icons/rx';
 import { TbClock, TbLetterCase, TbMinus, TbPlus } from 'react-icons/tb';
 
-import type { RouterOutputs } from '~/utils/api';
 import { api } from '~/utils/api';
 import { useUser } from '../../hooks/useUser';
 import Loader from '../_components/Loader';
@@ -20,6 +19,7 @@ import AlertListSortDropdown, {
 } from './_components/AlertListSortDropdown';
 import { useSearch } from './_hooks/useSearch';
 import type {
+  Alert,
   DisplaySettings,
   FilterSetting,
   SortSetting,
@@ -117,13 +117,10 @@ const AlertsList = () => {
   const users = api.user.list.useQuery();
   const currentUser = useUser();
 
-  const update = useCallback(
-    async (id: string, alert: Partial<RouterOutputs['alert']['all']['0']>) => {
-      await updateAlert.mutateAsync({ id, alert });
-      await alerts.refetch();
-    },
-    [],
-  );
+  const update = useCallback(async (id: string, alert: Partial<Alert>) => {
+    await updateAlert.mutateAsync({ id, alert });
+    await alerts.refetch();
+  }, []);
 
   return (
     <div className="flex flex-col">
@@ -246,7 +243,7 @@ const AlertsList = () => {
             className="mt-5 px-10"
             status={{ loading: alerts.isFetching }}
           >
-            {alerts.data?.map((a: RouterOutputs['alert']['all']['0']) => {
+            {alerts.data?.map((a: Alert) => {
               const user = users.data?.users.find(
                 (u) => u.id === a.assignedToId,
               );

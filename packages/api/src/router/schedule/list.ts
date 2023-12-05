@@ -21,6 +21,8 @@ export const scheduleList = trpc
     const schedules = await ctx.db.schedules.listByOrgId(orgId);
 
     return {
+      // TODO(@zkirby): Move this to schedule.view.ts since it might
+      // need to be applied to individual schedule find calls too.
       schedules: schedules.map((schedule) => {
         // Denote the oncall User
         // Step 1: Make sure users are sorted by order.
@@ -29,13 +31,15 @@ export const scheduleList = trpc
         // Step 2: Find the oncall user via the rotation start time and length.
         const startTimeInDays = schedule.startTime;
         const scheduleLengthInDays = Math.floor(
-          parseInt(schedule.lengthInSeconds) / 60 / 60 / 24,
+          parseInt(schedule.lengthInSeconds) / (60 * 60 * 24),
         );
         const timeSinceScheduleStarted = differenceInDays(
           Date.now(),
           startTimeInDays,
         );
 
+        // Step 3: Use the total number of rotations that have happened
+        // so far to find who is currently oncall
         const totalNumberOfRotations = Math.floor(
           timeSinceScheduleStarted / scheduleLengthInDays,
         );
