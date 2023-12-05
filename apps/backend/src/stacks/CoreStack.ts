@@ -51,7 +51,6 @@ export function CoreStack({ stack }: StackContext) {
     },
   });
 
-  // Step function for alerting oncall
   const alertPageWaitTask = new Wait(stack, 'AlertPageWaitTask', {
     time: WaitTime.secondsPath('$.waitSeconds'),
   });
