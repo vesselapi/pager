@@ -98,7 +98,7 @@ const SignInWithOAuth = () => {
         <View className="p-4 mb-4">
           <TouchableOpacity onPress={onSignInPress}>
             <View className="w-full flex-row items-center justify-center">
-              <Text className="text-xl text-white">Continue as guest</Text>
+              <Text className="text-xl text-slate-200">Continue as guest</Text>
             </View>
           </TouchableOpacity>
         </View>
