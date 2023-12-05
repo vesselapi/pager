@@ -1,6 +1,6 @@
 import type { RouterOutputs } from '@vessel/api';
 import classNames from 'classnames';
-import { differenceInSeconds } from 'date-fns';
+import { differenceInDays } from 'date-fns';
 import { useMemo } from 'react';
 import { TbPhoneFilled } from 'react-icons/tb';
 import { WeeklyCalendar, WeeklyEvent } from '../_components/Calendar';
@@ -9,19 +9,19 @@ import UserIcon from '../_components/UserIcon';
 const TotalScheduleDays = 14;
 const ScheduleDaysBeforeToday = 3;
 
-const Rotation = ({ name, isOncall }: { name: string; isOncall: boolean }) => {
+const Rotation = ({ name, isOnCall }: { name: string; isOnCall?: boolean }) => {
   return (
     <div className="flex items-center h-full w-full">
       <div
         className={classNames(
           `rounded mr-1 p-2 w-full bg-gray-300 text-gray-700 text-sm flex items-center justify-center`,
           {
-            'opacity-60': !isOncall,
-            'opacity-100 font-medium': isOncall,
+            'opacity-60': !isOnCall,
+            'opacity-100 font-medium': isOnCall,
           },
         )}
       >
-        {isOncall && (
+        {isOnCall && (
           <div className="text-red-400 text-base mr-2">
             <TbPhoneFilled />
           </div>
@@ -50,66 +50,81 @@ const ScheduleListCard = ({
    * This makes creating the schedules view significantly easier.
    */
   const orderedScheduleUsers = useMemo(() => {
-    const rotationsSinceInception = Math.floor(
-      differenceInSeconds(Date.now(), startTime) /
-        parseInt(lengthInSeconds) /
-        1000,
-    );
-    const onCallUserIndex = rotationsSinceInception % users.length;
+    const sorted = users.sort((a, b) => a.order - b.order);
+    const onCallIdx = sorted.findIndex((u) => u.isOnCall);
 
-    return users.sort((a, b) => a.order - b.order);
+    // Move all the users before the oncall to the end
+    // effectively making the list resorted with the oncall first.
+    return [...sorted.slice(onCallIdx), ...sorted.slice(0, onCallIdx)];
   }, [users]);
 
   /**
-   * Since we know how many days before today and how many days total
-   * we want to show on the rotation calendar, we can
-   * calculate what events we should put.
+   * Create the events
+   *
+   * NOTE: We round everything to the nearest day or else
+   * the calender becomes very unruly.
    */
   const rotationLengthInDays = useMemo(() => {
-    return Math.ceil(parseInt(lengthInSeconds) / 86400);
+    return Math.floor(parseInt(lengthInSeconds) / (60 * 60 * 24));
   }, [lengthInSeconds]);
 
-  // TODO: Figure out how to calculate who is actually on-call
   const eventsBeforeToday = useMemo(() => {
-    const lastUser = orderedScheduleUsers[orderedScheduleUsers.length - 1]!;
+    // Reverse the list since we're going backwards in time
+    const reversed = [...orderedScheduleUsers].reverse();
 
-    return [
+    const events = Array.from({
+      // The total rotations that happened in the 'ScheduleDaysBeforeToday' days.
+      length: Math.ceil(ScheduleDaysBeforeToday / rotationLengthInDays),
+    }).map((_, i) => {
+      const nextUser = reversed[i + 1]!;
+      const daysLeft = ScheduleDaysBeforeToday - i * rotationLengthInDays;
+      return {
+        name: `${nextUser.firstName} ${nextUser.lastName}`,
+        length: Math.min(daysLeft, rotationLengthInDays),
+        isOnCall: false,
+      };
+    });
+
+    // Re-reverse since we're showing the events in chronological order.
+    return events.reverse();
+  }, [orderedScheduleUsers, rotationLengthInDays]);
+
+  const eventsAfterToday = useMemo(() => {
+    // The days we visually get on the calendar to show the user.
+    const allocatedDays = TotalScheduleDays - ScheduleDaysBeforeToday;
+
+    // Calculate how many days in the rotation the oncall has left
+    const daysSinceStart = differenceInDays(new Date(), startTime);
+    const daysLeftOnCall =
+      rotationLengthInDays - (daysSinceStart % rotationLengthInDays);
+    const onCall = orderedScheduleUsers[0]!;
+    const rotations = [
       {
-        name: `${lastUser.firstName} ${lastUser.lastName}`,
-        length: ScheduleDaysBeforeToday,
+        name: `${onCall.firstName} ${onCall.lastName}`,
+        // Edge case where a rotation is more days than we have left on the calendar.
+        length: Math.min(daysLeftOnCall, allocatedDays),
+        isOnCall: true,
       },
     ];
-  }, [orderedScheduleUsers]);
 
-  const eventAfterToday = useMemo(() => {
-    const allocatedDays = TotalScheduleDays - ScheduleDaysBeforeToday;
-    const numFullRotations = Math.ceil(rotationLengthInDays / allocatedDays);
+    const remainingDays = allocatedDays - daysLeftOnCall;
+    Array.from({
+      length: Math.ceil(remainingDays / rotationLengthInDays),
+    }).forEach((_, i) => {
+      const nextUserIndex = (i + 1) % orderedScheduleUsers.length;
+      const nextUser = orderedScheduleUsers[nextUserIndex]!;
 
-    const rotations = [
-      ...Array.from({ length: numFullRotations }, (_, i) => {
-        const user = orderedScheduleUsers[i % orderedScheduleUsers.length]!;
-        return {
-          name: `${user.firstName} ${user.lastName}`,
-          length: rotationLengthInDays,
-          isOncall: i === 0,
-        };
-      }),
-    ];
+      const daysLeft = remainingDays - i * rotationLengthInDays;
 
-    const remainingDays =
-      allocatedDays - numFullRotations * rotationLengthInDays;
-    if (remainingDays > 0) {
-      const nextUser =
-        orderedScheduleUsers[numFullRotations % orderedScheduleUsers.length]!;
       rotations.push({
         name: `${nextUser.firstName} ${nextUser.lastName}`,
-        length: remainingDays,
-        isOncall: false,
+        length: Math.min(daysLeft, rotationLengthInDays),
+        isOnCall: false,
       });
-    }
+    });
 
     return rotations;
-  }, [rotationLengthInDays, orderedScheduleUsers]);
+  }, [rotationLengthInDays, orderedScheduleUsers, startTime]);
 
   return (
     <div className="h-card-lg px-4 py-4 rounded border-[1px] border-zinc-200 mt-5">
@@ -137,9 +152,9 @@ const ScheduleListCard = ({
         ))}
 
         {/* Events after today */}
-        {eventAfterToday.map((e) => (
+        {eventsAfterToday.map((e) => (
           <WeeklyEvent key={e.name} days={e.length}>
-            <Rotation name={e.name} isOncall={e.isOncall} />
+            <Rotation name={e.name} isOnCall={e.isOnCall} />
           </WeeklyEvent>
         ))}
       </WeeklyCalendar>

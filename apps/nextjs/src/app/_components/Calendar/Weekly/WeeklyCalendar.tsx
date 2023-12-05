@@ -23,8 +23,9 @@ export const WeeklyEvent = ({
 };
 
 /**
- * totalDays
- * daysBefore (w/ default)
+ * A horizontal calendar weekly view, i.e:
+ * Mon | Tue | Wed | Thu | Fri | Sat | Sun
+ * x   | x   | x   | x   | x   | x   | x
  */
 export const WeeklyCalendar = ({
   totalDays,
