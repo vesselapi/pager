@@ -44,11 +44,12 @@ export default {
       },
       /**
        * @Guidelines - Lean smaller, more compact sizes.
+       * @NOTE - xxxs, xxs, and xs have been bumped by 1px each.
        */
       fontSize: {
-        xxxs: '4px',
-        xxs: '8px',
-        xs: '12px',
+        xxxs: '5px',
+        xxs: '9px',
+        xs: '13px',
         sm: '14px',
         base: '16px',
         lg: '18px',

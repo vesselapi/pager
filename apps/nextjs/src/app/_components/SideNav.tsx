@@ -55,8 +55,8 @@ const SideNav = ({ children }: { children: ReactNode }) => {
     <div className="flex">
       <div className="bg-light-grey relative left-0 top-0 flex h-screen w-[220px] flex-col justify-between border-r-[1px] border-zinc-200 px-3 text-black">
         <div>
-          <div className="flex items-center justify-between px-2 py-3">
-            <div className="text-xs flex">
+          <div className="flex items-center justify-between py-3 pl-2">
+            <div className="text-sm flex">
               <Image
                 src="/vessel-icon.svg"
                 width={18}
@@ -66,7 +66,11 @@ const SideNav = ({ children }: { children: ReactNode }) => {
               />
               Vessel
             </div>
-            <Dropdown position="right" OpenButton={<UserIcon {...user} />}>
+            <Dropdown
+              position="right"
+              OpenButton={<UserIcon {...user} />}
+              openButtonClass="flex"
+            >
               {/* TODO(@zkirby): Enable dark mode */}
               {/* <Switch
                 checked={darkMode}
@@ -84,7 +88,7 @@ const SideNav = ({ children }: { children: ReactNode }) => {
               <SignOutButton className={'w-full text-left text-red-400'} />
             </Dropdown>
           </div>
-          <div className="mt-2">
+          <div className="mt-3">
             <NavItem
               route="/alerts"
               title="Alerts"

@@ -31,13 +31,15 @@ const UserIcon = ({
     );
   } else if (imageUrl) {
     return (
-      <Image
-        className="flex items-center justify-center rounded-full bg-slate-500 text-slate-200 h-[20px] w-[20px] text-xxs object-cover border-2 border-white"
-        src={imageUrl}
-        alt={'user profile picture'}
-        width={20}
-        height={20}
-      />
+      <div>
+        <Image
+          className="rounded-full bg-slate-500 text-slate-200 h-[23px] w-[23px] text-xxs object-cover border-2 border-white"
+          src={imageUrl}
+          alt={'user profile picture'}
+          width={25}
+          height={25}
+        />
+      </div>
     );
   }
   return (

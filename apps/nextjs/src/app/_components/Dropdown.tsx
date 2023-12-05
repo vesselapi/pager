@@ -6,19 +6,21 @@ import React, { Fragment } from 'react';
 const Dropdown = ({
   children,
   OpenButton,
+  openButtonClass,
   position = 'left',
   size = 'md',
   noHighlight = false,
 }: {
   children: ReactElement | ReactNode[];
   OpenButton: ReactElement;
+  openButtonClass?: string;
   position?: 'left' | 'right';
   size?: 'sm' | 'md' | 'lg';
   noHighlight?: boolean;
 }) => {
   return (
     <Menu as="div" className="relative inline-block">
-      <Menu.Button>{OpenButton}</Menu.Button>
+      <Menu.Button className={openButtonClass}>{OpenButton}</Menu.Button>
 
       <Transition
         as={Fragment}
