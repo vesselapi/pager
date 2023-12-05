@@ -16,9 +16,12 @@
     "check": "drizzle-kit check:pg",
     "studio": "drizzle-kit studio",
     "typecheck": "tsc --noEmit",
+    "seed:existing-user": "pnpm with-env tsx seed/seed-existing-user.ts",
+    "seed:guest-user": "pnpm with-env tsx seed/seed-guest-user.ts",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.3.1",
     "@vessel/types": "workspace:^",
     "drizzle-orm": "^0.29.1",
     "drizzle-zod": "^0.5.1",

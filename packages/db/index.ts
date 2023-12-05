@@ -391,7 +391,10 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return teams.map((team) => selectTeamSchema.parse(team));
     },
     create: async (team: CreateTeam) => {
-      const insertTeam = insertTeamSchema.parse(team);
+      const insertTeam = insertTeamSchema.parse({
+        id: IdGenerator.team(),
+        ...team,
+      });
       const dbTeam = await db.insert(teamSchema).values(insertTeam).returning();
       return selectTeamSchema.parse(dbTeam[0]);
     },
@@ -425,6 +428,11 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         schedules,
       };
     },
+  },
+  // NOTE: This is primarily used for scripts only. Scripts will hang at the end
+  // because the connection is still open. This will close the connection.
+  _end: async () => {
+    await queryClient.end();
   },
 });
 
