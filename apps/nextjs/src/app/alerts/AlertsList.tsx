@@ -28,7 +28,7 @@ import type {
 // -------------------------------
 // Filter Configs
 const StatusFilterConfig = {
-  property: 'status',
+  property: 'status' as const,
   label: 'Status',
   valueOptions: [
     {
@@ -56,7 +56,7 @@ const StatusFilterConfig = {
 const AssignedToFilterConfig = <T extends { email: string | null; id: string }>(
   users: T[] = [],
 ) => ({
-  property: 'assignedToId',
+  property: 'assignedToId' as const,
   label: 'Assigned To',
   valueOptions:
     users?.map((u) => ({
@@ -88,6 +88,7 @@ const AlertsList = () => {
     },
   ]);
 
+  // TODO(@zkirby): Clean this up.
   const allFilters = useMemo(() => {
     const searchFilter = [
       { property: 'title', value: search, condition: 'CONTAINS' },
@@ -111,6 +112,7 @@ const AlertsList = () => {
 
   const alerts = api.alert.all.useQuery({
     sorts: allSorts,
+    // @ts-expect-error The filters typing got quite hairy with all of the different filter options and sourly needs to be refactored.
     filters: allFilters,
   });
   const updateAlert = api.alert.update.useMutation();
@@ -187,8 +189,8 @@ const AlertsList = () => {
                 />
               </div>
             ))}
-            {filters?.map((f) => (
-              <div className="mr-2" key={f.property}>
+            {filters?.map((f, i) => (
+              <div className="mr-2" key={i}>
                 <AlertListFilterPill
                   label={f.label}
                   Icon={f.Icon}

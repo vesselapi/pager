@@ -10,7 +10,7 @@ export const WeeklyEvent = ({
   children,
 }: {
   days: number;
-  children: React.ReactElement | React.ReactElement[];
+  children: React.ReactNode[] | React.ReactNode;
 }) => {
   return (
     <div className={classNames(`col-span-${cols} h-[90px]`, Styles.rowBg)}>
@@ -39,7 +39,7 @@ export const WeeklyCalendar = ({
    * then the cal would be | today - 3 | today - 2 | today - 1 | today | today + 1 | ...
    */
   daysBeforeToday?: number;
-  children: React.ReactElement[] | React.ReactElement;
+  children: React.ReactNode[] | React.ReactNode;
 }) => {
   const today = new Date();
   const days = Array.from({ length: totalDays }, (_, i) => {

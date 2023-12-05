@@ -15,6 +15,7 @@ const Search = ({
       <input
         type="search"
         value={search}
+        // @ts-expect-error TODO(@zkirby): Fiddle with ts config so the HTMLInput types are correct (include value).
         onChange={(e) => setSearch(e.target.value as string)}
         className="text-sm w-[350px] rounded bg-gray-200 py-1.5 pl-8 pr-2 outline-none"
         placeholder="Search..."

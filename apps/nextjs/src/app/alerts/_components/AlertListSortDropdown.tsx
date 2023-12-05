@@ -3,9 +3,10 @@ import { MdOutlineClose, MdSort } from 'react-icons/md';
 
 import Dropdown from '../../_components/Dropdown';
 import Pill from '../../_components/Pill';
+import type { SortSetting } from '../alerts.types';
 
 type TOnSort = (s: {
-  property: string;
+  property: SortSetting['property'];
   label: string;
   Icon: React.ReactElement;
 }) => void;
@@ -17,7 +18,7 @@ const SortItem = ({
   Icon,
 }: {
   label: string;
-  value: string;
+  value: SortSetting['property'];
   onSort: TOnSort;
   Icon: React.ReactElement;
 }) => {
@@ -67,7 +68,11 @@ const AlertListSortDropdown = ({
   sorts,
   onSort,
 }: {
-  sorts: { label: string; value: string; Icon: React.ReactElement }[];
+  sorts: {
+    label: string;
+    value: SortSetting['property'];
+    Icon: React.ReactElement;
+  }[];
   onSort: TOnSort;
 }) => {
   return (
