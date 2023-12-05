@@ -1,4 +1,4 @@
-import { numeric, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 
@@ -20,7 +20,7 @@ export const schedule = pgTable('schedule', {
   startTime: timestamp('start_time').notNull(),
   name: text('name').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  lengthInSeconds: numeric('length_in_seconds').notNull(),
+  lengthInSeconds: integer('length_in_seconds').notNull(),
 });
 
 export const scheduleToScheduleUserRelation = relations(

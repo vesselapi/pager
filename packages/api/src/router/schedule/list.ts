@@ -31,7 +31,7 @@ export const scheduleList = trpc
         // Step 2: Find the oncall user via the rotation start time and length.
         const startTimeInDays = schedule.startTime;
         const scheduleLengthInDays = Math.floor(
-          parseInt(schedule.lengthInSeconds) / (60 * 60 * 24),
+          schedule.lengthInSeconds / (60 * 60 * 24),
         );
         const timeSinceScheduleStarted = differenceInDays(
           Date.now(),

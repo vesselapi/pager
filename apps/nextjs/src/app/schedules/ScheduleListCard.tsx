@@ -6,8 +6,8 @@ import { TbPhoneFilled } from 'react-icons/tb';
 import { WeeklyCalendar, WeeklyEvent } from '../_components/Calendar';
 import UserIcon from '../_components/UserIcon';
 
-const TotalScheduleDays = 14;
-const ScheduleDaysBeforeToday = 3;
+const TOTAL_SCHEDULE_DAYS = 14;
+const SCHEDULE_DAYS_BEFORE_TODAY = 3;
 
 const Rotation = ({ name, isOnCall }: { name: string; isOnCall?: boolean }) => {
   return (
@@ -41,7 +41,7 @@ const ScheduleListCard = ({
 }: {
   name: string;
   teamName: string;
-  lengthInSeconds: string;
+  lengthInSeconds: number;
   startTime: Date;
   users: RouterOutputs['schedule']['list']['schedules']['0']['users'];
 }) => {
@@ -65,7 +65,7 @@ const ScheduleListCard = ({
    * the calender becomes very unruly.
    */
   const rotationLengthInDays = useMemo(() => {
-    return Math.floor(parseInt(lengthInSeconds) / (60 * 60 * 24));
+    return Math.floor(lengthInSeconds / (60 * 60 * 24));
   }, [lengthInSeconds]);
 
   const eventsBeforeToday = useMemo(() => {
@@ -74,10 +74,10 @@ const ScheduleListCard = ({
 
     const events = Array.from({
       // The total rotations that happened in the 'ScheduleDaysBeforeToday' days.
-      length: Math.ceil(ScheduleDaysBeforeToday / rotationLengthInDays),
+      length: Math.ceil(SCHEDULE_DAYS_BEFORE_TODAY / rotationLengthInDays),
     }).map((_, i) => {
       const nextUser = reversed[i + 1]!;
-      const daysLeft = ScheduleDaysBeforeToday - i * rotationLengthInDays;
+      const daysLeft = SCHEDULE_DAYS_BEFORE_TODAY - i * rotationLengthInDays;
       return {
         name: `${nextUser.firstName} ${nextUser.lastName}`,
         length: Math.min(daysLeft, rotationLengthInDays),
@@ -91,7 +91,7 @@ const ScheduleListCard = ({
 
   const eventsAfterToday = useMemo(() => {
     // The days we visually get on the calendar to show the user.
-    const allocatedDays = TotalScheduleDays - ScheduleDaysBeforeToday;
+    const allocatedDays = TOTAL_SCHEDULE_DAYS - SCHEDULE_DAYS_BEFORE_TODAY;
 
     // Calculate how many days in the rotation the oncall has left
     const daysSinceStart = differenceInDays(new Date(), startTime);
@@ -141,8 +141,8 @@ const ScheduleListCard = ({
       </div>
 
       <WeeklyCalendar
-        totalDays={TotalScheduleDays}
-        daysBeforeToday={ScheduleDaysBeforeToday}
+        totalDays={TOTAL_SCHEDULE_DAYS}
+        daysBeforeToday={SCHEDULE_DAYS_BEFORE_TODAY}
       >
         {/* Events before today */}
         {eventsBeforeToday.map((e) => (
