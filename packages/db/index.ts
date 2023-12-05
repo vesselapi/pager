@@ -171,7 +171,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return selectAlertSchema.parse(dbAlerts[0]);
     },
     findWithEscalationPolicy: async (id: AlertId) => {
-      const dbAlert = (await db.query.alert.findFirst({
+      const dbAlertNullable = await db.query.alert.findFirst({
         where: eq(alertSchema.id, id as string),
         with: {
           escalationPolicy: {
@@ -180,10 +180,12 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
             },
           },
         },
-      })) as unknown as DbAlertWithEscalationPolicyAndSteps;
-      if (!dbAlert) {
-        return null;
-      }
+      });
+      if (!dbAlertNullable) return null;
+
+      const dbAlert =
+        dbAlertNullable as unknown as DbAlertWithEscalationPolicyAndSteps;
+
       const alert = selectAlertSchema.parse(dbAlert);
       if (!dbAlert.escalationPolicy) {
         throw new Error('Escalation policy not found');
@@ -480,7 +482,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return selectTeamSchema.parse(dbTeam[0]);
     },
     find: async (teamId: TeamId) => {
-      const team = (await db.query.team.findFirst({
+      const dbTeamNullable = await db.query.team.findFirst({
         where: eq(teamSchema.id, teamId),
         with: {
           schedules: {
@@ -489,16 +491,19 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
             },
           },
         },
-      })) as unknown as DbTeamWithSchedulesAndScheduleUsersAndUsers;
+      });
 
-      if (!team) return null;
+      if (!dbTeamNullable) return null;
+      const dbTeam =
+        dbTeamNullable as unknown as DbTeamWithSchedulesAndScheduleUsersAndUsers;
+
       return {
-        ...selectTeamSchema.parse(team),
-        schedules: team.schedules.map((schedule) =>
+        ...selectTeamSchema.parse(dbTeam),
+        schedules: dbTeam.schedules.map((schedule) =>
           selectScheduleSchema.parse(schedule),
         ),
         users: unique(
-          team.schedules.flatMap((schedule) =>
+          dbTeam.schedules.flatMap((schedule) =>
             schedule.scheduleUsers.map((scheduleUser) => ({
               ...selectScheduleUserSchema.parse(scheduleUser),
               ...selectUserSchema.parse(scheduleUser.user),

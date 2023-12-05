@@ -18,9 +18,9 @@ export const schedule = pgTable('schedule', {
     .references(() => team.id)
     .notNull(),
   startTime: timestamp('start_time').notNull(),
-  lengthInSeconds: numeric('length_in_seconds').notNull(),
   name: text('name').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+  lengthInSeconds: numeric('length_in_seconds').notNull(),
 });
 
 export const scheduleToScheduleUserRelation = relations(
