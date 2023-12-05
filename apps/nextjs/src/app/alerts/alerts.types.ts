@@ -1,3 +1,11 @@
+import type { RouterOutputs } from '@vessel/api';
+
+/**
+ * Base Types
+ */
+export type Alert = NonNullable<RouterOutputs['alert']['all']['0']>;
+export type User = RouterOutputs['user']['me']['user'];
+
 /**
  * Used for the Config bar options
  */
@@ -12,7 +20,7 @@ export interface ConfigOption<T = string> {
  */
 export interface DisplaySettings {
   // How the alerts should be styled
-  style: 'condensed' | 'expanded';
+  cardType: 'condensed' | 'expanded';
 }
 export interface SortSetting {
   property: string;
