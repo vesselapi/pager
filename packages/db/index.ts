@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import type { z } from 'zod';
+import { type z } from 'zod';
 
 import type {
   AlertEventId,
@@ -397,10 +397,9 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
           orgId: org.id,
           externalId,
         });
-        const user = await tx
-          .insert(userSchema)
-          .values(insertUser)
-          .returning()[0];
+        const user = await (
+          await tx.insert(userSchema).values(insertUser).returning()
+        )[0];
 
         return selectUserSchema.parse(user);
       });
