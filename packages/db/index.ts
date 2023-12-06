@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import type { z } from 'zod';
+import { type z } from 'zod';
 
 import type {
   AlertEventId,
@@ -52,7 +52,11 @@ import {
   integration as integrationSchema,
   selectIntegrationSchema,
 } from './schema/integration';
-import { org as orgSchema, selectOrgSchema } from './schema/org';
+import {
+  insertOrgSchema,
+  org as orgSchema,
+  selectOrgSchema,
+} from './schema/org';
 import type { CreateSchedule, Schedule } from './schema/schedule';
 import {
   insertScheduleSchema,
@@ -363,6 +367,43 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .where(eq(userSchema.id, id))
         .returning();
       return selectUserSchema.parse(dbUser[0]);
+    },
+    newSignUp: async ({
+      email,
+      firstName,
+      lastName,
+      externalId,
+    }: {
+      email: string;
+      firstName: string;
+      lastName: string;
+      externalId: string;
+    }) => {
+      const user = await db.transaction(async (tx) => {
+        const insertOrg = insertOrgSchema.parse({
+          id: IdGenerator.org(),
+          name: 'My Organization',
+        });
+        const dbOrg = (
+          await tx.insert(orgSchema).values(insertOrg).returning()
+        )[0];
+        const org = selectOrgSchema.parse(dbOrg);
+
+        const insertUser = insertUserSchema.parse({
+          id: IdGenerator.user(),
+          email,
+          firstName,
+          lastName,
+          orgId: org.id,
+          externalId,
+        });
+        const user = await (
+          await tx.insert(userSchema).values(insertUser).returning()
+        )[0];
+
+        return selectUserSchema.parse(user);
+      });
+      return user;
     },
   },
   secret: {
