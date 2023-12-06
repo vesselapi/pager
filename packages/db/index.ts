@@ -1,7 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { unique } from 'radash';
 import type { z } from 'zod';
 
 import type {
@@ -480,36 +479,11 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return selectTeamSchema.parse(dbTeam[0]);
     },
     find: async (teamId: TeamId) => {
-      const dbTeamNullable = await db.query.team.findFirst({
+      const dbTeam = await db.query.team.findFirst({
         where: eq(teamSchema.id, teamId),
-        with: {
-          schedules: {
-            with: {
-              users: true,
-            },
-          },
-        },
       });
-
-      if (!dbTeamNullable) return null;
-      const dbTeam =
-        dbTeamNullable as unknown as DbTeamWithSchedulesAndScheduleUsersAndUsers;
-
-      return {
-        ...selectTeamSchema.parse(dbTeam),
-        schedules: dbTeam.schedules.map((schedule) =>
-          selectScheduleSchema.parse(schedule),
-        ),
-        users: unique(
-          dbTeam.schedules.flatMap((schedule) =>
-            schedule.scheduleUsers.map((scheduleUser) => ({
-              ...selectScheduleUserSchema.parse(scheduleUser),
-              ...selectUserSchema.parse(scheduleUser.user),
-            })),
-          ),
-          (u) => u.id,
-        ),
-      };
+      if (!dbTeam) return null;
+      return selectTeamSchema.parse(dbTeam);
     },
   },
   // NOTE: This is primarily used for scripts only. Scripts will hang at the end
