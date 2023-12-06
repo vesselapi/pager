@@ -20,7 +20,7 @@ export const userMe = procedure
       userManager: makeUserManager,
     }),
   )
-  .mutation(async ({ ctx }) => {
+  .query(async ({ ctx }) => {
     if (!ctx.auth.claims) {
       throw new TRPCError({
         code: 'UNAUTHORIZED',

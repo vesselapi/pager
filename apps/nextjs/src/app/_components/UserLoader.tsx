@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 import { api } from '../../utils/api';
 import Loader from './Loader';
@@ -26,7 +28,10 @@ const UserLoader = ({ children }: React.PropsWithChildren) => {
     // NOTE(@zkirby): Keep spinning until we're sure the user is created,
     // if we use 'isFetching' here, we'll render sub-tree once until the
     // api calls kicks off.
-    <Loader status={{ loading: !ensureUserIsCreated.isSuccess }}>
+    <Loader
+      status={{ loading: !ensureUserIsCreated.isSuccess }}
+      className="ml-5 mt-5"
+    >
       {children}
     </Loader>
   );
