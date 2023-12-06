@@ -1,40 +1,53 @@
-'use client';
-
-import { useUser } from '../../hooks/useUser';
+import classNames from 'classnames';
+import Image from 'next/image';
 
 const createInitials = (
-  firstName: string | null,
-  lastName: string | null,
+  firstName?: string | null,
+  lastName?: string | null,
 ): string => {
   const initials = (firstName?.charAt(0) ?? '') + (lastName?.charAt(0) ?? '');
   return initials.toUpperCase();
 };
 
-const UserIcon = () => {
-  const user = useUser();
-
-  if (!user) {
+const UserIcon = ({
+  className,
+  firstName,
+  lastName,
+  imageUrl,
+}: {
+  className?: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  imageUrl?: string | null;
+}) => {
+  if (!firstName && !lastName && !imageUrl) {
     return (
-      <div className="h-[18px] w-[18px]  rounded-full bg-gray-500 ring-1 ring-gray-400"></div>
+      <div
+        className={classNames(
+          'h-[20px] w-[20px] rounded-full bg-slate-500 ring-2 ring-white',
+          className,
+        )}
+      ></div>
+    );
+  } else if (imageUrl) {
+    return (
+      <Image
+        className="rounded-full bg-slate-500 text-slate-200 h-[23px] w-[23px] text-xxs object-cover border-2 border-white"
+        src={imageUrl}
+        alt={'user profile picture'}
+        width={25}
+        height={25}
+      />
     );
   }
-
-  // TODO(@zkirby): Add support for profile image
-  //   <Image
-  //   className="h-[18px] w-[18px] rounded-full object-cover ring-1 ring-gray-400"
-  //   src={user.imageUrl}
-  //   width={20}
-  //   height={20}
-  //   alt="Profile Picture"
-  // />
-
   return (
     <div
-      className={
-        'flex h-[20px] w-[20px] items-center justify-center rounded-full bg-gray-500 text-[9px] text-slate-200'
-      }
+      className={classNames(
+        className,
+        'flex items-center justify-center rounded-full ring-2 ring-white bg-slate-500 text-slate-200 h-[20px] w-[20px] text-xxs',
+      )}
     >
-      <div>{createInitials(user.firstName, user.lastName)}</div>
+      <div>{createInitials(firstName, lastName)}</div>
     </div>
   );
 };

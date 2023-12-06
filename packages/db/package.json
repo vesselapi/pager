@@ -25,10 +25,12 @@
     "@vessel/types": "workspace:^",
     "drizzle-orm": "^0.29.1",
     "drizzle-zod": "^0.5.1",
+    "minimist": "^1.2.8",
     "postgres": "^3.4.3",
     "zod": "^3.22.3"
   },
   "devDependencies": {
+    "@types/minimist": "^1.2.5",
     "@vessel/eslint-config": "workspace:^0.2.0",
     "@vessel/prettier-config": "workspace:^0.1.0",
     "@vessel/tsconfig": "workspace:^0.1.0",

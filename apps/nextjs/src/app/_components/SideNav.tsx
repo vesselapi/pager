@@ -8,8 +8,14 @@ import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { FaGithub, FaSlack } from 'react-icons/fa';
 import { HiOutlineMail } from 'react-icons/hi';
-import { TbBell, TbBook2, TbCalendarFilled } from 'react-icons/tb';
+import {
+  TbBell,
+  TbBook2,
+  TbCalendarFilled,
+  TbUsersGroup,
+} from 'react-icons/tb';
 
+import { useUser } from '../../hooks/useUser';
 import Dropdown from './Dropdown';
 import UserIcon from './UserIcon';
 
@@ -33,7 +39,7 @@ const NavItem = ({
       )}
     >
       <Icon className="mr-1.5 font-bold text-zinc-600" />
-      <div className="text-smr">{title}</div>
+      <div className="text-xs">{title}</div>
     </Link>
   );
 };
@@ -43,13 +49,14 @@ const NavItem = ({
  */
 const SideNav = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
+  const user = useUser();
 
   return (
-    <div className="flex text-sm">
+    <div className="flex">
       <div className="bg-light-grey relative left-0 top-0 flex h-screen w-[220px] flex-col justify-between border-r-[1px] border-zinc-200 px-3 text-black">
         <div>
-          <div className="flex items-center justify-between px-2 py-3">
-            <div className="text-smr flex">
+          <div className="flex items-center justify-between py-3 pl-2">
+            <div className="text-sm flex">
               <Image
                 src="/vessel-icon.svg"
                 width={18}
@@ -59,7 +66,11 @@ const SideNav = ({ children }: { children: ReactNode }) => {
               />
               Vessel
             </div>
-            <Dropdown position="right" OpenButton={<UserIcon />}>
+            <Dropdown
+              position="right"
+              OpenButton={<UserIcon {...user} />}
+              openButtonClass="flex"
+            >
               {/* TODO(@zkirby): Enable dark mode */}
               {/* <Switch
                 checked={darkMode}
@@ -77,7 +88,7 @@ const SideNav = ({ children }: { children: ReactNode }) => {
               <SignOutButton className={'w-full text-left text-red-400'} />
             </Dropdown>
           </div>
-          <div className="mt-2">
+          <div className="mt-3">
             <NavItem
               route="/alerts"
               title="Alerts"
@@ -85,14 +96,20 @@ const SideNav = ({ children }: { children: ReactNode }) => {
               activeRoute={pathname}
             />
             <NavItem
-              route="/schedule"
-              title="Schedule"
+              route="/schedules"
+              title="Schedules"
               Icon={TbCalendarFilled}
+              activeRoute={pathname}
+            />
+            <NavItem
+              route="/teams"
+              title="Teams"
+              Icon={TbUsersGroup}
               activeRoute={pathname}
             />
           </div>
         </div>
-        <div className="text-smr m-3 grid grid-cols-2 opacity-40">
+        <div className="text-xs m-3 grid grid-cols-2 opacity-40">
           <div className="flex cursor-pointer items-center">
             <FaSlack className="mr-1" />
             Slack

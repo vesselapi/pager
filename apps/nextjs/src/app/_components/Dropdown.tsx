@@ -1,5 +1,3 @@
-'use client';
-
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
 import type { ReactElement, ReactNode } from 'react';
@@ -8,19 +6,21 @@ import React, { Fragment } from 'react';
 const Dropdown = ({
   children,
   OpenButton,
+  openButtonClass,
   position = 'left',
   size = 'md',
   noHighlight = false,
 }: {
   children: ReactElement | ReactNode[];
   OpenButton: ReactElement;
+  openButtonClass?: string;
   position?: 'left' | 'right';
   size?: 'sm' | 'md' | 'lg';
   noHighlight?: boolean;
 }) => {
   return (
     <Menu as="div" className="relative inline-block">
-      <Menu.Button>{OpenButton}</Menu.Button>
+      <Menu.Button className={openButtonClass}>{OpenButton}</Menu.Button>
 
       <Transition
         as={Fragment}
@@ -39,7 +39,7 @@ const Dropdown = ({
               'w-[85px]': size === 'sm',
               'w-[170px]': size === 'md',
             },
-            'text-smr absolute z-10 mt-1.5 origin-top-right rounded-md border-[1px] border-zinc-200 border-opacity-20 bg-white text-zinc-600 shadow focus:outline-none',
+            'text-xs absolute z-10 mt-1.5 origin-top-right rounded-md border-[1px] border-zinc-200 border-opacity-20 bg-white text-zinc-600 shadow focus:outline-none',
           )}
         >
           {React.Children.map(children, (child) => (

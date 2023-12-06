@@ -1,6 +1,3 @@
-'use client';
-
-import { useAuth } from '@clerk/nextjs';
 import classNames from 'classnames';
 import { useCallback, useMemo, useState } from 'react';
 import { GrStatusGood } from 'react-icons/gr';
@@ -8,15 +5,15 @@ import { MdOutlineClose } from 'react-icons/md';
 import { RxAvatar } from 'react-icons/rx';
 import { TbClock, TbLetterCase, TbMinus, TbPlus } from 'react-icons/tb';
 
-import { sift } from 'radash';
 import { api } from '~/utils/api';
-import Spinner from '../_components/Spinner';
+import { useUser } from '../../hooks/useUser';
+import Loader from '../_components/Loader';
+import Search from '../_components/Search';
 import AlertsListItem from './AlertListItem';
 import AlertListDisplayDropdown from './_components/AlertListDisplayDropdown';
 import AlertListFilterDropdown, {
   AlertListFilterPill,
 } from './_components/AlertListFilterDropdown';
-import AlertListSearch from './_components/AlertListSearch';
 import AlertListSortDropdown, {
   AlertListSortPill,
 } from './_components/AlertListSortDropdown';
@@ -31,7 +28,7 @@ import type {
 // -------------------------------
 // Filter Configs
 const StatusFilterConfig = {
-  property: 'status',
+  property: 'status' as const,
   label: 'Status',
   valueOptions: [
     {
@@ -59,7 +56,7 @@ const StatusFilterConfig = {
 const AssignedToFilterConfig = <T extends { email: string | null; id: string }>(
   users: T[] = [],
 ) => ({
-  property: 'assignedToId',
+  property: 'assignedToId' as const,
   label: 'Assigned To',
   valueOptions:
     users?.map((u) => ({
@@ -91,6 +88,7 @@ const AlertsList = () => {
     },
   ]);
 
+  // TODO(@zkirby): Clean this up.
   const allFilters = useMemo(() => {
     const searchFilter = [
       { property: 'title', value: search, condition: 'CONTAINS' },
@@ -114,26 +112,24 @@ const AlertsList = () => {
 
   const alerts = api.alert.all.useQuery({
     sorts: allSorts,
+    // @ts-expect-error The filters typing got quite hairy with all of the different filter options and sourly needs to be refactored.
     filters: allFilters,
   });
   const updateAlert = api.alert.update.useMutation();
-  const users = api.user.all.useQuery();
-  const currentUser = useAuth();
+  const users = api.user.list.useQuery();
+  const currentUser = useUser();
 
-  const update = useCallback(
-    async (alert: Partial<Alert> & { id: Alert['id'] }) => {
-      await updateAlert.mutateAsync({ id: alert.id, alert });
-      await alerts.refetch();
-    },
-    [],
-  );
+  const update = useCallback(async (id: string, alert: Partial<Alert>) => {
+    await updateAlert.mutateAsync({ id, alert });
+    await alerts.refetch();
+  }, []);
 
   return (
     <div className="flex flex-col">
       <div className="pt-4">
         {/* Config Settings Bar */}
         <div className="flex items-center justify-between px-10">
-          <AlertListSearch search={search} setSearch={setSearch} />
+          <Search search={search} setSearch={setSearch} />
           <div>
             <AlertListFilterDropdown
               filterOptions={[
@@ -193,8 +189,8 @@ const AlertsList = () => {
                 />
               </div>
             ))}
-            {filters?.map((f) => (
-              <div className="mr-2" key={f.property}>
+            {filters?.map((f, i) => (
+              <div className="mr-2" key={i}>
                 <AlertListFilterPill
                   label={f.label}
                   Icon={f.Icon}
@@ -245,11 +241,12 @@ const AlertsList = () => {
               !configsAreApplied && display.cardType === 'condensed',
           })}
         >
-          {alerts.isFetching ? (
-            <Spinner className="mt-5 px-10" />
-          ) : (
-            sift(alerts.data).map((a) => {
-              const user = users.data?.users?.find(
+          <Loader
+            className="mt-5 px-10"
+            status={{ loading: alerts.isFetching }}
+          >
+            {alerts.data?.map((a: Alert) => {
+              const user = users.data?.users.find(
                 (u) => u.id === a.assignedToId,
               );
 
@@ -259,16 +256,16 @@ const AlertsList = () => {
                   cardType={display.cardType}
                   alert={a}
                   user={user}
-                  onAck={() => update({ id: a.id, status: 'ACKED' })}
-                  onClose={() => update({ id: a.id, status: 'CLOSED' })}
+                  onAck={() => update(a.id, { status: 'ACKED' })}
+                  onClose={() => update(a.id, { status: 'CLOSED' })}
                   onSelfAssign={() =>
-                    update({ id: a.id, assignedToId: currentUser.userId })
+                    update(a.id, { assignedToId: currentUser?.id })
                   }
-                  onReopen={() => update({ id: a.id, status: 'OPEN' })}
+                  onReopen={() => update(a.id, { status: 'OPEN' })}
                 />
               );
-            })
-          )}
+            })}
+          </Loader>
         </div>
       </div>
     </div>

@@ -14,34 +14,36 @@ import type {
 } from '@vessel/types';
 
 import { IdGenerator } from './id-generator';
-import type { CreateAlert, UpsertAlert } from './schema/alert';
+import type { Alert, CreateAlert, UpsertAlert } from './schema/alert';
 import {
-  alertEscalationPolicyRelation,
   alert as alertSchema,
   alertSourceEnum,
+  alertToEscalationPolicyRelation,
   insertAlertSchema,
   selectAlertSchema,
   statusEnum,
 } from './schema/alert';
+import type { CreateAlertEvent } from './schema/alert-event';
 import {
-  CreateAlertEvent,
   alertEvent as alertEventSchema,
   insertAlertEventSchema,
   selectAlertEventSchema,
 } from './schema/alert-event';
+import type { CreateEscalationPolicy } from './schema/escalation-policy';
 import {
-  CreateEscalationPolicy,
   escalationPolicy as escalationPolicySchema,
-  escalationPolicyStepRelation,
+  escalationPolicyToAlertRelation,
+  escalationPolicyToStepRelation,
   insertEscalationPolicySchema,
   selectEscalationPolicySchema,
 } from './schema/escalation-policy';
+import type { CreateEscalationPolicyStep } from './schema/escalation-policy-step';
 import {
-  CreateEscalationPolicyStep,
   escalationPolicyStep as escalationPolicyStepSchema,
   escalationPolicyStepType,
   insertEscalationPolicyStepSchema,
   selectEscalationPolicyStepSchema,
+  stepToEscalationPolicyRelation,
 } from './schema/escalation-policy-step';
 import type { CreateIntegration } from './schema/integration';
 import {
@@ -51,32 +53,32 @@ import {
   selectIntegrationSchema,
 } from './schema/integration';
 import { org as orgSchema, selectOrgSchema } from './schema/org';
-import type { CreateSchedule } from './schema/schedule';
+import type { CreateSchedule, Schedule } from './schema/schedule';
 import {
   insertScheduleSchema,
   schedule as scheduleSchema,
-  scheduleUserRelations,
+  scheduleToScheduleUserRelation,
+  scheduleToTeamRelation,
   selectScheduleSchema,
 } from './schema/schedule';
-import type { CreateScheduleUser } from './schema/schedule-user';
+import type { CreateScheduleUser, ScheduleUser } from './schema/schedule-user';
 import {
   insertScheduleUserSchema,
   scheduleUser as scheduleUserSchema,
+  scheduleUserToScheduleRelation,
+  scheduleUserToUserRelation,
   selectScheduleUserSchema,
 } from './schema/schedule-user';
+import type { insertSecretSchema } from './schema/secret';
+import { secret as secretSchema, selectSecretSchema } from './schema/secret';
+import type { CreateTeam, Team } from './schema/team';
 import {
-  insertSecretSchema,
-  secret as secretSchema,
-  selectSecretSchema,
-} from './schema/secret';
-import {
-  CreateTeam,
   insertTeamSchema,
   selectTeamSchema,
   teamScheduleRelation,
   team as teamSchema,
 } from './schema/team';
-import type { CreateUser } from './schema/user';
+import type { CreateUser, User } from './schema/user';
 import {
   insertUserSchema,
   selectUserSchema,
@@ -88,12 +90,14 @@ export const schema = {
   appIdEnum,
   statusEnum,
   alert: alertSchema,
-  alertEscalationPolicyRelation,
+  alertToEscalationPolicyRelation,
   alertEvent: alertEventSchema,
   escalationPolicy: escalationPolicySchema,
   escalationPolicyStep: escalationPolicyStepSchema,
-  escalationPolicyStepRelation,
+  escalationPolicyToAlertRelation,
+  escalationPolicyToStepRelation,
   escalationPolicyStepType,
+  stepToEscalationPolicyRelation,
   integration: integrationSchema,
   org: orgSchema,
   user: userSchema,
@@ -101,8 +105,11 @@ export const schema = {
   team: teamSchema,
   teamScheduleRelation,
   schedule: scheduleSchema,
+  scheduleToScheduleUserRelation,
+  scheduleToTeamRelation,
   scheduleUser: scheduleUserSchema,
-  scheduleUserRelations,
+  scheduleUserToUserRelation,
+  scheduleUserToScheduleRelation,
 };
 
 export * from 'drizzle-orm';
@@ -110,6 +117,26 @@ export * from 'drizzle-orm';
 const queryClient = postgres(process.env.DATABASE_URL!);
 
 const drizzleDbClient = drizzle(queryClient, { schema });
+
+// Type overrides ----------------------------
+// These are needed because drizzle's typing doesn't work
+// on nested relational queries for any depth greater than one,
+// see: https://github.com/drizzle-team/drizzle-orm/issues/1256
+type DbAlertWithEscalationPolicyAndSteps = Alert & {
+  escalationPolicy: CreateEscalationPolicy & {
+    steps: CreateEscalationPolicyStep[];
+  };
+};
+type DbScheduleWithScheduleUsersAndUsers = Schedule & {
+  scheduleUsers: (ScheduleUser & { user: User })[];
+};
+type DbScheduleWithScheduleUsersAndUsersAndTeam =
+  DbScheduleWithScheduleUsersAndUsers & {
+    team: Team;
+  };
+type DbTeamWithSchedulesAndScheduleUsersAndUsers = Team & {
+  schedules: DbScheduleWithScheduleUsersAndUsers[];
+};
 
 const createDbClient = (db: typeof drizzleDbClient) => ({
   alerts: {
@@ -143,7 +170,7 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return selectAlertSchema.parse(dbAlerts[0]);
     },
     findWithEscalationPolicy: async (id: AlertId) => {
-      const dbAlert = await db.query.alert.findFirst({
+      const dbAlertNullable = await db.query.alert.findFirst({
         where: eq(alertSchema.id, id as string),
         with: {
           escalationPolicy: {
@@ -153,9 +180,11 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
           },
         },
       });
-      if (!dbAlert) {
-        return null;
-      }
+      if (!dbAlertNullable) return null;
+
+      const dbAlert =
+        dbAlertNullable as unknown as DbAlertWithEscalationPolicyAndSteps;
+
       const alert = selectAlertSchema.parse(dbAlert);
       if (!dbAlert.escalationPolicy) {
         throw new Error('Escalation policy not found');
@@ -207,6 +236,14 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .values(insertEscalationPolicy)
         .returning();
       return selectEscalationPolicySchema.parse(dbEscalationPolicy[0]);
+    },
+    listByOrgId: async (orgId: OrgId) => {
+      const dbEscalationPolicies = await db.query.escalationPolicy.findMany({
+        where: eq(escalationPolicySchema.orgId, orgId),
+      });
+      return dbEscalationPolicies.map((policy) =>
+        selectEscalationPolicySchema.parse(policy),
+      );
     },
   },
   escalationPolicyStep: {
@@ -354,15 +391,26 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       return selectScheduleSchema.parse(dbSchedule[0]);
     },
     listByOrgId: async (orgId: OrgId) => {
-      const dbSchedules = await db.query.schedule.findMany({
+      const dbSchedules = (await db.query.schedule.findMany({
         where: eq(scheduleSchema.orgId, orgId),
         with: {
-          users: true,
+          team: true,
+          scheduleUsers: {
+            with: {
+              user: true,
+            },
+          },
         },
-      });
-      return dbSchedules.map((schedule) =>
-        selectScheduleSchema.parse(schedule),
-      );
+      })) as unknown as DbScheduleWithScheduleUsersAndUsersAndTeam[];
+
+      return dbSchedules.map((schedule) => ({
+        ...selectScheduleSchema.parse(schedule),
+        team: selectTeamSchema.parse(schedule.team),
+        users: schedule.scheduleUsers.map((scheduleUser) => ({
+          ...selectUserSchema.parse(scheduleUser.user),
+          ...selectScheduleUserSchema.parse(scheduleUser),
+        })),
+      }));
     },
   },
   scheduleUsers: {
@@ -382,13 +430,45 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         selectScheduleUserSchema.parse(scheduleUser),
       );
     },
+    listByOrgId: async (orgId: OrgId) => {
+      const scheduleUsers = await db.query.scheduleUser.findMany({
+        where: eq(teamSchema.orgId, orgId),
+      });
+      return scheduleUsers.map((scheduleUser) =>
+        selectScheduleUserSchema.parse(scheduleUser),
+      );
+    },
   },
   teams: {
     listByOrgId: async (orgId: OrgId) => {
-      const teams = await db.query.team.findMany({
+      const teams = (await db.query.team.findMany({
         where: eq(teamSchema.orgId, orgId),
+        // TODO(@zkirby): There's no way this is efficient at scale...
+        with: {
+          schedules: {
+            with: {
+              scheduleUsers: {
+                with: {
+                  user: true,
+                },
+              },
+            },
+          },
+        },
+      })) as unknown as DbTeamWithSchedulesAndScheduleUsersAndUsers[];
+
+      return teams.map((team) => {
+        return {
+          ...selectTeamSchema.parse(team),
+          schedules: team.schedules.map((schedule) => ({
+            ...selectScheduleSchema.parse(schedule),
+            scheduleUsers: schedule.scheduleUsers.map((scheduleUser) => ({
+              ...selectScheduleUserSchema.parse(scheduleUser),
+              user: selectUserSchema.parse(scheduleUser.user),
+            })),
+          })),
+        };
       });
-      return teams.map((team) => selectTeamSchema.parse(team));
     },
     create: async (team: CreateTeam) => {
       const insertTeam = insertTeamSchema.parse({
@@ -401,32 +481,9 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
     find: async (teamId: TeamId) => {
       const dbTeam = await db.query.team.findFirst({
         where: eq(teamSchema.id, teamId),
-        with: {
-          schedules: {
-            with: {
-              users: true,
-            },
-          },
-        },
       });
-      if (!dbTeam) {
-        return null;
-      }
-      const team = selectTeamSchema.parse(dbTeam);
-      const schedules = dbTeam.schedules.map((dbSchedule) => {
-        const schedule = selectScheduleSchema.parse(dbSchedule);
-        const users = dbSchedule.users.map((dbUser) =>
-          selectUserSchema.parse(dbUser),
-        );
-        return {
-          ...schedule,
-          users,
-        };
-      });
-      return {
-        ...team,
-        schedules,
-      };
+      if (!dbTeam) return null;
+      return selectTeamSchema.parse(dbTeam);
     },
   },
   // NOTE: This is primarily used for scripts only. Scripts will hang at the end

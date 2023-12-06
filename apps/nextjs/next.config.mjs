@@ -10,7 +10,11 @@ const config = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   images: {
-    domains: ['img.clerk.com', 'images.clerk.dev'],
+    domains: [
+      'img.clerk.com',
+      'images.clerk.dev',
+      'vessel-development.ff9d1883a2d477468b0546df2af80aa2.r2.cloudflarestorage.com',
+    ],
   },
 };
 

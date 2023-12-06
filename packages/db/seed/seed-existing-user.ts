@@ -50,7 +50,7 @@ const makeSchedules = async ({
     orgId,
     teamId,
     name,
-    lengthInSeconds: `${60 * 60 * 24 * 7}`, // 1 week
+    lengthInSeconds: 60 * 60 * 24 * 7, // 1 week
     startTime: new Date(),
   });
 };

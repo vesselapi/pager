@@ -1,4 +1,5 @@
 'use client';
+declare let window: any;
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -15,7 +16,7 @@ const getBaseUrl = () => {
   if (typeof window !== 'undefined') return ''; // browser should use relative url
   if (env.VERCEL_URL) return env.VERCEL_URL; // SSR should use vercel url
 
-  return `http://localhost:${env.PORT}`; // dev SSR should use localhost
+  return `http://localhost:${(env as any as { PORT: number }).PORT}`; // dev SSR should use localhost
 };
 
 export function TRPCReactProvider(props: {
