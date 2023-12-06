@@ -51,7 +51,11 @@ import {
   integration as integrationSchema,
   selectIntegrationSchema,
 } from './schema/integration';
-import { org as orgSchema, selectOrgSchema } from './schema/org';
+import {
+  insertOrgSchema,
+  org as orgSchema,
+  selectOrgSchema,
+} from './schema/org';
 import type { CreateSchedule } from './schema/schedule';
 import {
   insertScheduleSchema,
@@ -340,42 +344,33 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       externalId: string;
     }) => {
       const user = await db.transaction(async (tx) => {
+        const insertOrg = insertOrgSchema.parse({
+          id: IdGenerator.org(),
+          name: 'My Organization',
+        });
         const [orgErr, org] = await tryit(
           async () =>
-            (
-              await tx
-                .insert(orgSchema)
-                .values({
-                  id: IdGenerator.org(),
-                  name: 'My Organization',
-                })
-                .returning()
-            )[0],
+            (await tx.insert(orgSchema).values(insertOrg).returning())[0],
         )();
 
         if (orgErr || !org) {
           return null;
         }
 
+        const insertUser = insertUserSchema.parse({
+          id: IdGenerator.user(),
+          email,
+          firstName,
+          lastName,
+          orgId: org.id,
+          externalId,
+        });
         const [userErr, user] = await tryit(
           async () =>
-            (
-              await tx
-                .insert(userSchema)
-                .values({
-                  id: IdGenerator.user(),
-                  email,
-                  firstName,
-                  lastName,
-                  orgId: org.id,
-                  externalId,
-                })
-                .returning()
-            )[0],
+            (await tx.insert(userSchema).values(insertUser).returning())[0],
         )();
 
         if (userErr || !user) {
-          await tx.rollback();
           return null;
         }
         return user;
