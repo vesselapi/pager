@@ -6,13 +6,13 @@ import { vessel } from '@vessel/api/src/middlewares/exobase/hooks/common-hooks';
 import { useSqsArgs } from '@vessel/api/src/middlewares/exobase/hooks/use-sqs-args';
 import type { Logger } from '@vessel/api/src/middlewares/exobase/services/make-logger';
 import { makeLogger } from '@vessel/api/src/middlewares/exobase/services/make-logger';
-import { AlertId, AlertIdRegex } from '@vessel/types';
+import type { AlertId } from '@vessel/types';
+import { AlertIdRegex } from '@vessel/types';
 
-import {
-  AlertManager,
-  makeAlertManager,
-} from '@vessel/api/src/services/alert-manager';
-import { Db, db } from '../../../../packages/db';
+import type { AlertManager } from '@vessel/api/src/services/alert-manager';
+import { makeAlertManager } from '@vessel/api/src/services/alert-manager';
+import type { Db } from '../../../../packages/db';
+import { db } from '../../../../packages/db';
 
 const schema = z.object({
   id: z

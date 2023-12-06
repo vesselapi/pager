@@ -1,6 +1,6 @@
 import { TbSearch } from 'react-icons/tb';
 
-const AlertListSearch = ({
+const Search = ({
   search,
   setSearch,
 }: {
@@ -16,11 +16,11 @@ const AlertListSearch = ({
         type="search"
         value={search}
         onChange={(e) => setSearch(e.target.value as string)}
-        className="text-smr w-[350px] rounded bg-gray-200 py-1.5 pl-8  pr-2 outline-none"
+        className="text-sm w-[350px] rounded bg-gray-200 py-1.5 pl-8 pr-2 outline-none"
         placeholder="Search..."
       />
     </div>
   );
 };
 
-export default AlertListSearch;
+export default Search;

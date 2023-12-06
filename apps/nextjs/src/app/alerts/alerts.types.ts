@@ -1,4 +1,4 @@
-import type { RouterOutputs } from '@vessel/api';
+import type { RouterInputs, RouterOutputs } from '@vessel/api';
 
 /**
  * Base Types
@@ -22,14 +22,20 @@ export interface DisplaySettings {
   // How the alerts should be styled
   cardType: 'condensed' | 'expanded';
 }
+
+type SortApiInput = NonNullable<RouterInputs['alert']['all']['sorts']>['0'];
 export interface SortSetting {
-  property: string;
+  property: SortApiInput['property'];
   label: string;
-  order?: 'asc' | 'desc';
+  order?: SortApiInput['order'];
   Icon: React.ReactElement;
 }
+
+export type FilterApiInput = NonNullable<
+  RouterInputs['alert']['all']['filters']
+>['0'];
 export interface FilterSetting {
-  property: string;
+  property: Omit<FilterApiInput['property'], 'title'>; // Title is handled by search.
   label: string;
   Icon: React.ReactElement;
   value: ConfigOption[]; // selected value

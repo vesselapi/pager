@@ -113,7 +113,7 @@ const AlertListFilterDropdown = ({
   return (
     <Dropdown
       OpenButton={
-        <div className="mr-1.5 flex items-center rounded bg-gray-200 px-2 py-1 text-zinc-600">
+        <div className="mr-1.5 flex items-center rounded bg-gray-200 px-2 py-1 text-zinc-600 text-sm">
           <MdFilterList className="mr-1.5" />
           Filter
         </div>

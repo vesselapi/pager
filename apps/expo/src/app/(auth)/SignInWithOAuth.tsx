@@ -33,10 +33,8 @@ const SignInWithOAuth = () => {
           // undefined, I'm guessing this is poor typing.
           await setActive!({ session: createdSessionId });
         } else {
-          // Modify this code to use signIn or signUp to set this missing requirements you set in your dashboard.
-          throw new Error(
-            'There are unmet requirements, modify this else to handle them',
-          );
+          // NOTE: Do nothing if they don't complete the sign in flow.
+          return;
         }
       } catch (err) {
         console.error('OAuth error', err);

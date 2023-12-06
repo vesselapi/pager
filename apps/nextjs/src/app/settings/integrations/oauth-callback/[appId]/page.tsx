@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useEffect } from 'react';
 
-import Spinner from '~/app/_components/Spinner';
+import { Spinner } from '~/app/_components/Loader';
 import { api } from '~/utils/api';
 
 const OAuthCallbackPage = ({ params }: { params: { appId: AppId } }) => {

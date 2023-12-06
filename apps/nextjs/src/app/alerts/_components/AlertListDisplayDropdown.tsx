@@ -16,7 +16,7 @@ const AlertListDisplayDropdown = ({
     <Dropdown
       noHighlight
       OpenButton={
-        <div className="flex items-center rounded bg-gray-200 px-2 py-1 text-zinc-600">
+        <div className="flex items-center rounded bg-gray-200 px-2 py-1 text-zinc-600 text-sm">
           <VscSettings className="mr-1.5" />
           Display
         </div>

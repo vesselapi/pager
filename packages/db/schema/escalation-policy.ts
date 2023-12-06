@@ -1,10 +1,11 @@
 import { pgTable, text } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import { customValidators } from '@vessel/types';
 
 import { relations } from 'drizzle-orm';
+import { alert } from './alert';
 import { escalationPolicyStep } from './escalation-policy-step';
 import { org } from './org';
 
@@ -16,10 +17,17 @@ export const escalationPolicy = pgTable('escalation_policy', {
   name: text('name').notNull(),
 });
 
-export const escalationPolicyStepRelation = relations(
+export const escalationPolicyToStepRelation = relations(
   escalationPolicy,
   ({ many }) => ({
     steps: many(escalationPolicyStep),
+  }),
+);
+
+export const escalationPolicyToAlertRelation = relations(
+  escalationPolicy,
+  ({ many }) => ({
+    alerts: many(alert),
   }),
 );
 

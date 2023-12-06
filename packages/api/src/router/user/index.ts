@@ -1,11 +1,11 @@
 import { createTRPCRouter } from '../../trpc';
+import { userList } from './list';
 import { userMe } from './me';
 import { userUpdate } from './update';
 import { userUpdateExpoPushToken } from './update-expo-push-token';
-import { userList } from './user-list';
 
 export const userRouter = createTRPCRouter({
-  all: userList,
+  list: userList,
   me: userMe,
   update: userUpdate,
   updateExpoPushToken: userUpdateExpoPushToken,

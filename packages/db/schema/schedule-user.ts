@@ -4,6 +4,7 @@ import type { z } from 'zod';
 
 import { customValidators } from '@vessel/types';
 
+import { relations } from 'drizzle-orm';
 import { org } from './org';
 import { schedule } from './schedule';
 import { user } from './user';
@@ -22,6 +23,26 @@ export const scheduleUser = pgTable('schedule_user', {
     .notNull(),
 });
 
+export const scheduleUserToScheduleRelation = relations(
+  scheduleUser,
+  ({ one }) => ({
+    schedule: one(schedule, {
+      fields: [scheduleUser.scheduleId],
+      references: [schedule.id],
+    }),
+  }),
+);
+
+export const scheduleUserToUserRelation = relations(
+  scheduleUser,
+  ({ one }) => ({
+    user: one(user, {
+      fields: [scheduleUser.userId],
+      references: [user.id],
+    }),
+  }),
+);
+
 export const selectScheduleUserSchema = createSelectSchema(scheduleUser, {
   id: customValidators.scheduleUserId,
   orgId: customValidators.orgId,
@@ -36,6 +57,7 @@ export const insertScheduleUserSchema = createInsertSchema(scheduleUser, {
   userId: customValidators.userId,
 });
 
+export type ScheduleUser = z.infer<typeof selectScheduleUserSchema>;
 export type CreateScheduleUser = Omit<
   z.infer<typeof insertScheduleUserSchema>,
   'id'

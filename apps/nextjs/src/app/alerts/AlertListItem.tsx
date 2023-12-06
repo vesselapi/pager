@@ -10,8 +10,8 @@ import {
 import type { Alert, User } from './alerts.types';
 
 const Styles = {
-  ButtonCondensed: 'h-[35px] w-[35px] rounded-full',
-  ButtonExpanded: 'rounded mb-2 text-smr',
+  ButtonCondensed: 'h-[30px] w-[30px] rounded-full',
+  ButtonExpanded: 'rounded mb-2 text-sm',
   ButtonShared: (colors: string) =>
     `${colors} border mr-2 text-lg hover:bg-opacity-40 flex items-center justify-between px-2 whitespace-nowrap`,
 };
@@ -152,27 +152,27 @@ const AlertsListItem = ({
     return (
       <div
         className={classNames(
-          `grid cursor-pointer grid-cols-[1fr_10fr_2fr_2fr] justify-between border-b-[1px] border-zinc-200 px-10 py-3 hover:bg-zinc-200`,
+          `cursor-pointer flex w-full justify-between border-b-[1px] border-zinc-200 px-10 py-3 hover:bg-zinc-200`,
           className,
         )}
       >
-        <div className="text-smr flex items-center">
-          <div
-            className={classNames(
-              StatusToColor[status as keyof typeof StatusToColor],
-              'text-smr rounded bg-opacity-80 px-2 font-medium',
-            )}
-          >
-            {capitalize(status)}
+        <div className="text-sm flex items-center">
+          <div className="flex items-center w-[70px]">
+            <div
+              className={classNames(
+                StatusToColor[status as keyof typeof StatusToColor],
+                'text-sm rounded bg-opacity-80 px-2',
+              )}
+            >
+              {capitalize(status)}
+            </div>
           </div>
+
+          <h2 className="mr-1.5 truncate w-[300px]">{title}</h2>
+          <div className="text-zinc-500 truncate w-[500px]">{summary}</div>
         </div>
 
-        <div className="flex items-center whitespace-nowrap">
-          <h2 className="mr-1.5 text-base">{title}</h2>
-          <div className="text-zinc-500">{summary}</div>
-        </div>
-
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end text-xs">
           <div className="mr-2 font-bold text-zinc-600">
             {(user?.firstName?.slice(0, 1) ?? '') +
               (user?.lastName?.slice(0, 1) ?? '')}
@@ -180,9 +180,6 @@ const AlertsListItem = ({
           <div className="mr-4 whitespace-nowrap">
             {format(createdAt, 'dd/MM p')}
           </div>
-        </div>
-
-        <div className="flex items-center justify-end">
           <ActionButtons
             status={status}
             onAck={onAck}

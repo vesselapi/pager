@@ -1,4 +1,4 @@
-import { numeric, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod';
 
@@ -6,8 +6,8 @@ import { customValidators } from '@vessel/types';
 
 import { relations } from 'drizzle-orm';
 import { org } from './org';
+import { scheduleUser } from './schedule-user';
 import { team } from './team';
-import { user } from './user';
 
 export const schedule = pgTable('schedule', {
   id: text('id').primaryKey(),
@@ -18,16 +18,22 @@ export const schedule = pgTable('schedule', {
     .references(() => team.id)
     .notNull(),
   startTime: timestamp('start_time').notNull(),
-  lengthInSeconds: numeric('length_in_seconds').notNull(),
   name: text('name').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+  lengthInSeconds: integer('length_in_seconds').notNull(),
 });
 
-export const scheduleUserRelations = relations(schedule, ({ many }) => {
-  return {
-    users: many(user),
-  };
-});
+export const scheduleToScheduleUserRelation = relations(
+  schedule,
+  ({ many }) => ({ scheduleUsers: many(scheduleUser) }),
+);
+
+export const scheduleToTeamRelation = relations(schedule, ({ one }) => ({
+  team: one(team, {
+    fields: [schedule.teamId],
+    references: [team.id],
+  }),
+}));
 
 export const selectScheduleSchema = createSelectSchema(schedule, {
   id: customValidators.scheduleId,
@@ -40,4 +46,5 @@ export const insertScheduleSchema = createInsertSchema(schedule, {
   orgId: customValidators.orgId,
   teamId: customValidators.teamId,
 });
+export type Schedule = z.infer<typeof selectScheduleSchema>;
 export type CreateSchedule = Omit<z.infer<typeof insertScheduleSchema>, 'id'>;

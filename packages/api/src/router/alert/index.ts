@@ -1,7 +1,7 @@
 import { createTRPCRouter } from '../../trpc';
-import { alertById } from './alert-by-id';
-import { alertList } from './alert-list';
-import { alertUpdate } from './alert-update';
+import { alertById } from './find';
+import { alertList } from './list';
+import { alertUpdate } from './update';
 
 export const alertRouter = createTRPCRouter({
   all: alertList,
