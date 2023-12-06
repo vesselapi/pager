@@ -3,7 +3,6 @@ import { TRPCError } from '@trpc/server';
 import type { Db } from '@vessel/db';
 import { db } from '@vessel/db';
 
-import { IdGenerator } from '@vessel/db/id-generator';
 import { useServicesHook } from '../../middlewares/trpc/use-services-hook';
 import { UserManager, makeUserManager } from '../../services/user-manager';
 import { JwtClaims, procedure } from '../../trpc';
@@ -35,29 +34,26 @@ export const userMe = procedure
     if (foundUser)
       return { user: await ctx.userManager.profilePic.addToUser(foundUser) };
 
-    const org = await db.orgs.create();
-
-    const userId = IdGenerator.user();
+    const user = await db.user.newSignUp({
+      email: claims.email,
+      firstName: claims.first_name,
+      lastName: claims.last_name,
+      externalId: claims.id,
+    });
 
     const uploadProfilePic = async () => {
       if (!claims.image_url) return;
       const { key } = await ctx.userManager.profilePic.put({
-        id: userId,
+        id: user.id,
         url: claims.image_url,
       });
       return key;
     };
     const imageS3Key = await uploadProfilePic();
 
-    const newUser = await ctx.db.user.create({
-      id: userId,
-      email: claims.email,
-      orgId: org.id,
-      firstName: claims.first_name,
-      lastName: claims.last_name,
-      externalId: claims.id,
+    const updatedUser = await ctx.db.user.update(user.id, {
       imageS3Key,
     });
 
-    return { user: await ctx.userManager.profilePic.addToUser(newUser) };
+    return { user: await ctx.userManager.profilePic.addToUser(updatedUser) };
   });

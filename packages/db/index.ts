@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import type { z } from 'zod';
+import { type z } from 'zod';
 
 import type {
   AlertEventId,
@@ -326,6 +326,53 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
         .where(eq(userSchema.id, id))
         .returning();
       return selectUserSchema.parse(dbUser[0]);
+    },
+    newSignUp: async ({
+      email,
+      firstName,
+      lastName,
+      externalId,
+    }: {
+      email: string;
+      firstName: string;
+      lastName: string;
+      externalId: string;
+    }) => {
+      const user = await db.transaction(async (tx) => {
+        const org = (
+          await tx
+            .insert(orgSchema)
+            .values({
+              id: IdGenerator.org(),
+              name: 'My Organization',
+            })
+            .returning()
+        )[0];
+
+        if (!org) {
+          return null;
+        }
+
+        const user = (
+          await tx
+            .insert(userSchema)
+            .values({
+              id: IdGenerator.user(),
+              email,
+              firstName,
+              lastName,
+              orgId: org.id,
+              externalId,
+            })
+            .returning()
+        )[0];
+
+        if (!user) {
+          return null;
+        }
+        return user;
+      });
+      return selectUserSchema.parse(user);
     },
   },
   secret: {
