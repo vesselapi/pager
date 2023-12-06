@@ -1,6 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
+import { tryit } from 'radash';
 import { type z } from 'zod';
 
 import type {
@@ -339,35 +340,42 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
       externalId: string;
     }) => {
       const user = await db.transaction(async (tx) => {
-        const org = (
-          await tx
-            .insert(orgSchema)
-            .values({
-              id: IdGenerator.org(),
-              name: 'My Organization',
-            })
-            .returning()
-        )[0];
+        const [orgErr, org] = await tryit(
+          async () =>
+            (
+              await tx
+                .insert(orgSchema)
+                .values({
+                  id: IdGenerator.org(),
+                  name: 'My Organization',
+                })
+                .returning()
+            )[0],
+        )();
 
-        if (!org) {
+        if (orgErr || !org) {
           return null;
         }
 
-        const user = (
-          await tx
-            .insert(userSchema)
-            .values({
-              id: IdGenerator.user(),
-              email,
-              firstName,
-              lastName,
-              orgId: org.id,
-              externalId,
-            })
-            .returning()
-        )[0];
+        const [userErr, user] = await tryit(
+          async () =>
+            (
+              await tx
+                .insert(userSchema)
+                .values({
+                  id: IdGenerator.user(),
+                  email,
+                  firstName,
+                  lastName,
+                  orgId: org.id,
+                  externalId,
+                })
+                .returning()
+            )[0],
+        )();
 
-        if (!user) {
+        if (userErr || !user) {
+          await tx.rollback();
           return null;
         }
         return user;
