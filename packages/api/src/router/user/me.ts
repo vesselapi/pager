@@ -59,9 +59,16 @@ export const userMe = procedure
       });
       return { user: await ctx.userManager.profilePic.addToUser(updatedUser) };
     } catch (err) {
-      const user = await retry({ times: 2, delay: 1000 }, () =>
-        ctx.db.user.findByEmail(claims.email),
-      );
-      return { user };
+      const user = await retry({ times: 2, delay: 1000 }, async () => {
+        const user = await ctx.db.user.findByEmail(claims.email);
+        if (!user) {
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'User not found',
+          });
+        }
+        return user;
+      });
+      return { user: await ctx.userManager.profilePic.addToUser(user) };
     }
   });
