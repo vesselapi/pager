@@ -14,7 +14,7 @@ const TeamItem = ({
   user,
 }: {
   team: RouterOutputs['team']['list']['teams']['0'];
-  user: RouterOutputs['user']['me']['user'];
+  user?: RouterOutputs['user']['me']['user'];
 }) => {
   const userHasJoined = useMemo(
     () => team.users.some((u) => u.id === user?.id),
