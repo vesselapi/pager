@@ -1,7 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
-import { tryit } from 'radash';
 import { type z } from 'zod';
 
 import type {
@@ -348,14 +347,10 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
           id: IdGenerator.org(),
           name: 'My Organization',
         });
-        const [orgErr, org] = await tryit(
-          async () =>
-            (await tx.insert(orgSchema).values(insertOrg).returning())[0],
-        )();
-
-        if (orgErr || !org) {
-          return null;
-        }
+        const dbOrg = (
+          await tx.insert(orgSchema).values(insertOrg).returning()
+        )[0];
+        const org = selectOrgSchema.parse(dbOrg);
 
         const insertUser = insertUserSchema.parse({
           id: IdGenerator.user(),
@@ -365,17 +360,13 @@ const createDbClient = (db: typeof drizzleDbClient) => ({
           orgId: org.id,
           externalId,
         });
-        const [userErr, user] = await tryit(
-          async () =>
-            (await tx.insert(userSchema).values(insertUser).returning())[0],
-        )();
+        const user = await (
+          await tx.insert(userSchema).values(insertUser).returning()
+        )[0];
 
-        if (userErr || !user) {
-          return null;
-        }
-        return user;
+        return selectUserSchema.parse(user);
       });
-      return selectUserSchema.parse(user);
+      return user;
     },
   },
   secret: {
