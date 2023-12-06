@@ -12,6 +12,7 @@ import { SignedIn, SignedOut } from '@clerk/clerk-react';
 import Constants from 'expo-constants';
 
 import SignInWithOAuth from './(auth)/SignInWithOAuth';
+import UserLoader from './(auth)/UserLoader';
 
 const tokenCache = {
   async getToken(key: string) {
@@ -38,10 +39,12 @@ const RootLayout = () => {
     >
       <SignedIn>
         <TRPCProvider>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
-          <StatusBar />
+          <UserLoader>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+            <StatusBar />
+          </UserLoader>
         </TRPCProvider>
       </SignedIn>
       <SignedOut>

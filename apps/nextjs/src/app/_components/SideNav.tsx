@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type { ReactNode } from 'react';
 import { FaGithub, FaSlack } from 'react-icons/fa';
 import { HiOutlineMail } from 'react-icons/hi';
 import {
@@ -15,7 +14,7 @@ import {
   TbUsersGroup,
 } from 'react-icons/tb';
 
-import { useUser } from '../../hooks/useUser';
+import { api } from '../../utils/api';
 import Dropdown from './Dropdown';
 import UserIcon from './UserIcon';
 
@@ -47,9 +46,9 @@ const NavItem = ({
 /**
  * Sidebar navigation
  */
-const SideNav = ({ children }: { children: ReactNode }) => {
+const SideNav = ({ children }: React.PropsWithChildren) => {
   const pathname = usePathname();
-  const user = useUser();
+  const user = api.user.me.useQuery();
 
   return (
     <div className="flex">
@@ -68,7 +67,7 @@ const SideNav = ({ children }: { children: ReactNode }) => {
             </div>
             <Dropdown
               position="right"
-              OpenButton={<UserIcon {...user} />}
+              OpenButton={<UserIcon {...(user.data?.user ?? {})} />}
               openButtonClass="flex"
             >
               {/* TODO(@zkirby): Enable dark mode */}

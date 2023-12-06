@@ -8,6 +8,7 @@ import { headers } from 'next/headers';
 
 import React from 'react';
 import SideNav from './_components/SideNav';
+import UserLoader from './_components/UserLoader';
 import { TRPCReactProvider } from './providers';
 
 const fontSans = Inter({
@@ -38,7 +39,7 @@ export const dynamic = 'force-dynamic';
 //     creator: '@jullerino',
 //   },
 // };
-export default function Layout(props: { children: React.ReactNode }) {
+export default function Layout({ children }: React.PropsWithChildren) {
   return (
     <ClerkProvider>
       <html lang="en">
@@ -49,7 +50,9 @@ export default function Layout(props: { children: React.ReactNode }) {
           )}
         >
           <TRPCReactProvider headers={headers()}>
-            <SideNav>{props.children}</SideNav>
+            <UserLoader>
+              <SideNav>{children}</SideNav>
+            </UserLoader>
           </TRPCReactProvider>
         </body>
       </html>

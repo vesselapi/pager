@@ -2,8 +2,8 @@ import FeatherIcons from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View } from 'react-native';
 
+import { api } from '../../utils/api';
 import { useNotification } from '../hooks/useNotification';
-import { useUser } from '../hooks/useUser';
 import AlertListPage from './(alerts)';
 import ProfilePage from './(profile)';
 
@@ -11,7 +11,7 @@ const Tab = createBottomTabNavigator();
 
 const TabsLayout = () => {
   useNotification();
-  const user = useUser();
+  const user = api.user.me.useQuery();
 
   return (
     <Tab.Navigator
@@ -43,8 +43,8 @@ const TabsLayout = () => {
         options={{
           tabBarIcon: ({ size }) => {
             const initials =
-              (user?.firstName?.charAt(0) ?? '') +
-              (user?.lastName?.charAt(0) ?? '');
+              (user.data?.user?.firstName?.charAt(0) ?? '') +
+              (user.data?.user?.lastName?.charAt(0) ?? '');
             return (
               <View
                 style={{ height: size, width: size, borderRadius: 100 }}
