@@ -8,10 +8,9 @@ const Styles = {
 export const WeeklyEvent = ({
   days: cols,
   children,
-}: {
+}: React.PropsWithChildren<{
   days: number;
-  children: React.ReactNode[] | React.ReactNode;
-}) => {
+}>) => {
   return (
     <div className={classNames(`col-span-${cols} h-[90px]`, Styles.rowBg)}>
       {children}
@@ -28,7 +27,7 @@ export const WeeklyCalendar = ({
   totalDays,
   daysBeforeToday = 0,
   children,
-}: {
+}: React.PropsWithChildren<{
   /**
    * The total number of days to show in the calendar
    */
@@ -39,8 +38,7 @@ export const WeeklyCalendar = ({
    * then the cal would be | today - 3 | today - 2 | today - 1 | today | today + 1 | ...
    */
   daysBeforeToday?: number;
-  children: React.ReactNode[] | React.ReactNode;
-}) => {
+}>) => {
   const today = new Date();
   const days = Array.from({ length: totalDays }, (_, i) => {
     const date = addDays(today, i - daysBeforeToday);

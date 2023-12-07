@@ -6,7 +6,6 @@ import { RxAvatar } from 'react-icons/rx';
 import { TbClock, TbLetterCase, TbMinus, TbPlus } from 'react-icons/tb';
 
 import { api } from '~/utils/api';
-import { useUser } from '../../hooks/useUser';
 import Loader from '../_components/Loader';
 import Search from '../_components/Search';
 import AlertsListItem from './AlertListItem';
@@ -117,7 +116,7 @@ const AlertsList = () => {
   });
   const updateAlert = api.alert.update.useMutation();
   const users = api.user.list.useQuery();
-  const currentUser = useUser();
+  const currentUser = api.user.me.useQuery();
 
   const update = useCallback(async (id: string, alert: Partial<Alert>) => {
     await updateAlert.mutateAsync({ id, alert });
@@ -259,7 +258,7 @@ const AlertsList = () => {
                   onAck={() => update(a.id, { status: 'ACKED' })}
                   onClose={() => update(a.id, { status: 'CLOSED' })}
                   onSelfAssign={() =>
-                    update(a.id, { assignedToId: currentUser?.id })
+                    update(a.id, { assignedToId: currentUser.data?.user?.id })
                   }
                   onReopen={() => update(a.id, { status: 'OPEN' })}
                 />

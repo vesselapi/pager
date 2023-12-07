@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { TbCheck, TbPlus } from 'react-icons/tb';
 import type { RouterOutputs } from '~/utils/api';
 import { api } from '~/utils/api';
-import { useUser } from '../../hooks/useUser';
 import Button from '../_components/Button';
 import Loader from '../_components/Loader';
 import Modal from '../_components/Modal';
@@ -15,10 +14,10 @@ const TeamItem = ({
   user,
 }: {
   team: RouterOutputs['team']['list']['teams']['0'];
-  user: RouterOutputs['user']['me']['user'];
+  user?: RouterOutputs['user']['me']['user'];
 }) => {
   const userHasJoined = useMemo(
-    () => team.users.some((u) => u.id === user.id),
+    () => team.users.some((u) => u.id === user?.id),
     [team.users, user],
   );
 
@@ -45,7 +44,7 @@ const TeamItem = ({
 const TeamsList = () => {
   const listTeams = api.team.list.useQuery();
   const createTeam = api.team.create.useMutation();
-  const user = useUser();
+  const user = api.user.me.useQuery();
 
   // NOTE(@zkirby): We might want to consider making this an
   // API query param, but for now we'll assume there are few enough
@@ -104,10 +103,10 @@ const TeamsList = () => {
       {/* Teams List */}
       <Loader
         className={'px-10 mt-5'}
-        status={{ loading: listTeams.isFetching || !user }}
+        status={{ loading: listTeams.isFetching || user.isFetching }}
       >
         {teams.map((team) => (
-          <TeamItem key={team.id} team={team} user={user!} />
+          <TeamItem key={team.id} team={team} user={user.data?.user} />
         ))}
       </Loader>
     </div>

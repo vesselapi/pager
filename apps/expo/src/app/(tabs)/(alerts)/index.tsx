@@ -11,7 +11,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Stack } from 'expo-router';
 import { api } from '~/utils/api';
-import { useUser } from '../../hooks/useUser';
 import AlertListItem from './_components/AlertListItem';
 import type { Alert } from './alerts.types';
 import { useSearch } from './hooks/useSearch';
@@ -33,7 +32,7 @@ const AlertListPage = () => {
       },
     ],
   });
-  const user = useUser();
+  const user = api.user.me.useQuery();
   const updateAlert = api.alert.update.useMutation();
 
   const update = useCallback(async (id: string, alert: Partial<Alert>) => {
@@ -42,8 +41,8 @@ const AlertListPage = () => {
   }, []);
 
   const isLoading = useMemo(
-    () => updateAlert.isPending || alerts.isFetching,
-    [alerts.isFetching, updateAlert.isPending],
+    () => updateAlert.isPending || alerts.isFetching || user.isFetching,
+    [alerts.isFetching, updateAlert.isPending, user.isFetching],
   );
 
   return (
@@ -68,7 +67,7 @@ const AlertListPage = () => {
           ALERTS
         </Text>
         <View className="bg-white h-screen">
-          {isLoading || !user ? (
+          {isLoading ? (
             <ActivityIndicator />
           ) : (
             <FlatList
@@ -77,12 +76,12 @@ const AlertListPage = () => {
               renderItem={({ item }) => (
                 <AlertListItem
                   alert={item}
-                  user={user}
+                  user={user.data?.user}
                   onAck={() => update(item.id, { status: 'ACKED' })}
                   onReopen={() => update(item.id, { status: 'OPEN' })}
                   onClose={() => update(item.id, { status: 'CLOSED' })}
                   onSelfAssign={() =>
-                    update(item.id, { assignedToId: user.id })
+                    update(item.id, { assignedToId: user.data?.user?.id })
                   }
                 />
               )}

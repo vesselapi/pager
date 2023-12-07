@@ -2,7 +2,8 @@ import { useAuth } from '@clerk/clerk-expo';
 import { Stack } from 'expo-router';
 import { Button, Text, View } from 'react-native';
 
-import { useUser } from '../../hooks/useUser';
+import { useMemo } from 'react';
+import { api } from '../../../utils/api';
 
 const SignOut = () => {
   const { isLoaded, signOut } = useAuth();
@@ -23,7 +24,11 @@ const SignOut = () => {
 };
 
 const ProfilePage = () => {
-  const user = useUser();
+  const apiUser = api.user.me.useQuery();
+
+  const user = useMemo(() => {
+    return apiUser.data?.user;
+  }, [apiUser.data]);
 
   return (
     <View className="relative h-full bg-white">

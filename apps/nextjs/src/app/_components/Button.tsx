@@ -14,13 +14,12 @@ const Button = ({
   onClick,
   disabled,
   children,
-}: {
+}: React.PropsWithChildren<{
   type?: ButtonType;
   className?: string;
   onClick?: () => void | Promise<void>;
   disabled?: boolean;
-  children: React.ReactNode | React.ReactNode[];
-}) => (
+}>) => (
   <button
     disabled={disabled}
     onClick={onClick}

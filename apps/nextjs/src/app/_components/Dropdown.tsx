@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
 import classNames from 'classnames';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement } from 'react';
 import React, { Fragment } from 'react';
 
 const Dropdown = ({
@@ -10,14 +10,13 @@ const Dropdown = ({
   position = 'left',
   size = 'md',
   noHighlight = false,
-}: {
-  children: ReactElement | ReactNode[];
+}: React.PropsWithChildren<{
   OpenButton: ReactElement;
   openButtonClass?: string;
   position?: 'left' | 'right';
   size?: 'sm' | 'md' | 'lg';
   noHighlight?: boolean;
-}) => {
+}>) => {
   return (
     <Menu as="div" className="relative inline-block">
       <Menu.Button className={openButtonClass}>{OpenButton}</Menu.Button>

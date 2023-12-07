@@ -1,7 +1,6 @@
-import type { ReactNode } from 'react';
 import React from 'react';
 
-const Pill = ({ children }: { children: ReactNode }) => {
+const Pill = ({ children }: React.PropsWithChildren) => {
   const childArray = React.Children.toArray(children);
   const tLength = childArray.length - 1;
 

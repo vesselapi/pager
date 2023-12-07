@@ -31,11 +31,10 @@ const Loader = ({
   status,
   className,
   children,
-}: {
+}: React.PropsWithChildren<{
   status: Status;
   className?: string;
-  children: React.ReactNode | React.ReactNode[];
-}) => {
+}>) => {
   if (status.loading) return <Spinner className={className} />;
   return children;
 };

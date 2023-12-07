@@ -20,7 +20,7 @@ const AlertListItem = ({
   onSelfAssign,
 }: {
   alert: Alert;
-  user: User;
+  user?: User;
   onAck: () => void;
   onClose: () => void;
   onReopen: () => void;
@@ -28,7 +28,7 @@ const AlertListItem = ({
 }) => {
   const { status, title, createdAt, summary } = alert;
   const initials =
-    (user.firstName?.slice(0, 1) ?? '') + (user.lastName?.slice(0, 1) ?? '');
+    (user?.firstName?.slice(0, 1) ?? '') + (user?.lastName?.slice(0, 1) ?? '');
 
   const StatusColors = StatusToColor[status as keyof typeof StatusToColor];
   const { LeftSwipe, RightSwipe, action } = createSwipeAnimations(status, {
