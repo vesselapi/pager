@@ -24,7 +24,7 @@ Easily manage product alerts in one place with Linear-style filtering and custom
 
 Manager Alerts on the Go with the [IOS App](https://apps.apple.com/us/app/vessel-oncall-management/id6473809331)
 
-<img src='images/app.png' width='300'>
+<img src='/images/app.PNG' width='300' />
 
 <br/>
 
