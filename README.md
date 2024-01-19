@@ -6,23 +6,27 @@ Open Source AI-First PagerDuty Alternative
 <i>Easy to use, configurable, and performant alerting.</i>
 </div>
 
+<br></br>
+
 # Vessel Pager
 
 ## Web App
 
-[pictures here]
+Easily manage product alerts in one place with Linear-style filtering and customizable display settings.
+
+![pager web app](/images/filters.png)
+
+[Coming soon] Manage users and teams across your org.
+
+![pager teams page](/images/teams.png)
 
 ## IOS App
 
-[pictures here]
+Manager Alerts on the Go with the [IOS App](https://apps.apple.com/us/app/vessel-oncall-management/id6473809331)
 
-# Usage
+<img src='images/app.png' width='300'>
 
-```
-pnpm i
-pnpm db:generate
-pnpm dev
-```
+<br/>
 
 # Built With
 
@@ -37,7 +41,3 @@ pnpm dev
 - Vercel/Nextjs
 - T3
 - Clerk
-
-```
-
-```
